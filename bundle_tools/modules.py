@@ -18,3 +18,10 @@ def install_module(module_path: Path, device_path: Path) -> None:
         copy2(module_path, device_path)
     else:
         copytree(module_path, device_path / module_path.stem)
+
+
+def uninstall_module(module_path: Path) -> None:
+    if module_path.is_file():
+        module_path.unlink()
+    else:
+        module_path.rmdir()
