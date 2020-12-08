@@ -1,19 +1,5 @@
 """
-A module that detects and abstracts detecting what OS we are on. Simply run:
-
-```
-
-from bundle_tools import os_detect
-
-os_detect.on_windows()
-
-os_detect.on_mac()
-
-os_detect.on_linux()
-
-```
-
-to get bools on whether what OS we are running on.
+A module that detects and abstracts detecting what OS we are on.
 
 -----------
 
@@ -56,7 +42,7 @@ platform: str = system()
 def on_windows() -> bool:
     """
     Returns a bool whether we are on Windows or not.
-    :rtype: A bool whether we are on Windows or not.
+    :return: A bool whether we are on Windows or not.
     """
     return platform == OS.WINDOWS.value
 
@@ -64,7 +50,7 @@ def on_windows() -> bool:
 def on_mac() -> bool:
     """
     Returns a bool whether we are on Mac OSX or not.
-    :rtype: A bool whether we are on Mac OSX or not.
+    :return: A bool whether we are on Mac OSX or not.
     """
     return platform == OS.MAC.value
 
@@ -72,6 +58,6 @@ def on_mac() -> bool:
 def on_linux() -> bool:
     """
     Returns a bool whether we are on Linux or not.
-    :rtype: A bool whether we are on Linux or not.
+    :return: A bool whether we are on Linux or not.
     """
     return platform == OS.LINUX.value
