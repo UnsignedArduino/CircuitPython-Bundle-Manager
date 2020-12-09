@@ -42,6 +42,7 @@ platform: str = system()
 def on_windows() -> bool:
     """
     Returns a bool whether we are on Windows or not.
+
     :return: A bool whether we are on Windows or not.
     """
     return platform == OS.WINDOWS.value
@@ -50,6 +51,7 @@ def on_windows() -> bool:
 def on_mac() -> bool:
     """
     Returns a bool whether we are on Mac OSX or not.
+
     :return: A bool whether we are on Mac OSX or not.
     """
     return platform == OS.MAC.value
@@ -58,6 +60,7 @@ def on_mac() -> bool:
 def on_linux() -> bool:
     """
     Returns a bool whether we are on Linux or not.
+
     :return: A bool whether we are on Linux or not.
     """
     return platform == OS.LINUX.value

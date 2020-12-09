@@ -25,6 +25,7 @@ def list_connected_drives(circuitpython_only: bool = True) -> list:
     Returns a list of connected drives. On Windows, this will be something like `[WindowsPath('C:'), ...]`.
 
     :param circuitpython_only: A bool telling whether to filter out non-CircuitPython drives. Defaults to True.
+
     :return: A list of pathlib.Path objects that contain the drives.
     """
     connected_drives: list = []

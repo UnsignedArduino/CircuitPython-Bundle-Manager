@@ -27,7 +27,7 @@ def get_lib_path(device_drive: Path = None) -> Path:
     Passing in the device path (ex. "I:") will return the path of the lib directory
 
     :param device_drive: A pathlib.Path object that points to the device. Example: "I:" on Windows.
-    Defaults to None, and will raise an exception if no compatible object is passed in.
+     Defaults to None, and will raise an exception if no compatible object is passed in.
 
     :return: A pathlib.Path object pointing to the lib directory on a CircuitPython device.
     """
@@ -36,18 +36,20 @@ def get_lib_path(device_drive: Path = None) -> Path:
 
 def list_modules(start_path: Path = None) -> list:
     """
-    Passing in the device path (ex. "I:") will return a list of pathlib.Path objects pointing to the module paths
-    - stringify them to get the module names.
+    Passing in the device path (ex. "I:") will return a list of strings containing the names of the modules.
 
     :param start_path: A pathlib.Path object that points to the device. Example: "I:" on Windows.
-    Defaults to None, and will raise an exception if no compatible object is passed in.
+     Defaults to None, and will raise an exception if no compatible object is passed in.
 
-    :return: A list of pathlib.Path objects pointing to the path of the modules.
+    :return: A list of strings with the name of the modules.
     """
     lib_directory: Path = get_lib_path(start_path)
     if not lib_directory.exists():
         raise RuntimeError(f"The lib directory '{lib_directory}' does not exist on the CircuitPython device!")
-    return list(lib_directory.glob("*"))
+    libs = list(lib_directory.glob("*"))
+    for index, lib in enumerate(libs):
+        libs[index] = lib.name
+    return libs
 
 
 def install_module(module_path: Path = None, device_path: Path = None) -> None:
@@ -56,10 +58,10 @@ def install_module(module_path: Path = None, device_path: Path = None) -> None:
     and the device path (ex. "I:lib") will copy the directory/file to the device.
 
     :param module_path: A pathlib.Path object that points to the path of the module. Defaults to None, and will raise
-    an exception if no compatible object is passed in.
+     an exception if no compatible object is passed in.
 
     :param device_path: A pathlib.Path object that points to the path of the device's lib directory. Defaults to None,
-    and will raise an exception if no compatible object is passed in.
+     and will raise an exception if no compatible object is passed in.
 
     :return: None
     """
@@ -75,7 +77,7 @@ def uninstall_module(module_path: Path = None) -> None:
     the device will delete the directory/file on the device.
 
     :param module_path: A pathlib.Path object that points to the path of the module ON THE DEVICE. Defaults to None,
-    and will raise an exception if no compatible object is passed in.
+     and will raise an exception if no compatible object is passed in.
 
     :return: None
     """
