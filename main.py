@@ -29,7 +29,7 @@ class GUI(tk.Tk):
         self.update_bundle_button.grid(row=5, column=1, rowspan=2, columnspan=2, padx=1, pady=1)
         self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
-        self.version_entry = ttk.Entry(master=self.github_auth_frame, width=3)
+        self.version_entry = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100)
         self.version_entry.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
         self.updating = False
         self.check_button()
