@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbox
 from threading import Thread
+import traceback
+from github import GithubException
 from time import sleep
 from bundle_tools import drives, modules, bundle_manager
 
@@ -23,7 +25,11 @@ class GUI(tk.Tk):
         self.create_github_enterprise_input()
         self.create_auth_method_selector()
         self.update_bundle_button = ttk.Button(master=self.github_auth_frame, text="Update bundle", command=self.update_bundle)
-        self.update_bundle_button.grid(row=5, column=1, rowspan=2, padx=1, pady=1)
+        self.update_bundle_button.grid(row=5, column=1, rowspan=2, columnspan=2, padx=1, pady=1)
+        self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
+        self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
+        self.version_entry = ttk.Entry(master=self.github_auth_frame, width=3)
+        self.version_entry.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
         self.updating = False
         self.check_button()
 
@@ -34,7 +40,28 @@ class GUI(tk.Tk):
     def _update_bundle(self):
         self.updating = True
         self.enable_github_auth_inputs(False)
-        sleep(1)
+        github_instance = bundle_manager.authenticate_with_github(
+            user_and_pass={
+                "username": self.username_entry.get(),
+                "password": self.password_entry.get()
+            } if self.github_auth_method_var.get() == "username and password" else None,
+            access_token=self.access_token_entry.get() if self.github_auth_method_var.get() == "access token" else None,
+            url_and_token={
+                "base_url": self.enterprise_url_entry.get(),
+                "login_or_tokin": self.enterprise_token_entry.get()
+            } if self.github_auth_method_var.get() == "enterprise" else None
+        )
+        try:
+            bundle_manager.update_bundle(int(self.version_entry.get()), github_instance)
+        except TypeError:
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Oh no! An error occurred while updating the bundle!\n"
+                           "Did you enter in the correct CircuitPython version below?\n\n" + traceback.format_exc())
+        except GithubException:
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Oh no! An error occurred while updating the bundle!\n"
+                           "Something happened while trying to access GitHub! "
+                           "Did you enter in the correct credentials?\n\n" + traceback.format_exc())
         self.updating = False
         self.enable_github_auth_inputs(True)
 
@@ -45,14 +72,19 @@ class GUI(tk.Tk):
         self.user_pass_radio_button.config(state="normal" if enable else "disabled")
         self.access_token_radio_button.config(state="normal" if enable else "disabled")
         self.enterprise_radio_button.config(state="normal" if enable else "disabled")
+        self.version_label.config(state="normal" if enable else "disabled")
+        self.version_entry.config(state="normal" if enable else "disabled")
 
     def check_button(self):
+        self.after(100, self.check_button)
         if self.updating:
             self.update_bundle_button.config(state="disabled", text="Updating bundle...")
-            self.after(100, self.check_button)
             return
         else:
             self.update_bundle_button.config(state="enabled", text="Update bundle")
+        if self.version_entry.get() == "":
+            self.update_bundle_button.config(state="disabled")
+            return
         if self.github_auth_method_var.get() == "username and password":
             self.update_bundle_button.config(
                 state="normal" if self.username_entry.get() != "" and self.password_entry.get() != "" else "disabled"
@@ -65,7 +97,6 @@ class GUI(tk.Tk):
             self.update_bundle_button.config(
                 state="normal" if self.enterprise_url_entry.get() != "" and self.enterprise_token_entry.get() != "" else "disabled"
             )
-        self.after(100, self.check_button)
 
     def update_selected_auth_method(self):
         self.enable_username_password(self.github_auth_method_var.get() == "username and password")
@@ -113,29 +144,29 @@ class GUI(tk.Tk):
 
     def create_github_enterprise_input(self):
         self.enterprise_url_label = ttk.Label(master=self.github_auth_frame, text="GitHub Enterprise URL: ")
-        self.enterprise_url_label.grid(row=3, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.enterprise_url_label.grid(row=3, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_url_entry = ttk.Entry(master=self.github_auth_frame)
-        self.enterprise_url_entry.grid(row=3, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.enterprise_url_entry.grid(row=3, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_token_label = ttk.Label(master=self.github_auth_frame, text="Login or token: ")
-        self.enterprise_token_label.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.enterprise_token_label.grid(row=4, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_token_entry = ttk.Entry(master=self.github_auth_frame)
-        self.enterprise_token_entry.grid(row=4, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.enterprise_token_entry.grid(row=4, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
     def create_access_token_input(self):
         self.access_token_label = ttk.Label(master=self.github_auth_frame, text="Access token: ")
-        self.access_token_label.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.access_token_label.grid(row=2, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.access_token_entry = ttk.Entry(master=self.github_auth_frame)
-        self.access_token_entry.grid(row=2, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.access_token_entry.grid(row=2, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
     def create_username_password_input(self):
         self.username_label = ttk.Label(master=self.github_auth_frame, text="Username: ")
-        self.username_label.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.username_label.grid(row=0, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.password_label = ttk.Label(master=self.github_auth_frame, text="Password: ")
-        self.password_label.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.password_label.grid(row=1, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.username_entry = ttk.Entry(master=self.github_auth_frame)
-        self.username_entry.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.username_entry.grid(row=0, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.password_entry = ttk.Entry(master=self.github_auth_frame, show="*")
-        self.password_entry.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.password_entry.grid(row=1, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
     def create_gui(self):
         self.create_bundle_update_frame()
@@ -152,7 +183,7 @@ class GUI(tk.Tk):
                            "Oh no! A fatal error has occurred!\n"
                            f"Error type: {err_type}\n"
                            f"Error value: {err_value}\n"
-                           f"Error traceback: {err_traceback}")
+                           f"Error traceback: {err_traceback}\n\n" + traceback.format_exc())
 
 
 with GUI() as gui:
