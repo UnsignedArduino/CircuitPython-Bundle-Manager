@@ -48,22 +48,6 @@ def list_modules_in_bundle(version: int = None) -> list:
     return modules
 
 
-def get_module_path(version: int = None, name: str = None) -> Path:
-    """
-    Gets the path to the module in the bundle from the name.
-
-    :param version: An integer saying what version we want, like 5 for CircuitPython 5.x and 6 for CircuitPython 6.x.
-     Defaults to None, and will raise an exception if no compatible object is passed in.
-
-    :param name: The name of the module. Defaults to None, and will raise an exception if no compatible object is
-     passed in.
-
-    :return: A pathlib.Path object pointing to the requested module's path. Returns None if we can't find it.
-    """
-    module_path = Path.cwd() / "bundles" / str(version) / name
-    return module_path if module_path.exists() else None
-
-
 def authenticate_with_github(user_and_pass: dict = None,
                              access_token: str = None,
                              url_and_token: dict = None) -> Union[Github, None]:
