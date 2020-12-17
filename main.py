@@ -174,6 +174,17 @@ class GUI(tk.Tk):
         self.bundle_manager_frame = ttk.Frame(master=self.notebook)
         self.bundle_manager_frame.grid(row=0, column=0, padx=1, pady=1)
         self.notebook.add(self.bundle_manager_frame, text="Bundle Manager")
+        self.create_bundle_list()
+
+    def create_bundle_list(self):
+        self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
+        self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1)
+        self.bundle_listbox_var = tk.StringVar()
+        self.bundle_listbox = tk.Listbox(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
+        self.bundle_listbox.grid(row=0, column=0, padx=1, pady=1)
+        self.bundle_listbox_scrollbar = ttk.Scrollbar(self.bundle_listbox_frame, orient=tk.VERTICAL, command=self.bundle_listbox.yview)
+        self.bundle_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
+        self.bundle_listbox.config(yscrollcommand=self.bundle_listbox_scrollbar.set)
 
     def create_drive_selector(self):
         self.drive_combobox_label = ttk.Label(master=self, text="CircuitPython drive: ")
