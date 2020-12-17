@@ -179,12 +179,18 @@ class GUI(tk.Tk):
         self.drive_combobox_label.grid(row=1, column=0, padx=1, pady=1)
         self.drive_combobox = ttk.Combobox(master=self, width=3)
         self.drive_combobox.grid(row=1, column=1, padx=1, pady=1)
-        self.refresh_drives_button = ttk.Button(master=self, text="↻", width=2)
+        self.refresh_drives_button = ttk.Button(master=self, text="↻", width=2, command=self.update_drives)
         self.refresh_drives_button.grid(row=1, column=2, padx=1, pady=1)
         self.show_all_drives_var = tk.BooleanVar()
         self.show_all_drives_var.set(False)
-        self.show_all_drives_checkbutton = ttk.Checkbutton(master=self, text="Show all drives?", variable=self.show_all_drives_var)
+        self.show_all_drives_checkbutton = ttk.Checkbutton(master=self, text="Show all drives?",
+                                                           variable=self.show_all_drives_var, command=self.update_drives)
         self.show_all_drives_checkbutton.grid(row=1, column=3, padx=1, pady=1)
+        self.update_drives()
+
+    def update_drives(self):
+        self.drive_combobox.set("")
+        self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get())
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
