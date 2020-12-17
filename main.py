@@ -54,6 +54,7 @@ class GUI(tk.Tk):
         )
         try:
             bundle_manager.update_bundle(int(self.version_entry.get()), github_instance)
+            mbox.showinfo("CircuitPython Bundle Manager: Info", "CircuitPython bundle updated successfully!")
         except (TypeError, ValueError):
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
