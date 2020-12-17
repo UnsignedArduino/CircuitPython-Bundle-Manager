@@ -20,12 +20,12 @@ class GUI(tk.Tk):
     def create_bundle_update_tab(self):
         self.github_auth_frame = ttk.Frame(master=self.notebook)
         self.github_auth_frame.grid(row=0, column=0, padx=1, pady=1)
-        self.notebook.add(self.github_auth_frame, text="Authenticate with GitHub")
+        self.notebook.add(self.github_auth_frame, text="Update Bundle")
         self.create_username_password_input()
         self.create_access_token_input()
         self.create_github_enterprise_input()
         self.create_auth_method_selector()
-        self.update_bundle_button = ttk.Button(master=self.github_auth_frame, text="Update bundle", command=self.update_bundle)
+        self.update_bundle_button = ttk.Button(master=self.github_auth_frame, text="Update bundle", command=self.start_update_bundle_thread)
         self.update_bundle_button.grid(row=5, column=1, rowspan=2, columnspan=2, padx=1, pady=1)
         self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
@@ -34,11 +34,11 @@ class GUI(tk.Tk):
         self.updating = False
         self.check_button()
 
-    def update_bundle(self):
-        update_thread = Thread(target=self._update_bundle, daemon=True)
+    def start_update_bundle_thread(self):
+        update_thread = Thread(target=self.update_bundle, daemon=True)
         update_thread.start()
 
-    def _update_bundle(self):
+    def update_bundle(self):
         self.updating = True
         self.enable_github_auth_inputs(False)
         github_instance = bundle_manager.authenticate_with_github(
@@ -169,18 +169,35 @@ class GUI(tk.Tk):
         self.password_entry = ttk.Entry(master=self.github_auth_frame, show="*")
         self.password_entry.grid(row=1, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
+    def create_bundle_manager_tab(self):
+        self.bundle_manager_frame = ttk.Frame(master=self.notebook)
+        self.bundle_manager_frame.grid(row=0, column=0, padx=1, pady=1)
+        self.notebook.add(self.bundle_manager_frame, text="Bundle Manager")
+
+    def create_drive_selector(self):
+        self.drive_combobox_label = ttk.Label(master=self, text="CircuitPython drive: ")
+        self.drive_combobox_label.grid(row=1, column=0, padx=1, pady=1)
+        self.drive_combobox = ttk.Combobox(master=self, width=3)
+        self.drive_combobox.grid(row=1, column=1, padx=1, pady=1)
+        self.refresh_drives_button = ttk.Button(master=self, text="↻", width=2)
+        self.refresh_drives_button.grid(row=1, column=2, padx=1, pady=1)
+        self.show_all_drives_var = tk.BooleanVar()
+        self.show_all_drives_var.set(False)
+        self.show_all_drives_checkbutton = ttk.Checkbutton(master=self, text="Show all drives?", variable=self.show_all_drives_var)
+        self.show_all_drives_checkbutton.grid(row=1, column=3, padx=1, pady=1)
+
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
-        self.notebook.grid(row=0, column=0, padx=1, pady=1)
+        self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
+        self.create_drive_selector()
         self.create_bundle_update_tab()
+        self.create_bundle_manager_tab()  # TODO: Finish GUI layout
 
     def run(self):
         self.create_gui()
         self.mainloop()
 
-    def __exit__(self, err_type=None,
-                 err_value=None,
-                 err_traceback=None):
+    def __exit__(self, err_type=None, err_value=None, err_traceback=None):
         if err_type is not None:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! A fatal error has occurred!\n"
