@@ -17,9 +17,10 @@ class GUI(tk.Tk):
     def __enter__(self):
         return self
 
-    def create_bundle_update_frame(self):
-        self.github_auth_frame = ttk.LabelFrame(master=self, text="Authenticate with GitHub")
+    def create_bundle_update_tab(self):
+        self.github_auth_frame = ttk.Frame(master=self.notebook)
         self.github_auth_frame.grid(row=0, column=0, padx=1, pady=1)
+        self.notebook.add(self.github_auth_frame, text="Authenticate with GitHub")
         self.create_username_password_input()
         self.create_access_token_input()
         self.create_github_enterprise_input()
@@ -53,7 +54,7 @@ class GUI(tk.Tk):
         )
         try:
             bundle_manager.update_bundle(int(self.version_entry.get()), github_instance)
-        except TypeError:
+        except (TypeError, ValueError):
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
                            "Did you enter in the correct CircuitPython version below?\n\n" + traceback.format_exc())
@@ -169,7 +170,9 @@ class GUI(tk.Tk):
         self.password_entry.grid(row=1, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
     def create_gui(self):
-        self.create_bundle_update_frame()
+        self.notebook = ttk.Notebook(master=self)
+        self.notebook.grid(row=0, column=0, padx=1, pady=1)
+        self.create_bundle_update_tab()
 
     def run(self):
         self.create_gui()
