@@ -22,7 +22,7 @@ Functions list:
 """
 
 from pathlib import Path
-from shutil import copy2, copytree
+from shutil import copy2, copytree, rmtree
 
 
 def get_lib_path(device_drive: Path = None) -> Path:
@@ -105,4 +105,4 @@ def uninstall_module(module_path: Path = None) -> None:
     if module_path.is_file():
         module_path.unlink()
     else:
-        module_path.rmdir()
+        rmtree(module_path)

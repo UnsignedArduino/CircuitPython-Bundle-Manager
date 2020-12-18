@@ -204,17 +204,28 @@ class GUI(tk.Tk):
         if self.installing:
             self.install_module_button.config(state="disabled", text="Installing...")
             self.uninstall_module_button.config(state="disabled")
+            self.bundle_listbox.config(state="disabled")
+            self.installed_modules_listbox.config(state="disabled")
             return
         else:
             self.install_module_button.config(text="Install")
+            self.bundle_listbox.config(state="normal")
+            self.installed_modules_listbox.config(state="normal")
         if self.uninstalling:
             self.install_module_button.config(state="disabled")
             self.uninstall_module_button.config(state="disabled", text="Uninstalling...")
+            self.bundle_listbox.config(state="disabled")
+            self.installed_modules_listbox.config(state="disabled")
             return
         else:
             self.uninstall_module_button.config(text="Uninstall")
+            self.bundle_listbox.config(state="normal")
+            self.installed_modules_listbox.config(state="normal")
         self.install_module_button.config(state="normal" if len(self.bundle_listbox.curselection()) > 0 else "disabled")
         self.uninstall_module_button.config(state="normal" if len(self.installed_modules_listbox.curselection()) > 0 else "disabled")
+        if self.drive_combobox.get() == "":
+            self.install_module_button.config(state="disabled")
+            self.uninstall_module_button.config(state="disabled")
 
     def create_bundle_list(self):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
@@ -249,10 +260,16 @@ class GUI(tk.Tk):
     def uninstall_module(self):
         self.uninstalling = True
         drive = Path(self.drive_combobox.get())
-        module_path = modules.get_lib_path(drive) / modules.list_modules(drive)[self.installed_modules_listbox.curselection()[0]]
-        modules.uninstall_module(module_path)
+        try:
+            module_path = modules.get_lib_path(drive) / modules.list_modules(drive)[self.installed_modules_listbox.curselection()[0]]
+            modules.uninstall_module(module_path)
+        except RuntimeError:
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Failed to uninstall module!\n\n" + traceback.format_exc())
+            return
         self.uninstalling = False
         self.update_modules_in_device()
+        mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully uninstalled module!")
 
     def start_install_module_thread(self):
         install_thread = Thread(target=self.install_module, daemon=True)
@@ -260,14 +277,20 @@ class GUI(tk.Tk):
 
     def install_module(self):
         self.installing = True
-        bundle_path = bundle_manager.get_bundle_path(int(self.version_listbox.get()))
-        bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))[self.bundle_listbox.curselection()[0]]
-        modules.install_module(
-            bundle_path / bundles,
-            Path(self.drive_combobox.get()) / "lib"
-        )
+        try:
+            bundle_path = bundle_manager.get_bundle_path(int(self.version_listbox.get()))
+            bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))[self.bundle_listbox.curselection()[0]]
+            modules.install_module(
+                bundle_path / bundles,
+                Path(self.drive_combobox.get()) / "lib"
+            )
+        except RuntimeError:
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Failed to install module!\n\n" + traceback.format_exc())
+            return
         self.installing = False
         self.update_modules_in_device()
+        mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully installed module!")
 
     def create_drive_selector(self):
         self.drive_combobox_label = ttk.Label(master=self, text="CircuitPython drive: ")
@@ -295,7 +318,7 @@ class GUI(tk.Tk):
         self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
         self.create_drive_selector()
         self.create_bundle_update_tab()
-        self.create_bundle_manager_tab()  # TODO: Finish GUI layout
+        self.create_bundle_manager_tab()
 
     def run(self):
         self.create_gui()
