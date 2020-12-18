@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbox
 from threading import Thread
+from pathlib import Path
 import traceback
 from github import GithubException
 from time import sleep
@@ -179,6 +180,13 @@ class GUI(tk.Tk):
         self.create_module_buttons()
         self.update_buttons()
         self.update_modules_in_bundle()
+        self.update_modules_in_device()
+
+    def update_modules_in_device(self):
+        try:
+            self.installed_modules_listbox_var.set(modules.list_modules(Path(self.drive_combobox.get())))
+        except (AttributeError, RuntimeError):
+            pass
 
     def update_modules_in_bundle(self):
         try:
@@ -235,9 +243,9 @@ class GUI(tk.Tk):
         self.update_drives()
 
     def update_drives(self):
-        self.drive_combobox.set("")
-        self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get())
         self.update_modules_in_bundle()
+        self.update_modules_in_device()
+        self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get())
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
