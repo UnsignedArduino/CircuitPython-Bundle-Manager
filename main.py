@@ -246,6 +246,8 @@ class GUI(tk.Tk):
         self.update_modules_in_bundle()
         self.update_modules_in_device()
         self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get())
+        if len(drives.list_connected_drives()) > 0:
+            self.drive_combobox.set(drives.list_connected_drives()[0])
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
