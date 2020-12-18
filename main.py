@@ -177,6 +177,22 @@ class GUI(tk.Tk):
         self.create_bundle_list()
         self.create_installed_module_list()
         self.create_module_buttons()
+        self.update_buttons()
+        self.update_modules_in_bundle()
+
+    def update_modules_in_bundle(self):
+        try:
+            bundles = bundle_manager.list_modules_in_bundle(int(self.version_entry.get()))
+            if bundles == None:
+                bundles = []
+            self.bundle_listbox_var.set(bundles)
+        except (ValueError, AttributeError):
+            pass
+
+    def update_buttons(self):
+        self.after(100, self.update_buttons)
+        self.install_module_button.config(state="normal" if len(self.bundle_listbox.curselection()) > 0 else "disabled")
+        self.uninstall_module_button.config(state="normal" if len(self.installed_modules_listbox.curselection()) > 0 else "disabled")
 
     def create_bundle_list(self):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
@@ -221,6 +237,7 @@ class GUI(tk.Tk):
     def update_drives(self):
         self.drive_combobox.set("")
         self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get())
+        self.update_modules_in_bundle()
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)

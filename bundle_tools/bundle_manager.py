@@ -42,7 +42,14 @@ def list_modules_in_bundle(version: int = None) -> list:
     :return: A list of strings with the module name. Returns an empty list if no bundle was downloaded.
     """
     modules = []
-    module_path = Path.cwd() / "bundles" / str(version)
+    modules_path = Path.cwd() / "bundles" / str(version)
+    bundles = [str(path) for path in list(modules_path.glob("*"))]
+    bundles.sort()
+    try:
+        bundles = bundles[-1:][0]
+    except IndexError:
+        return None
+    module_path = (list(Path(bundles).glob("*"))[0] / "lib")
     for module in module_path.glob("*"):
         modules.append(module.name)
     return modules
