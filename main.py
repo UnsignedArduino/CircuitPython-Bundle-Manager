@@ -239,8 +239,20 @@ class GUI(tk.Tk):
     def create_module_buttons(self):
         self.install_module_button = ttk.Button(self.bundle_manager_frame, text="Install", command=self.start_install_module_thread)
         self.install_module_button.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NSEW)
-        self.uninstall_module_button = ttk.Button(self.bundle_manager_frame, text="Uninstall")
+        self.uninstall_module_button = ttk.Button(self.bundle_manager_frame, text="Uninstall", command=self.start_uninstall_module_thread)
         self.uninstall_module_button.grid(row=2, column=1, padx=1, pady=1, sticky=tk.NSEW)
+
+    def start_uninstall_module_thread(self):
+        uninstall_thread = Thread(target=self.uninstall_module, daemon=True)
+        uninstall_thread.start()
+
+    def uninstall_module(self):
+        self.uninstalling = True
+        drive = Path(self.drive_combobox.get())
+        module_path = modules.get_lib_path(drive) / modules.list_modules(drive)[self.installed_modules_listbox.curselection()[0]]
+        modules.uninstall_module(module_path)
+        self.uninstalling = False
+        self.update_modules_in_device()
 
     def start_install_module_thread(self):
         install_thread = Thread(target=self.install_module, daemon=True)
