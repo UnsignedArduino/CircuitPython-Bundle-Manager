@@ -6,6 +6,7 @@ from pathlib import Path
 import traceback
 from github import GithubException
 from time import sleep
+import json
 from bundle_tools import drives, modules, bundle_manager
 
 
@@ -14,9 +15,25 @@ class GUI(tk.Tk):
         super().__init__()
         self.title("CircuitPython Bundle Manager")
         self.resizable(False, False)
+        self.config_path = Path.cwd() / "config.json"
 
     def __enter__(self):
         return self
+
+    def save_key(self, key=None, value=None):
+        if not self.config_path.exists():
+            self.config_path.write_text("{}")
+        old_json = json.loads(self.config_path.read_text())
+        old_json[key] = value
+        self.config_path.write_text(json.dumps(old_json, sort_keys=True, indent=4))
+
+    def load_key(self, key):
+        if not self.config_path.exists():
+            self.config_path.write_text("{}")
+        try:
+            return json.loads(self.config_path.read_text())[key]
+        except (json.decoder.JSONDecodeError, KeyError):
+            return None
 
     def create_bundle_update_tab(self):
         self.github_auth_frame = ttk.Frame(master=self.notebook)
@@ -30,8 +47,13 @@ class GUI(tk.Tk):
         self.update_bundle_button.grid(row=5, column=1, rowspan=2, columnspan=2, padx=1, pady=1)
         self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
-        self.version_listbox = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100)
+        self.version_listbox = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100,
+                                           command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()))
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
+        try:
+            self.version_listbox.set(self.load_key("last_circuitpython_bundle_version"))
+        except FileNotFoundError:
+            pass
         self.updating = False
         self.check_button()
 
