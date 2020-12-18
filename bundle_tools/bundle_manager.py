@@ -32,7 +32,7 @@ from time import time as unix
 from typing import Union
 
 
-def list_modules_in_bundle(version: int = None) -> list:
+def list_modules_in_bundle(version: int = None) -> Union[list, None]:
     """
     Lists the modules in the bundle stored internally.
 
@@ -53,6 +53,26 @@ def list_modules_in_bundle(version: int = None) -> list:
     for module in module_path.glob("*"):
         modules.append(module.name)
     return modules
+
+
+def get_bundle_path(version: int = None) -> Union[Path, None]:
+    """
+    Gets that path of the bundle stored internally.
+
+    :param version: An integer saying what version we want, like 5 for CircuitPython 5.x and 6 for CircuitPython 6.x.
+     Defaults to None, and will raise an exception if no compatible object is passed in.
+
+    :return: A pathlib.Path object pointing to the path of the bundle or None if we can't find it.
+    """
+    modules_path = Path.cwd() / "bundles" / str(version)
+    bundles = [str(path) for path in list(modules_path.glob("*"))]
+    bundles.sort()
+    try:
+        bundles = bundles[-1:][0]
+    except IndexError:
+        return None
+    bundle_path = (list(Path(bundles).glob("*"))[0] / "lib")
+    return bundle_path
 
 
 def authenticate_with_github(user_and_pass: dict = None,

@@ -30,8 +30,8 @@ class GUI(tk.Tk):
         self.update_bundle_button.grid(row=5, column=1, rowspan=2, columnspan=2, padx=1, pady=1)
         self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
-        self.version_entry = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100)
-        self.version_entry.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
+        self.version_listbox = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100)
+        self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
         self.updating = False
         self.check_button()
 
@@ -54,7 +54,7 @@ class GUI(tk.Tk):
             } if self.github_auth_method_var.get() == "enterprise" else None
         )
         try:
-            bundle_manager.update_bundle(int(self.version_entry.get()), github_instance)
+            bundle_manager.update_bundle(int(self.version_listbox.get()), github_instance)
             mbox.showinfo("CircuitPython Bundle Manager: Info", "CircuitPython bundle updated successfully!")
         except (TypeError, ValueError):
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
@@ -76,7 +76,7 @@ class GUI(tk.Tk):
         self.access_token_radio_button.config(state="normal" if enable else "disabled")
         self.enterprise_radio_button.config(state="normal" if enable else "disabled")
         self.version_label.config(state="normal" if enable else "disabled")
-        self.version_entry.config(state="normal" if enable else "disabled")
+        self.version_listbox.config(state="normal" if enable else "disabled")
 
     def check_button(self):
         self.after(100, self.check_button)
@@ -85,7 +85,7 @@ class GUI(tk.Tk):
             return
         else:
             self.update_bundle_button.config(state="enabled", text="Update bundle")
-        if self.version_entry.get() == "":
+        if self.version_listbox.get() == "":
             self.update_bundle_button.config(state="disabled")
             return
         if self.github_auth_method_var.get() == "username and password":
@@ -175,6 +175,8 @@ class GUI(tk.Tk):
         self.bundle_manager_frame = ttk.Frame(master=self.notebook)
         self.bundle_manager_frame.grid(row=0, column=0, padx=1, pady=1)
         self.notebook.add(self.bundle_manager_frame, text="Bundle Manager")
+        self.installing = False
+        self.uninstalling = False
         self.create_bundle_list()
         self.create_installed_module_list()
         self.create_module_buttons()
@@ -190,7 +192,7 @@ class GUI(tk.Tk):
 
     def update_modules_in_bundle(self):
         try:
-            bundles = bundle_manager.list_modules_in_bundle(int(self.version_entry.get()))
+            bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))
             if bundles == None:
                 bundles = []
             self.bundle_listbox_var.set(bundles)
@@ -199,6 +201,18 @@ class GUI(tk.Tk):
 
     def update_buttons(self):
         self.after(100, self.update_buttons)
+        if self.installing:
+            self.install_module_button.config(state="disabled", text="Installing...")
+            self.uninstall_module_button.config(state="disabled")
+            return
+        else:
+            self.install_module_button.config(text="Install")
+        if self.uninstalling:
+            self.install_module_button.config(state="disabled")
+            self.uninstall_module_button.config(state="disabled", text="Uninstalling...")
+            return
+        else:
+            self.uninstall_module_button.config(text="Uninstall")
         self.install_module_button.config(state="normal" if len(self.bundle_listbox.curselection()) > 0 else "disabled")
         self.uninstall_module_button.config(state="normal" if len(self.installed_modules_listbox.curselection()) > 0 else "disabled")
 
@@ -223,10 +237,25 @@ class GUI(tk.Tk):
         self.installed_modules_listbox.config(yscrollcommand=self.installed_modules_listbox_scrollbar.set)
 
     def create_module_buttons(self):
-        self.install_module_button = ttk.Button(self.bundle_manager_frame, text="Install")
+        self.install_module_button = ttk.Button(self.bundle_manager_frame, text="Install", command=self.start_install_module_thread)
         self.install_module_button.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.uninstall_module_button = ttk.Button(self.bundle_manager_frame, text="Uninstall")
         self.uninstall_module_button.grid(row=2, column=1, padx=1, pady=1, sticky=tk.NSEW)
+
+    def start_install_module_thread(self):
+        install_thread = Thread(target=self.install_module, daemon=True)
+        install_thread.start()
+
+    def install_module(self):
+        self.installing = True
+        bundle_path = bundle_manager.get_bundle_path(int(self.version_listbox.get()))
+        bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))[self.bundle_listbox.curselection()[0]]
+        modules.install_module(
+            bundle_path / bundles,
+            Path(self.drive_combobox.get()) / "lib"
+        )
+        self.installing = False
+        self.update_modules_in_device()
 
     def create_drive_selector(self):
         self.drive_combobox_label = ttk.Label(master=self, text="CircuitPython drive: ")
