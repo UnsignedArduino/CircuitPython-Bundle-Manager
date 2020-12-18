@@ -175,16 +175,34 @@ class GUI(tk.Tk):
         self.bundle_manager_frame.grid(row=0, column=0, padx=1, pady=1)
         self.notebook.add(self.bundle_manager_frame, text="Bundle Manager")
         self.create_bundle_list()
+        self.create_installed_module_list()
+        self.create_module_buttons()
 
     def create_bundle_list(self):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
-        self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1)
+        self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
         self.bundle_listbox_var = tk.StringVar()
         self.bundle_listbox = tk.Listbox(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
         self.bundle_listbox.grid(row=0, column=0, padx=1, pady=1)
         self.bundle_listbox_scrollbar = ttk.Scrollbar(self.bundle_listbox_frame, orient=tk.VERTICAL, command=self.bundle_listbox.yview)
         self.bundle_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.bundle_listbox.config(yscrollcommand=self.bundle_listbox_scrollbar.set)
+
+    def create_installed_module_list(self):
+        self.installed_modules_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Installed modules")
+        self.installed_modules_listbox_frame.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NE)
+        self.installed_modules_listbox_var = tk.StringVar()
+        self.installed_modules_listbox = tk.Listbox(self.installed_modules_listbox_frame, width=18, height=5, listvariable=self.installed_modules_listbox_var)
+        self.installed_modules_listbox.grid(row=0, column=0, padx=1, pady=1)
+        self.installed_modules_listbox_scrollbar = ttk.Scrollbar(self.installed_modules_listbox_frame, orient=tk.VERTICAL, command=self.installed_modules_listbox.yview)
+        self.installed_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
+        self.installed_modules_listbox.config(yscrollcommand=self.installed_modules_listbox_scrollbar.set)
+
+    def create_module_buttons(self):
+        self.install_module_button = ttk.Button(self.bundle_manager_frame, text="Install")
+        self.install_module_button.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NSEW)
+        self.uninstall_module_button = ttk.Button(self.bundle_manager_frame, text="Uninstall")
+        self.uninstall_module_button.grid(row=2, column=1, padx=1, pady=1, sticky=tk.NSEW)
 
     def create_drive_selector(self):
         self.drive_combobox_label = ttk.Label(master=self, text="CircuitPython drive: ")
