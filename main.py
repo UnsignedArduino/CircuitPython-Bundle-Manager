@@ -5,6 +5,7 @@ from threading import Thread
 from pathlib import Path
 import traceback
 from github import GithubException
+import webbrowser
 from time import sleep
 import json
 from bundle_tools import drives, modules, bundle_manager
@@ -352,12 +353,53 @@ class GUI(tk.Tk):
         if len(drives.list_connected_drives()) > 0:
             self.drive_combobox.set(drives.list_connected_drives()[0])
 
+    def copy_to_clipboard(self, string: str = ""):
+        self.clipboard_clear()
+        self.clipboard_append(string)
+        self.update()
+
+    def create_other_tab(self):
+        self.other_frame = ttk.Frame(master=self.notebook)
+        self.other_frame.grid(row=0, column=0)
+        self.notebook.add(self.other_frame, text="Other")
+        self.open_readme_button = ttk.Button(
+            master=self.other_frame, text="Open README file",
+            command=lambda: webbrowser.open(str(Path.cwd() / "README.md"))
+        )
+        self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.copy_readme_location_button = ttk.Button(
+            master=self.other_frame, text="Copy README file location",
+            command=lambda: self.copy_to_clipboard(str(Path.cwd() / "README.md"))
+        )
+        self.copy_readme_location_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.open_config_button = ttk.Button(
+            master=self.other_frame, text="Open config file",
+            command=lambda: webbrowser.open(str(Path.cwd() / "config.json"))
+        )
+        self.open_config_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.copy_config_location_button = ttk.Button(
+            master=self.other_frame, text="Copy config file location",
+            command=lambda: self.copy_to_clipboard(str(Path.cwd() / "config.json"))
+        )
+        self.copy_config_location_button.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.open_github_repo_button = ttk.Button(
+            master=self.other_frame, text="Open GitHub repo",
+            command=lambda: webbrowser.open("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
+        )
+        self.open_github_repo_button.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.copy_github_repo_button = ttk.Button(
+            master=self.other_frame, text="Copy GitHub repo link",
+            command=lambda: self.copy_to_clipboard("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
+        )
+        self.copy_github_repo_button.grid(row=2, column=1, padx=1, pady=1, sticky=tk.NW)
+
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
         self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
         self.create_drive_selector()
         self.create_bundle_update_tab()
         self.create_bundle_manager_tab()
+        self.create_other_tab()
 
     def run(self):
         self.create_gui()
