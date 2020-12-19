@@ -292,7 +292,7 @@ class GUI(tk.Tk):
                            "Failed to uninstall module!\n\n" + traceback.format_exc())
             return
         self.uninstalling = False
-        self.update_modules_in_device()
+        self.after(100, self.update_modules_in_device)
         mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully uninstalled module!")
 
     def start_install_module_thread(self):
@@ -313,7 +313,7 @@ class GUI(tk.Tk):
                            "Failed to install module!\n\n" + traceback.format_exc())
             return
         self.installing = False
-        self.update_modules_in_device()
+        self.after(100, self.update_modules_in_device)
         mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully installed module!")
 
     def create_drive_selector(self):
