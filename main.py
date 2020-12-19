@@ -51,7 +51,9 @@ class GUI(tk.Tk):
                                            command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()))
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
         try:
-            self.version_listbox.set(self.load_key("last_circuitpython_bundle_version"))
+            version = self.load_key("last_circuitpython_bundle_version")
+            if not version == None:
+                self.version_listbox.set(version)
         except FileNotFoundError:
             pass
         self.updating = False
