@@ -124,11 +124,14 @@ class GUI(tk.Tk):
             self.update_bundle_button.config(
                 state="normal" if self.enterprise_url_entry.get() != "" and self.enterprise_token_entry.get() != "" else "disabled"
             )
+        else:
+            self.update_bundle_button.config(state="disabled")
 
     def update_selected_auth_method(self):
         self.enable_username_password(self.github_auth_method_var.get() == "username and password")
         self.enable_access_token(self.github_auth_method_var.get() == "access token")
         self.enable_enterprise(self.github_auth_method_var.get() == "enterprise")
+        self.save_key("last_auth_method_used", self.github_auth_method_var.get())
 
     def enable_enterprise(self, enable: bool = True):
         self.enterprise_url_label.config(state="normal" if enable else "disabled")
@@ -167,6 +170,12 @@ class GUI(tk.Tk):
             command=self.update_selected_auth_method
         )
         self.enterprise_radio_button.grid(row=7, column=0, padx=1, pady=1, sticky=tk.NW)
+        try:
+            auth_method = self.load_key("last_auth_method_used")
+            if not auth_method == None:
+                self.github_auth_method_var.set(auth_method)
+        except FileNotFoundError:
+            pass
         self.update_selected_auth_method()
 
     def create_github_enterprise_input(self):
