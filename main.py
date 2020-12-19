@@ -296,13 +296,16 @@ class GUI(tk.Tk):
         try:
             module_path = modules.get_lib_path(drive) / modules.list_modules(drive)[self.installed_modules_listbox.curselection()[0]]
             modules.uninstall_module(module_path)
-        except (RuntimeError, FileNotFoundError):
+        except FileNotFoundError:
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Failed to uninstall module - did you input a drive that exists?\n\n" + traceback.format_exc())
+        except RuntimeError:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to uninstall module!\n\n" + traceback.format_exc())
-            return
+        else:
+            mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully uninstalled module!")
         self.uninstalling = False
         self.after(100, self.update_modules_in_device)
-        mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully uninstalled module!")
 
     def start_install_module_thread(self):
         install_thread = Thread(target=self.install_module, daemon=True)
@@ -317,13 +320,16 @@ class GUI(tk.Tk):
                 bundle_path / bundles,
                 Path(self.drive_combobox.get()) / "lib"
             )
-        except (RuntimeError, FileNotFoundError):
+        except FileNotFoundError:
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Failed to install module - did you input a drive that exists?\n\n" + traceback.format_exc())
+        except RuntimeError:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to install module!\n\n" + traceback.format_exc())
-            return
+        else:
+            mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully installed module!")
         self.installing = False
         self.after(100, self.update_modules_in_device)
-        mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully installed module!")
 
     def create_drive_selector(self):
         self.drive_combobox_label = ttk.Label(master=self, text="CircuitPython drive: ")
