@@ -84,12 +84,12 @@ class GUI(tk.Tk):
         except (TypeError, ValueError):
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
-                           "Did you enter in the correct CircuitPython version below?\n\n" + traceback.format_exc())
+                           "Did you enter in the correct CircuitPython version below?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except GithubException:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
                            "Something happened while trying to access GitHub! "
-                           "Did you enter in the correct credentials?\n\n" + traceback.format_exc())
+                           "Did you enter in the correct credentials?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         self.updating = False
         self.enable_github_auth_inputs(True)
 
@@ -299,10 +299,10 @@ class GUI(tk.Tk):
             modules.uninstall_module(module_path)
         except FileNotFoundError:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
-                           "Failed to uninstall module - did you input a drive that exists?\n\n" + traceback.format_exc())
+                           "Failed to uninstall module - did you input a drive that exists?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except RuntimeError:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
-                           "Failed to uninstall module!\n\n" + traceback.format_exc())
+                           "Failed to uninstall module!\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         else:
             mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully uninstalled module!")
         self.uninstalling = False
@@ -323,10 +323,10 @@ class GUI(tk.Tk):
             )
         except FileNotFoundError:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
-                           "Failed to install module - did you input a drive that exists?\n\n" + traceback.format_exc())
+                           "Failed to install module - did you input a drive that exists?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except RuntimeError:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
-                           "Failed to install module!\n\n" + traceback.format_exc())
+                           "Failed to install module!\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         else:
             mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully installed module!")
         self.installing = False
@@ -394,6 +394,13 @@ class GUI(tk.Tk):
             command=lambda: self.copy_to_clipboard("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
         self.copy_github_repo_button.grid(row=7, column=0, padx=1, pady=1, sticky=tk.NW)
+
+    def show_traceback(self):
+        try:
+            return self.load_key("show_traceback_in_error_messages").lower() in ("yes", "true", "1")
+        except AttributeError:
+            self.save_key("show_traceback_in_error_messages", "false")
+            return False
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
