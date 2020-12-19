@@ -296,7 +296,7 @@ class GUI(tk.Tk):
         try:
             module_path = modules.get_lib_path(drive) / modules.list_modules(drive)[self.installed_modules_listbox.curselection()[0]]
             modules.uninstall_module(module_path)
-        except RuntimeError:
+        except (RuntimeError, FileNotFoundError):
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to uninstall module!\n\n" + traceback.format_exc())
             return
@@ -317,7 +317,7 @@ class GUI(tk.Tk):
                 bundle_path / bundles,
                 Path(self.drive_combobox.get()) / "lib"
             )
-        except RuntimeError:
+        except (RuntimeError, FileNotFoundError):
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to install module!\n\n" + traceback.format_exc())
             return

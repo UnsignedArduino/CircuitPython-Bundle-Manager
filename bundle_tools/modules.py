@@ -86,6 +86,10 @@ def install_module(module_path: Path = None, device_path: Path = None) -> None:
 
     :return: None
     """
+    if not module_path.exists():
+        raise FileNotFoundError(f"{module_path} does not exist!")
+    if not device_path.exists():
+        raise FileNotFoundError(f"{device_path} does not exist!")
     if module_path.is_file():
         copy2(module_path, device_path)
     else:
@@ -102,6 +106,8 @@ def uninstall_module(module_path: Path = None) -> None:
 
     :return: None
     """
+    if not module_path.exists():
+        raise FileNotFoundError(f"{module_path} does not exist!")
     if module_path.is_file():
         module_path.unlink()
     else:
