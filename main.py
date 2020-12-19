@@ -371,27 +371,29 @@ class GUI(tk.Tk):
             master=self.other_frame, text="Copy README file location",
             command=lambda: self.copy_to_clipboard(str(Path.cwd() / "README.md"))
         )
-        self.copy_readme_location_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.copy_readme_location_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=2, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.open_config_button = ttk.Button(
             master=self.other_frame, text="Open config file",
             command=lambda: webbrowser.open(str(Path.cwd() / "config.json"))
         )
-        self.open_config_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_config_button.grid(row=3, column=0, padx=1, pady=1, sticky=tk.NW)
         self.copy_config_location_button = ttk.Button(
             master=self.other_frame, text="Copy config file location",
             command=lambda: self.copy_to_clipboard(str(Path.cwd() / "config.json"))
         )
-        self.copy_config_location_button.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.copy_config_location_button.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.open_github_repo_button = ttk.Button(
-            master=self.other_frame, text="Open GitHub repo",
+            master=self.other_frame, text="Open GitHub repo in browser",
             command=lambda: webbrowser.open("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
-        self.open_github_repo_button.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_github_repo_button.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
         self.copy_github_repo_button = ttk.Button(
             master=self.other_frame, text="Copy GitHub repo link",
             command=lambda: self.copy_to_clipboard("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
-        self.copy_github_repo_button.grid(row=2, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.copy_github_repo_button.grid(row=7, column=0, padx=1, pady=1, sticky=tk.NW)
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
