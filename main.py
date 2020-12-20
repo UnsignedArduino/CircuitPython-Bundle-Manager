@@ -51,12 +51,7 @@ class GUI(tk.Tk):
         self.version_listbox = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100,
                                            command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()))
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
-        try:
-            version = self.load_key("last_circuitpython_bundle_version")
-            if not version == None:
-                self.version_listbox.set(version)
-        except FileNotFoundError:
-            pass
+        self.version_listbox.set(self.load_key("last_circuitpython_bundle_version"))
         self.updating = False
         self.check_button()
 
@@ -399,12 +394,20 @@ class GUI(tk.Tk):
         try:
             return self.load_key("show_traceback_in_error_messages").lower() in ("yes", "true", "1")
         except AttributeError:
-            self.save_key("show_traceback_in_error_messages", "false")
             return False
+
+    def create_config(self):
+        if not self.load_key("last_circuitpython_bundle_version"):
+            self.save_key("last_circuitpython_bundle_version", "6")
+        if not self.load_key("last_auth_method_used"):
+            self.save_key("last_auth_method_used", "username and password")
+        if not self.load_key("show_traceback_in_error_messages"):
+            self.save_key("show_traceback_in_error_messages", "false")
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
         self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
+        self.create_config()
         self.create_drive_selector()
         self.create_bundle_update_tab()
         self.create_bundle_manager_tab()
