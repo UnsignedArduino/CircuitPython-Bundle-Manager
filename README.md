@@ -5,12 +5,12 @@ Run [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/
 Note: This will create a bunch of files and directories, so I recommend placing this in its own directory and adding a shortcut or a symlink to the desktop or something like that.
 
 ## Options
-You can find these options in `config.json`, which is in the same directory as [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/main.py), and should be auto-generated upon first run. In case it does not happen, this is the full JSON file:
+You can find these options in `config.json`, which is in the same directory as [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/main.py), and should be auto-generated upon first run. In case it does not happen, this is the default JSON file:
 ```json
 {
-    "last_auth_method_used": "access token",
+    "last_auth_method_used": "username and password",
     "last_circuitpython_bundle_version": "6",
-    "show_traceback_in_error_messages": "True"
+    "show_traceback_in_error_messages": "false"
 }
 ```
 `last_auth_method_used` should be a string of `username and password`, `access token`, or `enterprise`. This is the last method of authentication you used.
