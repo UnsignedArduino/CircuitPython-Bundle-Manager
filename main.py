@@ -216,12 +216,14 @@ class GUI(tk.Tk):
         self.create_installed_module_list()
         self.create_module_buttons()
         self.update_buttons()
-        self.update_modules_in_bundle()
-        self.update_modules_in_device()
+        self.update_modules()
 
     def update_modules_in_device(self):
         try:
-            installed_modules = modules.list_modules(Path(self.drive_combobox.get()))
+            try:
+                installed_modules = modules.list_modules(Path(self.drive_combobox.get()))
+            except RuntimeError:
+                installed_modules = []
             installed_modules.sort()
             self.installed_modules_listbox_var.set(installed_modules)
         except (AttributeError, RuntimeError):
