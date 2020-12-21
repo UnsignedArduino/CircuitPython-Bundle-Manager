@@ -352,13 +352,15 @@ class GUI(tk.Tk):
         self.show_all_drives_checkbutton.grid(row=1, column=3, padx=1, pady=1)
         self.update_drives()
 
-    def update_drives(self):
+    def update_modules(self):
         self.update_modules_in_bundle()
         self.update_modules_in_device()
+
+    def update_drives(self):
+        self.update_modules()
         self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get(),
                                                                      Path(self.load_key("unix_drive_mount_point")))
-        self.drive_combobox.set("")
-        if len(drives.list_connected_drives(not self.show_all_drives_var.get(), Path(self.load_key("unix_drive_mount_point")))) > 0:
+        if self.drive_combobox.get() == "" and len(drives.list_connected_drives(not self.show_all_drives_var.get(), Path(self.load_key("unix_drive_mount_point")))) > 0:
             self.drive_combobox.set(drives.list_connected_drives(not self.show_all_drives_var.get(), Path(self.load_key("unix_drive_mount_point")))[0])
 
     def copy_to_clipboard(self, string: str = ""):
