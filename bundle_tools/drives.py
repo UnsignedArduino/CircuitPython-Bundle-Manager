@@ -47,7 +47,6 @@ def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Pa
             else:
                 connected_drives.append(path)
     elif os_detect.on_linux():
-        # TODO: Someone test this!
         for path in drive_mount_point.glob("*"):
             if circuitpython_only and (path / "boot_out.txt").exists():
                 connected_drives.append(path)

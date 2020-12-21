@@ -221,7 +221,9 @@ class GUI(tk.Tk):
 
     def update_modules_in_device(self):
         try:
-            self.installed_modules_listbox_var.set(modules.list_modules(Path(self.drive_combobox.get())))
+            installed_modules = modules.list_modules(Path(self.drive_combobox.get()))
+            installed_modules.sort()
+            self.installed_modules_listbox_var.set(installed_modules)
         except (AttributeError, RuntimeError):
             pass
 
@@ -230,6 +232,7 @@ class GUI(tk.Tk):
             bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))
             if bundles == None:
                 bundles = []
+            bundles.sort()
             self.bundle_listbox_var.set(bundles)
         except (ValueError, AttributeError):
             pass
