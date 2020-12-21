@@ -357,8 +357,8 @@ class GUI(tk.Tk):
         self.update_modules_in_device()
         self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get(),
                                                                      Path(self.load_key("unix_drive_mount_point")))
-        if len(drives.list_connected_drives()) > 0:
-            self.drive_combobox.set(drives.list_connected_drives()[0])
+        if len(drives.list_connected_drives(not self.show_all_drives_var.get(), Path(self.load_key("unix_drive_mount_point")))) > 0:
+            self.drive_combobox.set(drives.list_connected_drives(not self.show_all_drives_var.get(), Path(self.load_key("unix_drive_mount_point")))[0])
 
     def copy_to_clipboard(self, string: str = ""):
         self.clipboard_clear()
