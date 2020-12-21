@@ -351,7 +351,7 @@ class GUI(tk.Tk):
         self.update_modules_in_bundle()
         self.update_modules_in_device()
         self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get(),
-                                                                     self.load_key("unix_drive_mount_point"))
+                                                                     Path(self.load_key("unix_drive_mount_point")))
         if len(drives.list_connected_drives()) > 0:
             self.drive_combobox.set(drives.list_connected_drives()[0])
 
