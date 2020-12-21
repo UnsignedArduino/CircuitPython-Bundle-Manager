@@ -8,6 +8,7 @@ from github import GithubException
 import webbrowser
 from time import sleep
 import json
+import re
 from bundle_tools import drives, modules, bundle_manager
 
 
@@ -36,6 +37,9 @@ class GUI(tk.Tk):
         except (json.decoder.JSONDecodeError, KeyError):
             return None
 
+    def validate_for_number(self, new):
+        return new.isdigit() and len(new) <= 3
+
     def create_bundle_update_tab(self):
         self.github_auth_frame = ttk.Frame(master=self.notebook)
         self.github_auth_frame.grid(row=0, column=0, padx=1, pady=1)
@@ -48,8 +52,10 @@ class GUI(tk.Tk):
         self.update_bundle_button.grid(row=5, column=1, rowspan=2, columnspan=2, padx=1, pady=1)
         self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
+        validate_for_number_wrapper = (self.register(self.validate_for_number), '%P')
         self.version_listbox = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100,
-                                           command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()))
+                                           command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()),
+                                           validate="key", validatecommand=validate_for_number_wrapper)
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
         self.version_listbox.set(self.load_key("last_circuitpython_bundle_version"))
         self.updating = False
