@@ -334,9 +334,9 @@ class GUI(tk.Tk):
         self.after(100, self.update_modules_in_device)
 
     def create_drive_selector(self):
-        self.drive_combobox_label = ttk.Label(master=self, text="CircuitPython drive: ")
+        self.drive_combobox_label = ttk.Label(master=self, text="Drive:")
         self.drive_combobox_label.grid(row=1, column=0, padx=1, pady=1)
-        self.drive_combobox = ttk.Combobox(master=self, width=3)
+        self.drive_combobox = ttk.Combobox(master=self, width=16)
         self.drive_combobox.grid(row=1, column=1, padx=1, pady=1)
         self.refresh_drives_button = ttk.Button(master=self, text="↻", width=2, command=self.update_drives)
         self.refresh_drives_button.grid(row=1, column=2, padx=1, pady=1)
