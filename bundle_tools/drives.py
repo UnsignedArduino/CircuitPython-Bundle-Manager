@@ -11,7 +11,7 @@ No classes!
 
 Functions list:
 
-- list_connected_drives(circuitpython_only: bool = True) -> list
+- list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Path = "/media") -> list
 
 """
 
@@ -20,11 +20,14 @@ from string import ascii_uppercase
 from bundle_tools import os_detect
 
 
-def list_connected_drives(circuitpython_only: bool = True) -> list:
+def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Path = "/media") -> list:
     """
     Returns a list of connected drives. On Windows, this will be something like `[WindowsPath('C:'), ...]`.
 
     :param circuitpython_only: A bool telling whether to filter out non-CircuitPython drives. Defaults to True.
+
+    :param drive_mount_point: A pathlib.Path object pointing to where drives are mounted. Applies only to unix-based
+     systems.
 
     :return: A list of pathlib.Path objects that contain the drives.
     """
@@ -37,12 +40,19 @@ def list_connected_drives(circuitpython_only: bool = True) -> list:
             if drive_path.exists():
                 connected_drives.append(drive_path.parent)
     elif os_detect.on_mac():
-        # TODO: Figure out how to detect drives in Mac OSX
-        pass
+        # TODO: Someone test this!
+        for path in drive_mount_point.glob("*"):
+            if circuitpython_only and (path / "boot_out.txt").exists():
+                connected_drives.append(path)
+            else:
+                connected_drives.append(path)
     elif os_detect.on_linux():
-        # TODO: Figure out how to detect drives in Linux
-        #  - maybe try to enumerate over /media?
-        pass
+        # TODO: Someone test this!
+        for path in drive_mount_point.glob("*"):
+            if circuitpython_only and (path / "boot_out.txt").exists():
+                connected_drives.append(path)
+            else:
+                connected_drives.append(path)
     else:
         raise os_detect.UnknownPlatform("Unknown platform - does not know how to search for drives")
     return connected_drives

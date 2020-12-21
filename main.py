@@ -409,6 +409,8 @@ class GUI(tk.Tk):
             self.save_key("last_auth_method_used", "username and password")
         if not self.load_key("show_traceback_in_error_messages"):
             self.save_key("show_traceback_in_error_messages", "false")
+        if not self.load_key("unix_drive_mount_point"):
+            self.save_key("unix_drive_mount_point", "/media")
 
     def create_gui(self):
         self.notebook = ttk.Notebook(master=self)
