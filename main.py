@@ -320,7 +320,9 @@ class GUI(tk.Tk):
         self.installing = True
         try:
             bundle_path = bundle_manager.get_bundle_path(int(self.version_listbox.get()))
-            bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))[self.bundle_listbox.curselection()[0]]
+            bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))
+            bundles.sort()
+            bundles = bundles[self.bundle_listbox.curselection()[0]]
             modules.install_module(
                 bundle_path / bundles,
                 Path(self.drive_combobox.get()) / "lib"
