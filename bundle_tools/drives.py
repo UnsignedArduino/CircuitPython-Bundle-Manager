@@ -20,7 +20,7 @@ from string import ascii_uppercase
 from bundle_tools import os_detect
 
 
-def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Path = "/media") -> list:
+def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Path = Path("/media")) -> list:
     """
     Returns a list of connected drives. On Windows, this will be something like `[WindowsPath('C:'), ...]`.
 
