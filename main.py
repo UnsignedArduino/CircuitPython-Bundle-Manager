@@ -229,9 +229,21 @@ class GUI(tk.Tk):
         self.username_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.username_entry.grid(row=0, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.username_entry.initiate_right_click_menu()
-        self.password_entry = EntryWithRightClick(master=self.github_auth_frame, show="*")
-        self.password_entry.grid(row=1, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
+        self.password_frame = ttk.Frame(master=self.github_auth_frame)
+        self.password_frame.grid(row=1, column=1, padx=0, pady=1, columnspan=2, sticky=tk.NW)
+        self.password_entry = EntryWithRightClick(master=self.password_frame, width=13, show="*")
+        self.password_entry.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.password_entry.initiate_right_click_menu()
+        self.show_password_button = ttk.Button(master=self.password_frame, width=5, text="Show", command=self.toggle_password_visibility)
+        self.show_password_button.grid(row=0, column=1, padx=1, pady=0, sticky=tk.NW)
+
+    def toggle_password_visibility(self):
+        if self.show_password_button["text"] == "Show":
+            self.show_password_button.config(text="Hide")
+            self.password_entry.config(show="")
+        else:
+            self.show_password_button.config(text="Show")
+            self.password_entry.config(show="*")
 
     def create_bundle_manager_tab(self):
         self.bundle_manager_frame = ttk.Frame(master=self.notebook)
