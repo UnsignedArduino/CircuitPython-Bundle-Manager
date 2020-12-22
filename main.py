@@ -10,7 +10,7 @@ from time import sleep
 import json
 from bundle_tools import drives, modules, bundle_manager
 from gui_tools.right_click.entry import EntryWithRightClick
-
+from gui_tools.right_click.spinbox import SpinboxWithRightClick
 
 class GUI(tk.Tk):
     def __init__(self):
@@ -67,9 +67,9 @@ class GUI(tk.Tk):
         self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
         validate_for_number_wrapper = (self.register(self.validate_for_number), '%P')
-        self.version_listbox = ttk.Spinbox(master=self.github_auth_frame, width=3, from_=1, to=100,
-                                           command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()),
-                                           validate="key", validatecommand=validate_for_number_wrapper)
+        self.version_listbox = SpinboxWithRightClick(master=self.github_auth_frame, width=3, from_=1, to=100,
+                                                     command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()),
+                                                     validate="key", validatecommand=validate_for_number_wrapper)
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
         self.version_listbox.set(self.load_key("last_circuitpython_bundle_version"))
         self.updating = False
