@@ -1,7 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbox
-from idlelib import tooltip
+from gui_tools.right_click.entry import EntryWithRightClick
+from gui_tools.right_click.spinbox import SpinboxWithRightClick
+from gui_tools.right_click.combobox import ComboboxWithRightClick
+from gui_tools.right_click.listbox import ListboxWithRightClick
+from gui_tools.idlelib_clone import tooltip
 from threading import Thread
 from pathlib import Path
 import traceback
@@ -10,10 +14,6 @@ import webbrowser
 from time import sleep
 import json
 from bundle_tools import drives, modules, bundle_manager
-from gui_tools.right_click.entry import EntryWithRightClick
-from gui_tools.right_click.spinbox import SpinboxWithRightClick
-from gui_tools.right_click.combobox import ComboboxWithRightClick
-from gui_tools.right_click.listbox import ListboxWithRightClick
 
 
 class GUI(tk.Tk):
