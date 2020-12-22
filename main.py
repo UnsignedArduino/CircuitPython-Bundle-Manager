@@ -8,8 +8,30 @@ from github import GithubException
 import webbrowser
 from time import sleep
 import json
-import re
 from bundle_tools import drives, modules, bundle_manager
+
+
+class EntryWithRightClick(ttk.Entry):
+    def __init__(self, master, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.initiate_right_click_menu()
+        self.bind("<Button-3>", self.popup)
+
+    def popup(self, event):
+        try:
+            self.right_click_menu.tk_popup(event.x_root, event.y_root, 0)
+        finally:
+            self.right_click_menu.grab_release()
+
+    def initiate_right_click_menu(self):
+        self.right_click_menu = tk.Menu(self, tearoff=0)
+        self.right_click_menu.add_command(label="Copy", command=None)
+        self.right_click_menu.add_command(label="Cut", command=None)
+        self.right_click_menu.add_command(label="Paste", command=None)
+        self.right_click_menu.add_separator()
+        self.right_click_menu.add_command(label="Delete", command=None)
+        self.right_click_menu.add_separator()
+        self.right_click_menu.add_command(label="Select all", command=None)
 
 
 class GUI(tk.Tk):
@@ -199,17 +221,17 @@ class GUI(tk.Tk):
     def create_github_enterprise_input(self):
         self.enterprise_url_label = ttk.Label(master=self.github_auth_frame, text="GitHub Enterprise URL: ")
         self.enterprise_url_label.grid(row=3, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.enterprise_url_entry = ttk.Entry(master=self.github_auth_frame)
+        self.enterprise_url_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.enterprise_url_entry.grid(row=3, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_token_label = ttk.Label(master=self.github_auth_frame, text="Login or token: ")
         self.enterprise_token_label.grid(row=4, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.enterprise_token_entry = ttk.Entry(master=self.github_auth_frame)
+        self.enterprise_token_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.enterprise_token_entry.grid(row=4, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
     def create_access_token_input(self):
         self.access_token_label = ttk.Label(master=self.github_auth_frame, text="Access token: ")
         self.access_token_label.grid(row=2, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.access_token_entry = ttk.Entry(master=self.github_auth_frame)
+        self.access_token_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.access_token_entry.grid(row=2, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
     def create_username_password_input(self):
@@ -217,9 +239,9 @@ class GUI(tk.Tk):
         self.username_label.grid(row=0, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.password_label = ttk.Label(master=self.github_auth_frame, text="Password: ")
         self.password_label.grid(row=1, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.username_entry = ttk.Entry(master=self.github_auth_frame)
+        self.username_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.username_entry.grid(row=0, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.password_entry = ttk.Entry(master=self.github_auth_frame, show="*")
+        self.password_entry = EntryWithRightClick(master=self.github_auth_frame, show="*")
         self.password_entry.grid(row=1, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
 
     def create_bundle_manager_tab(self):
