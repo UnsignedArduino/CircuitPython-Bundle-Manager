@@ -12,6 +12,13 @@ from bundle_tools import drives, modules, bundle_manager
 from gui_tools.right_click.entry import EntryWithRightClick
 from gui_tools.right_click.spinbox import SpinboxWithRightClick
 from gui_tools.right_click.combobox import ComboboxWithRightClick
+from gui_tools.right_click.listbox import ListboxWithRightClick
+
+# TODO: Show password button
+# TODO: Right click for bundle list, which can refresh drives
+# TODO: Right click for installed modules, which can refresh drives or open parent directory of lib with webbrowser
+# TODO: Instead of Copy README file location, open parent directory with webbrowser
+# TODO: Instead of Copy config file location, open parent directory with webbrowser
 
 
 class GUI(tk.Tk):
@@ -295,8 +302,9 @@ class GUI(tk.Tk):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
         self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
         self.bundle_listbox_var = tk.StringVar()
-        self.bundle_listbox = tk.Listbox(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
+        self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
         self.bundle_listbox.grid(row=0, column=0, padx=1, pady=1)
+        self.bundle_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
         self.bundle_listbox_scrollbar = ttk.Scrollbar(self.bundle_listbox_frame, orient=tk.VERTICAL, command=self.bundle_listbox.yview)
         self.bundle_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.bundle_listbox.config(yscrollcommand=self.bundle_listbox_scrollbar.set)
@@ -305,8 +313,9 @@ class GUI(tk.Tk):
         self.installed_modules_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Installed modules")
         self.installed_modules_listbox_frame.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NE)
         self.installed_modules_listbox_var = tk.StringVar()
-        self.installed_modules_listbox = tk.Listbox(self.installed_modules_listbox_frame, width=18, height=5, listvariable=self.installed_modules_listbox_var)
+        self.installed_modules_listbox = ListboxWithRightClick(self.installed_modules_listbox_frame, width=18, height=5, listvariable=self.installed_modules_listbox_var)
         self.installed_modules_listbox.grid(row=0, column=0, padx=1, pady=1)
+        self.installed_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
         self.installed_modules_listbox_scrollbar = ttk.Scrollbar(self.installed_modules_listbox_frame, orient=tk.VERTICAL, command=self.installed_modules_listbox.yview)
         self.installed_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.installed_modules_listbox.config(yscrollcommand=self.installed_modules_listbox_scrollbar.set)
