@@ -18,10 +18,10 @@ class SpinboxWithRightClick(ttk.Spinbox):
     def initiate_right_click_menu(self):
         self.right_click_menu = tk.Menu(self, tearoff=0)
         self.right_click_menu.add_command(label="Copy", command=self.copy)
-        # self.right_click_menu.add_command(label="Cut", command=self.cut)
+        self.right_click_menu.add_command(label="Cut", command=self.cut, state="disabled")
         self.right_click_menu.add_command(label="Paste", command=self.paste)
-        # self.right_click_menu.add_separator()
-        # self.right_click_menu.add_command(label="Delete", command=self.delete_menu)
+        self.right_click_menu.add_separator()
+        self.right_click_menu.add_command(label="Delete", command=self.delete_menu, state="disabled")
         self.right_click_menu.add_separator()
         self.right_click_menu.add_command(label="Select all", command=self.select_all)
 

@@ -12,6 +12,7 @@ from bundle_tools import drives, modules, bundle_manager
 from gui_tools.right_click.entry import EntryWithRightClick
 from gui_tools.right_click.spinbox import SpinboxWithRightClick
 
+
 class GUI(tk.Tk):
     def __init__(self):
         super().__init__()
