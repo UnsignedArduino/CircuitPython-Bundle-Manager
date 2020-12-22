@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from typing import Callable
 
 
 class ListboxWithRightClick(tk.Listbox):
@@ -8,13 +9,17 @@ class ListboxWithRightClick(tk.Listbox):
         self.bind("<Button-3>", self.popup)
 
     def popup(self, event):
+        try:
+            self.callback()
+        except TypeError:
+            pass
         if str(self["state"]) == "normal":
             try:
                 self.right_click_menu.tk_popup(event.x_root, event.y_root, 0)
             finally:
                 self.right_click_menu.grab_release()
 
-    def initiate_right_click_menu(self, disable: list = []):
+    def initiate_right_click_menu(self, disable: list = [], callback: Callable = None):
         self.right_click_menu = tk.Menu(self, tearoff=0)
         self.right_click_menu.add_command(label="Copy", command=self.copy, state="disabled" if "Copy" in disable else "normal")
         self.right_click_menu.add_command(label="Cut", command=self.cut, state="disabled" if "Cut" in disable else "normal")
@@ -23,6 +28,7 @@ class ListboxWithRightClick(tk.Listbox):
         self.right_click_menu.add_command(label="Delete", command=self.delete_menu, state="disabled" if "Delete" in disable else "normal")
         self.right_click_menu.add_separator()
         self.right_click_menu.add_command(label="Select all", command=self.select_all, state="disabled" if "Select all" in disable else "normal")
+        self.callback = callback
 
     def select_all(self):
         self.select_range(0, tk.END)

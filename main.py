@@ -313,15 +313,22 @@ class GUI(tk.Tk):
         self.installed_modules_listbox_var = tk.StringVar()
         self.installed_modules_listbox = ListboxWithRightClick(self.installed_modules_listbox_frame, width=18, height=5, listvariable=self.installed_modules_listbox_var)
         self.installed_modules_listbox.grid(row=0, column=0, padx=1, pady=1)
-        self.installed_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
+        self.installed_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"], callback=self.check_for_lib_path)
         self.installed_modules_listbox.right_click_menu.add_separator()
         self.installed_modules_listbox.right_click_menu.add_command(label="Refresh modules", command=self.update_modules_in_device)
-        # TODO: Disable this when get_lib_path returns non-existant drive
         self.installed_modules_listbox.right_click_menu.add_command(label="Open in file manager",
-                                                                    command=lambda: webbrowser.open(str(modules.get_lib_path(Path(self.drive_combobox.get()))) + "/"))
+                                                                    command=lambda: webbrowser.open(str(modules.get_lib_path(Path(self.drive_combobox.get())))))
         self.installed_modules_listbox_scrollbar = ttk.Scrollbar(self.installed_modules_listbox_frame, orient=tk.VERTICAL, command=self.installed_modules_listbox.yview)
         self.installed_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.installed_modules_listbox.config(yscrollcommand=self.installed_modules_listbox_scrollbar.set)
+
+    def check_for_lib_path(self):
+        self.installed_modules_listbox.right_click_menu.delete(9)
+        self.installed_modules_listbox.right_click_menu.add_command(
+            label="Open in file manager",
+            state="normal" if modules.get_lib_path(Path(self.drive_combobox.get())).exists() else "disabled",
+            command=lambda: webbrowser.open(str(modules.get_lib_path(Path(self.drive_combobox.get()))))
+        )
 
     def create_module_buttons(self):
         self.install_module_button = ttk.Button(self.bundle_manager_frame, text="Install", command=self.start_install_module_thread)
