@@ -27,12 +27,21 @@ class EntryWithRightClick(ttk.Entry):
     def initiate_right_click_menu(self):
         self.right_click_menu = tk.Menu(self, tearoff=0)
         self.right_click_menu.add_command(label="Copy", command=self.copy)
-        self.right_click_menu.add_command(label="Cut", command=None)
+        self.right_click_menu.add_command(label="Cut", command=self.cut)
         self.right_click_menu.add_command(label="Paste", command=None)
         self.right_click_menu.add_separator()
         self.right_click_menu.add_command(label="Delete", command=None)
         self.right_click_menu.add_separator()
         self.right_click_menu.add_command(label="Select all", command=None)
+
+    def cut(self):
+        if self.selection_present():
+            self.copy_to_clipboard(self.selection_get())
+            self.delete(tk.SEL_FIRST, tk.SEL_LAST)
+            self.select_clear()
+        else:
+            self.copy_to_clipboard(self.get())
+            self.delete(0, tk.END)
 
     def copy(self):
         if self.selection_present():
