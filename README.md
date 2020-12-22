@@ -14,10 +14,7 @@ You can find these options in `config.json`, which is in the same directory as [
     "unix_drive_mount_point": "/media"
 }
 ```
-`last_auth_method_used` should be a string of `username and password`, `access token`, or `enterprise`. This is the last method of authentication you used.
-
-`last_circuitpython_bundle_version` should be a string of a number. This is the last CircuitPython version you used.
-
-`show_traceback_in_error_messages` should be a string of a bool. (Like `1`, `true`, `yes` for `True` and anything else for `False`) This will control whether stack traces will appear in error messages.
-
-`unix_drive_mount_point` should be a string of a path that points to the place where your distro automatically mounts drives. Only applies to Unix-based systems.
+- `last_auth_method_used` should be a string of `username and password`, `access token`, or `enterprise`. This is the last method of authentication you used.
+- `last_circuitpython_bundle_version` should be a string of a number. This is the last CircuitPython version you used.
+- `show_traceback_in_error_messages` should be a string of a bool. (Like `1`, `true`, `yes` for `True` and anything else for `False`) This will control whether stack traces will appear in error messages.
+- `unix_drive_mount_point` should be a string of a path that points to the place where your distro automatically mounts drives. Only applies to Unix-based systems.
