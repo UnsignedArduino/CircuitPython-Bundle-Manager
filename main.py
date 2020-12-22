@@ -15,10 +15,6 @@ from gui_tools.right_click.combobox import ComboboxWithRightClick
 from gui_tools.right_click.listbox import ListboxWithRightClick
 
 # TODO: Show password button
-# TODO: Right click for bundle list, which can refresh drives
-# TODO: Right click for installed modules, which can refresh drives or open parent directory of lib with webbrowser
-# TODO: Instead of Copy README file location, open parent directory with webbrowser
-# TODO: Instead of Copy config file location, open parent directory with webbrowser
 
 
 class GUI(tk.Tk):
@@ -320,6 +316,9 @@ class GUI(tk.Tk):
         self.installed_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
         self.installed_modules_listbox.right_click_menu.add_separator()
         self.installed_modules_listbox.right_click_menu.add_command(label="Refresh modules", command=self.update_modules_in_device)
+        # TODO: Disable this when get_lib_path returns non-existant drive
+        self.installed_modules_listbox.right_click_menu.add_command(label="Open in file manager",
+                                                                    command=lambda: webbrowser.open(str(modules.get_lib_path(Path(self.drive_combobox.get()))) + "/"))
         self.installed_modules_listbox_scrollbar = ttk.Scrollbar(self.installed_modules_listbox_frame, orient=tk.VERTICAL, command=self.installed_modules_listbox.yview)
         self.installed_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.installed_modules_listbox.config(yscrollcommand=self.installed_modules_listbox_scrollbar.set)
@@ -427,8 +426,8 @@ class GUI(tk.Tk):
         )
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.copy_readme_location_button = ttk.Button(
-            master=self.other_frame, text="Copy README file location",
-            command=lambda: self.copy_to_clipboard(str(Path.cwd() / "README.md"))
+            master=self.other_frame, text="Open README file location",
+            command=lambda: webbrowser.open(str(Path.cwd()))
         )
         self.copy_readme_location_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
         ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=2, column=0, padx=1, pady=3, sticky=tk.NSEW)
@@ -438,8 +437,8 @@ class GUI(tk.Tk):
         )
         self.open_config_button.grid(row=3, column=0, padx=1, pady=1, sticky=tk.NW)
         self.copy_config_location_button = ttk.Button(
-            master=self.other_frame, text="Copy config file location",
-            command=lambda: self.copy_to_clipboard(str(Path.cwd() / "config.json"))
+            master=self.other_frame, text="Open config file location",
+            command=lambda: webbrowser.open(str(Path.cwd()))
         )
         self.copy_config_location_button.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
         ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
