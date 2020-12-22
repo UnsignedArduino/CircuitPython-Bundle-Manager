@@ -32,7 +32,10 @@ class EntryWithRightClick(ttk.Entry):
         self.right_click_menu.add_separator()
         self.right_click_menu.add_command(label="Delete", command=self.delete_menu)
         self.right_click_menu.add_separator()
-        self.right_click_menu.add_command(label="Select all", command=None)
+        self.right_click_menu.add_command(label="Select all", command=self.select_all)
+
+    def select_all(self):
+        self.select_range(0, tk.END)
 
     def delete_menu(self):
         if self.selection_present():
