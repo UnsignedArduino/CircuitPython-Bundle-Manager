@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class SpinboxWithRightClick(ttk.Spinbox):
+class ComboboxWithRightClick(ttk.Combobox):
     def __init__(self, master, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.bind("<Button-3>", self.popup)

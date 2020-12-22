@@ -11,6 +11,7 @@ import json
 from bundle_tools import drives, modules, bundle_manager
 from gui_tools.right_click.entry import EntryWithRightClick
 from gui_tools.right_click.spinbox import SpinboxWithRightClick
+from gui_tools.right_click.combobox import ComboboxWithRightClick
 
 
 class GUI(tk.Tk):
@@ -73,6 +74,7 @@ class GUI(tk.Tk):
                                                      validate="key", validatecommand=validate_for_number_wrapper)
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
         self.version_listbox.set(self.load_key("last_circuitpython_bundle_version"))
+        self.version_listbox.initiate_right_click_menu(disable=["Cut", "Delete"])
         self.updating = False
         self.check_button()
 
@@ -202,16 +204,19 @@ class GUI(tk.Tk):
         self.enterprise_url_label.grid(row=3, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_url_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.enterprise_url_entry.grid(row=3, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
+        self.enterprise_url_entry.initiate_right_click_menu()
         self.enterprise_token_label = ttk.Label(master=self.github_auth_frame, text="Login or token: ")
         self.enterprise_token_label.grid(row=4, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_token_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.enterprise_token_entry.grid(row=4, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
+        self.enterprise_token_entry.initiate_right_click_menu()
 
     def create_access_token_input(self):
         self.access_token_label = ttk.Label(master=self.github_auth_frame, text="Access token: ")
         self.access_token_label.grid(row=2, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.access_token_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.access_token_entry.grid(row=2, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
+        self.access_token_entry.initiate_right_click_menu()
 
     def create_username_password_input(self):
         self.username_label = ttk.Label(master=self.github_auth_frame, text="Username: ")
@@ -220,8 +225,10 @@ class GUI(tk.Tk):
         self.password_label.grid(row=1, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.username_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.username_entry.grid(row=0, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
+        self.username_entry.initiate_right_click_menu()
         self.password_entry = EntryWithRightClick(master=self.github_auth_frame, show="*")
         self.password_entry.grid(row=1, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
+        self.password_entry.initiate_right_click_menu()
 
     def create_bundle_manager_tab(self):
         self.bundle_manager_frame = ttk.Frame(master=self.notebook)
@@ -364,9 +371,12 @@ class GUI(tk.Tk):
     def create_drive_selector(self):
         self.drive_combobox_label = ttk.Label(master=self, text="Drive:")
         self.drive_combobox_label.grid(row=1, column=0, padx=1, pady=1)
-        self.drive_combobox = ttk.Combobox(master=self, width=16)
+        self.drive_combobox = ComboboxWithRightClick(master=self, width=16)
         self.drive_combobox.grid(row=1, column=1, padx=1, pady=1)
-        self.refresh_drives_button = ttk.Button(master=self, text="↻", width=2, command=self.update_drives)
+        self.drive_combobox.initiate_right_click_menu()
+        self.drive_combobox.right_click_menu.add_separator()
+        self.drive_combobox.right_click_menu.add_command(label="Refresh drives", command=self.update_drives)
+        self.refresh_drives_button = ttk.Button(master=self, text="↻", width=2, command=self.update_everything)
         self.refresh_drives_button.grid(row=1, column=2, padx=1, pady=1)
         self.show_all_drives_var = tk.BooleanVar()
         self.show_all_drives_var.set(False)
@@ -375,12 +385,15 @@ class GUI(tk.Tk):
         self.show_all_drives_checkbutton.grid(row=1, column=3, padx=1, pady=1)
         self.update_drives()
 
+    def update_everything(self):
+        self.update_drives()
+        self.update_modules()
+
     def update_modules(self):
         self.update_modules_in_bundle()
         self.update_modules_in_device()
 
     def update_drives(self):
-        self.update_modules()
         self.drive_combobox["values"] = drives.list_connected_drives(not self.show_all_drives_var.get(),
                                                                      Path(self.load_key("unix_drive_mount_point")))
         if self.drive_combobox.get() == "" and len(drives.list_connected_drives(not self.show_all_drives_var.get(), Path(self.load_key("unix_drive_mount_point")))) > 0:
