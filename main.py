@@ -18,10 +18,11 @@ class EntryWithRightClick(ttk.Entry):
         self.bind("<Button-3>", self.popup)
 
     def popup(self, event):
-        try:
-            self.right_click_menu.tk_popup(event.x_root, event.y_root, 0)
-        finally:
-            self.right_click_menu.grab_release()
+        if str(self["state"]) == "normal":
+            try:
+                self.right_click_menu.tk_popup(event.x_root, event.y_root, 0)
+            finally:
+                self.right_click_menu.grab_release()
 
     def initiate_right_click_menu(self):
         self.right_click_menu = tk.Menu(self, tearoff=0)
