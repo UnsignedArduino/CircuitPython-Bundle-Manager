@@ -18,9 +18,23 @@ class GUI(tk.Tk):
         self.title("CircuitPython Bundle Manager")
         self.resizable(False, False)
         self.config_path = Path.cwd() / "config.json"
+        self.disable_closing = False
+        self.protocol("WM_DELETE_WINDOW", self.try_to_close)
 
     def __enter__(self):
         return self
+
+    def try_to_close(self):
+        if self.disable_closing:
+            if mbox.askokcancel("CircuitPython Bundle Manager: Confirmation",
+                                "Something is happening right now!\n"
+                                "If you close out now, this will immediately stop what we are doing and may cause a "
+                                "corrupt directory hierarchy, broken files and/or broken directories. "
+                                "Are you sure you want to exit?",
+                                icon="warning", default="cancel"):
+                self.destroy()
+        else:
+            self.destroy()
 
     def save_key(self, key=None, value=None):
         if not self.config_path.exists():
@@ -67,6 +81,7 @@ class GUI(tk.Tk):
 
     def update_bundle(self):
         self.updating = True
+        self.disable_closing = True
         self.enable_github_auth_inputs(False)
         github_instance = bundle_manager.authenticate_with_github(
             user_and_pass={
@@ -92,6 +107,7 @@ class GUI(tk.Tk):
                            "Something happened while trying to access GitHub! "
                            "Did you enter in the correct credentials?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         self.updating = False
+        self.disable_closing = False
         self.enable_github_auth_inputs(True)
 
     def enable_github_auth_inputs(self, enable: bool = True):
@@ -299,6 +315,7 @@ class GUI(tk.Tk):
 
     def uninstall_module(self):
         self.uninstalling = True
+        self.disable_closing = True
         drive = Path(self.drive_combobox.get())
         try:
             module_path = modules.get_lib_path(drive) / modules.list_modules(drive)[self.installed_modules_listbox.curselection()[0]]
@@ -312,6 +329,7 @@ class GUI(tk.Tk):
         else:
             mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully uninstalled module!")
         self.uninstalling = False
+        self.disable_closing = False
         self.after(100, self.update_modules_in_device)
 
     def start_install_module_thread(self):
@@ -320,6 +338,7 @@ class GUI(tk.Tk):
 
     def install_module(self):
         self.installing = True
+        self.disable_closing = True
         try:
             bundle_path = bundle_manager.get_bundle_path(int(self.version_listbox.get()))
             bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))
@@ -338,6 +357,7 @@ class GUI(tk.Tk):
         else:
             mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully installed module!")
         self.installing = False
+        self.disable_closing = False
         self.after(100, self.update_modules_in_device)
 
     def create_drive_selector(self):
