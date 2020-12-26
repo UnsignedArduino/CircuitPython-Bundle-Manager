@@ -23,6 +23,10 @@ Functions list:
 
 from pathlib import Path
 from shutil import copy2, copytree, rmtree
+from bundle_tools.create_logger import create_logger
+import logging
+
+logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
 def get_lib_path(device_drive: Path = None) -> Path:
@@ -34,6 +38,7 @@ def get_lib_path(device_drive: Path = None) -> Path:
 
     :return: A pathlib.Path object pointing to the lib directory on a CircuitPython device.
     """
+    logger.debug(f"Lib path is {repr(device_drive / 'lib')}")
     return device_drive / "lib"
 
 
@@ -47,11 +52,14 @@ def list_modules(start_path: Path = None) -> list:
     :return: A list of strings with the name of the modules.
     """
     lib_directory: Path = get_lib_path(start_path)
+    logger.debug(f"Lib path is {repr(lib_directory)}")
     if not lib_directory.exists():
+        logger.error(f"The lib directory '{lib_directory}' does not exist on the CircuitPython device!")
         raise RuntimeError(f"The lib directory '{lib_directory}' does not exist on the CircuitPython device!")
     libs = list(lib_directory.glob("*"))
     for index, lib in enumerate(libs):
         libs[index] = lib.name
+    logger.debug(f"Modules found: {repr(libs)}")
     return libs
 
 
@@ -70,6 +78,7 @@ def list_modules_in_bundle(start_path: Path = None) -> list:
     libs = list(start_path.glob("*"))
     for index, lib in enumerate(libs):
         libs[index] = lib.name
+    logger.debug(f"Modules found in bundle: {repr(libs)}")
     return libs
 
 
@@ -87,13 +96,18 @@ def install_module(module_path: Path = None, device_path: Path = None) -> None:
     :return: None
     """
     if not module_path.exists():
+        logger.error(f"{module_path} does not exist!")
         raise FileNotFoundError(f"{module_path} does not exist!")
     if not device_path.exists():
+        logger.error(f"{device_path} does not exist!")
         raise FileNotFoundError(f"{device_path} does not exist!")
     if module_path.is_file():
+        logger.debug(f"Installing {repr(module_path)} to {repr(device_path)}...")
         copy2(module_path, device_path)
     else:
+        logger.debug(f"Installing {repr(module_path)} to {repr(device_path / module_path.stem)}...")
         copytree(module_path, device_path / module_path.stem)
+    logger.info(f"Successfully installed {repr(module_path)}!")
 
 
 def uninstall_module(module_path: Path = None) -> None:
@@ -107,8 +121,11 @@ def uninstall_module(module_path: Path = None) -> None:
     :return: None
     """
     if not module_path.exists():
+        logger.error(f"{module_path} does not exist!")
         raise FileNotFoundError(f"{module_path} does not exist!")
+    logger.debug(f"Uninstalling {repr(module_path)}...")
     if module_path.is_file():
         module_path.unlink()
     else:
         rmtree(module_path)
+    logger.info(f"Successfully uninstalled {repr(module_path)}!")

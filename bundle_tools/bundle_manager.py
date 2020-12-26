@@ -30,6 +30,10 @@ import requests
 from zipfile import ZipFile
 from time import time as unix
 from typing import Union
+from bundle_tools.create_logger import create_logger
+import logging
+
+logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
 def list_modules_in_bundle(version: int = None) -> Union[list, None]:
@@ -45,13 +49,16 @@ def list_modules_in_bundle(version: int = None) -> Union[list, None]:
     modules_path = Path.cwd() / "bundles" / str(version)
     bundles = [str(path) for path in list(modules_path.glob("*"))]
     bundles.sort()
+    logger.debug(f"Modules found are {repr(bundles)}")
     try:
         bundles = bundles[-1:][0]
     except IndexError:
         return None
     module_path = (list(Path(bundles).glob("*"))[0] / "lib")
+    logger.debug(f"Module path is {repr(module_path)}")
     for module in module_path.glob("*"):
         modules.append(module.name)
+    logger.debug(f"Modules found: {repr(modules)}")
     return modules
 
 
@@ -67,11 +74,13 @@ def get_bundle_path(version: int = None) -> Union[Path, None]:
     modules_path = Path.cwd() / "bundles" / str(version)
     bundles = [str(path) for path in list(modules_path.glob("*"))]
     bundles.sort()
+    logger.debug(f"Modules found are {repr(bundles)}")
     try:
         bundles = bundles[-1:][0]
     except IndexError:
         return None
     bundle_path = (list(Path(bundles).glob("*"))[0] / "lib")
+    logger.debug(f"Bundle path is {repr(bundle_path)}")
     return bundle_path
 
 
@@ -114,10 +123,13 @@ def authenticate_with_github(user_and_pass: dict = None,
      update the bundle. Check it's doc strings for more detail. If no parameters were provided, then None is returned.
     """
     if type(user_and_pass) == dict:
+        logger.debug(f"Using username and password!")
         return Github(user_and_pass["username"], user_and_pass["password"])
     elif type(access_token) == str:
+        logger.debug(f"Using access token!")
         return Github(access_token)
     elif type(url_and_token) == dict:
+        logger.debug(f"Using url and token/login!")
         return Github(base_url=url_and_token["base_url"], login_or_token=url_and_token["login_or_token"])
     return None
 
@@ -133,7 +145,9 @@ def update_bundle(version: int = None, github_instance: Github = None) -> Path:
       compatible object is passed in.
     :return: A pathlib.Path object that contains the path of the bundle.
     """
+    logger.info(f"Updating bundle...")
     assets = github_instance.get_repo("adafruit/Adafruit_CircuitPython_Bundle").get_latest_release().get_assets()
+    logger.debug(f"Assets found: {repr(assets)}")
     name = f"adafruit-circuitpython-bundle-{version}.x-mpy"
     bundle_url = None
     bundle_name = None
@@ -141,19 +155,29 @@ def update_bundle(version: int = None, github_instance: Github = None) -> Path:
         if name in asset.name:
             bundle_url = asset.browser_download_url
             bundle_name = asset.name
+            logger.debug(f"Found bundle! Name: {repr(bundle_name)} URL: {repr(bundle_url)}")
             break
     download_path = Path.cwd() / "bundles_zip" / str(version) / bundle_name
     download_path.parent.mkdir(parents=True, exist_ok=True)
+    logger.debug(f"Download path is {repr(download_path)}")
     with download_path.open(mode="wb") as file:
+        logger.debug(f"Downloading {repr(bundle_url)}...")
         response = requests.get(bundle_url)
         file.write(response.content)
     unzip_path = Path.cwd() / "bundles" / str(version) / str(unix())
     unzip_path.parent.mkdir(parents=True, exist_ok=True)
+    logger.debug(f"Unzip path is {repr(unzip_path)}")
     with ZipFile(download_path, "r") as zip_file:
+        logger.debug(f"Extracting {repr(download_path)}...")
         zip_file.extractall(unzip_path)
+    logger.debug(f"Deleting {repr(download_path.parent)}...")
     rmtree(download_path.parent)
+    logger.debug(f"Found {len(list(unzip_path.parent.glob('*')))} bundles!")
     while len(list(unzip_path.parent.glob("*"))) > 5:
         bundles = list(unzip_path.parent.glob("*"))
         bundles.sort()
+        logger.debug(f"Deleting {repr(bundles[0])}...")
         rmtree(bundles[0])
+    logger.debug(f"Path to latest bundle is {repr(unzip_path / bundle_name[:-4] / 'lib')}")
+    logger.info(f"Finished updating bundle!")
     return unzip_path / bundle_name[:-4] / "lib"
