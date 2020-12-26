@@ -10,6 +10,7 @@ from threading import Thread
 from pathlib import Path
 import traceback
 from github import GithubException
+import requests
 import webbrowser
 from time import sleep
 import json
@@ -56,12 +57,13 @@ class GUI(tk.Tk):
         old_json[key] = value
         self.config_path.write_text(json.dumps(old_json, sort_keys=True, indent=4))
 
-    def load_key(self, key):
+    def load_key(self, key, log: bool = True):
         if not self.config_path.exists():
             self.config_path.write_text("{}")
         try:
             value = json.loads(self.config_path.read_text())[key]
-            logger.debug(f"{repr(key)} = {repr(value)}")
+            if log:
+                logger.debug(f"{repr(key)} = {repr(value)}")
             return value
         except (json.decoder.JSONDecodeError, KeyError):
             logger.warning(f"Could not find {repr(key)} in config!")
@@ -93,7 +95,7 @@ class GUI(tk.Tk):
         self.version_listbox.initiate_right_click_menu(disable=["Cut", "Delete"])
         tooltip.Hovertip(self.version_listbox, text="The major CircuitPython version used when updating the bundle.")
         self.updating = False
-        self.check_button()
+        self.check_update_button()
 
     def start_update_bundle_thread(self):
         logger.debug(f"Starting update bundle thread!")
@@ -130,6 +132,23 @@ class GUI(tk.Tk):
                            "Oh no! An error occurred while updating the bundle!\n"
                            "Something happened while trying to access GitHub! "
                            "Did you enter in the correct credentials?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
+        except requests.exceptions.ConnectionError:
+            logger.exception(f"Uh oh! Something happened!")
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Oh no! An error occurred while updating the bundle!\n"
+                           "Something happened while trying to access the internet! "
+                           "Do you have a working internet connection?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
+        except requests.exceptions.ChunkedEncodingError:
+            logger.exception(f"Uh oh! Something happened!")
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Oh no! An error occurred while updating the bundle!\n"
+                           "Something happened while trying to access the internet! "
+                           "Did you internet connection break?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
+        except Exception as _:
+            logger.exception(f"Uh oh! Something happened!")
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Oh no! An error occurred while updating the bundle!"
+                           "\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         else:
             logger.info(f"Successfully updated bundle!")
         self.updating = False
@@ -146,8 +165,8 @@ class GUI(tk.Tk):
         self.version_label.config(state="normal" if enable else "disabled")
         self.version_listbox.config(state="normal" if enable else "disabled")
 
-    def check_button(self):
-        self.after(100, self.check_button)
+    def check_update_button(self):
+        self.after(500, self.check_update_button)
         if self.updating:
             self.update_bundle_button.config(state="disabled", text="Updating bundle...")
             return
@@ -553,6 +572,8 @@ class GUI(tk.Tk):
             self.save_key("show_traceback_in_error_messages", "false")
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
+        if not self.load_key("internet_check_website"):
+            self.save_key("internet_check_website", "https://github.com/")
 
     def create_gui(self):
         logger.debug(f"Creating GUI...")
