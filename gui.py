@@ -564,8 +564,12 @@ class GUI(tk.Tk):
         self.create_bundle_manager_tab()
         self.create_other_tab()
 
-    def run(self):
+    def run(self, log_level: int = logging.DEBUG):
         self.create_gui()
+        for log_thing in [logging.getLogger(name) for name in logging.root.manager.loggerDict]:
+            log_thing.setLevel(level=log_level)
+            for handler in log_thing.handlers:
+                handler.setLevel(level=log_level)
         self.mainloop()
 
     def __exit__(self, err_type=None, err_value=None, err_traceback=None):
