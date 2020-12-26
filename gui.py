@@ -579,3 +579,4 @@ class GUI(tk.Tk):
                            f"Error type: {err_type}\n"
                            f"Error value: {err_value}\n"
                            f"Error traceback: {err_traceback}\n\n" + traceback.format_exc())
+            logger.fatel("Uh oh, a fatel error has occurred!", exc_info=True)
