@@ -524,12 +524,12 @@ class GUI(tk.Tk):
         )
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
-        self.copy_readme_location_button = ttk.Button(
+        self.open_readme_button_location = ttk.Button(
             master=self.other_frame, text="Open README file location",
             command=lambda: webbrowser.open(str(Path.cwd()))
         )
-        self.copy_readme_location_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
-        tooltip.Hovertip(self.copy_readme_location_button, text="Open the README file location in the default file manager.")
+        self.open_readme_button_location.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.open_readme_button_location, text="Open the README file location in the default file manager.")
         ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=2, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.open_config_button = ttk.Button(
             master=self.other_frame, text="Open config file",
@@ -537,12 +537,12 @@ class GUI(tk.Tk):
         )
         self.open_config_button.grid(row=3, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button, text="Open the config file in the default json editor.")
-        self.copy_config_location_button = ttk.Button(
+        self.open_config_button_location = ttk.Button(
             master=self.other_frame, text="Open config file location",
             command=lambda: webbrowser.open(str(Path.cwd()))
         )
-        self.copy_config_location_button.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
-        tooltip.Hovertip(self.copy_config_location_button, text="Open the config file location in the default file manager.")
+        self.open_config_button_location.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
         ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.open_github_repo_button = ttk.Button(
             master=self.other_frame, text="Open GitHub repo in browser",
