@@ -71,8 +71,13 @@ class TextWithRightClick(tk.Text):
 
     def copy(self):
         if self.tag_ranges(tk.SEL):
-            # TODO: Warn user from copy and paste when more than 10K characters in box, ask to continue or not
-            if len(self.get("1.0", tk.END)) > 10000 and mbox.showwarning("CircuitPython Bundle Manager: Warning!")
+            if len(self.get("1.0", tk.END)) > 20000 and mbox.askokcancel("CircuitPython Bundle Manager: Warning!",
+                                                                         f"You are about to copy "
+                                                                         f"{len(self.get('1.0', tk.END))}"
+                                                                         f" characters into the clipboard which might "
+                                                                         f"crash the application - are you sure you "
+                                                                         f"want to continue?", icon="warning",
+                                                                         default="cancel"):
                 logger.debug(f"Copying {repr(self.selection_get())} to clipboard!")
                 self.copy_to_clipboard(self.selection_get())
                 self.tag_remove(tk.SEL, self.tag_ranges(tk.SEL)[0], self.tag_ranges(tk.SEL)[1])
