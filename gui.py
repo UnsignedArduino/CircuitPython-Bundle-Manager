@@ -518,43 +518,49 @@ class GUI(tk.Tk):
         self.other_frame = ttk.Frame(master=self.notebook)
         self.other_frame.grid(row=0, column=0)
         self.notebook.add(self.other_frame, text="Other")
+        self.readme_frame = ttk.Frame(master=self.other_frame)
+        self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
-            master=self.other_frame, text="Open README file",
+            master=self.readme_frame, text="Open README file",
             command=lambda: webbrowser.open(str(Path.cwd() / "README.md"))
         )
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
         self.open_readme_button_location = ttk.Button(
-            master=self.other_frame, text="Open README file location",
+            master=self.readme_frame, text="Open README file location",
             command=lambda: webbrowser.open(str(Path.cwd()))
         )
-        self.open_readme_button_location.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_readme_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button_location, text="Open the README file location in the default file manager.")
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=2, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        self.config_frame = ttk.Frame(master=self.other_frame)
+        self.config_frame.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_config_button = ttk.Button(
-            master=self.other_frame, text="Open config file",
+            master=self.config_frame, text="Open config file",
             command=lambda: webbrowser.open(str(Path.cwd() / "config.json"))
         )
-        self.open_config_button.grid(row=3, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_config_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button, text="Open the config file in the default json editor.")
         self.open_config_button_location = ttk.Button(
-            master=self.other_frame, text="Open config file location",
+            master=self.config_frame, text="Open config file location",
             command=lambda: webbrowser.open(str(Path.cwd()))
         )
-        self.open_config_button_location.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_config_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        self.github_repo_frame = ttk.Frame(master=self.other_frame)
+        self.github_repo_frame.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_github_repo_button = ttk.Button(
-            master=self.other_frame, text="Open GitHub repo in browser",
+            master=self.github_repo_frame, text="Open GitHub repo link",
             command=lambda: webbrowser.open("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
-        self.open_github_repo_button.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_github_repo_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_github_repo_button, text="Open the GitHub repo for this project in the default browser.")
         self.copy_github_repo_button = ttk.Button(
-            master=self.other_frame, text="Copy GitHub repo link",
+            master=self.github_repo_frame, text="Copy GitHub repo link",
             command=lambda: self.copy_to_clipboard("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
-        self.copy_github_repo_button.grid(row=7, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.copy_github_repo_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.copy_github_repo_button, text="Copy the link to the GitHub repo for this project to the clipboard.")
 
     def show_traceback(self):
