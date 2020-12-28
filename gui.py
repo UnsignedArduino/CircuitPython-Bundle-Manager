@@ -6,6 +6,7 @@ from gui_tools.right_click.spinbox import SpinboxWithRightClick
 from gui_tools.right_click.combobox import ComboboxWithRightClick
 from gui_tools.right_click.listbox import ListboxWithRightClick
 from gui_tools.idlelib_clone import tooltip
+from gui_tools import gui_log
 from threading import Thread
 from pathlib import Path
 import traceback
@@ -581,6 +582,12 @@ class GUI(tk.Tk):
         if not self.load_key("internet_check_website"):
             self.save_key("internet_check_website", "https://github.com/")
 
+    def create_log_tab(self):
+        self.log_frame = ttk.Frame(master=self.notebook)
+        self.log_frame.grid(row=0, column=0)
+        self.notebook.add(self.log_frame, text="Log")
+        self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=9, cols=32)
+
     def create_gui(self):
         logger.debug(f"Creating GUI...")
         self.notebook = ttk.Notebook(master=self)
@@ -590,11 +597,13 @@ class GUI(tk.Tk):
         self.create_bundle_update_tab()
         self.create_bundle_manager_tab()
         self.create_other_tab()
+        self.create_log_tab()
 
     def run(self, log_level: int = logging.DEBUG):
         self.create_gui()
         for log_thing in [logging.getLogger(name) for name in logging.root.manager.loggerDict]:
             log_thing.setLevel(level=log_level)
+            log_thing.addHandler(hdlr=self.gui_logger)
             for handler in log_thing.handlers:
                 handler.setLevel(level=log_level)
         self.mainloop()
