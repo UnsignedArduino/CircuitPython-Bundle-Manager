@@ -17,7 +17,7 @@ No functions!
 
 import tkinter as tk
 from tkinter import ttk
-from gui_tools.right_click import text
+from gui_tools.right_click import text, spinbox
 import logging
 
 
@@ -45,13 +45,24 @@ class Logger(logging.Handler):
     def validate_for_number(self, new):
         return new.isdigit()
 
+    def clear_scrollback(self):
+        delete_rows = self.log.get("1.0", tk.END).count("\n") - self.rows
+        self.log.config(state=tk.NORMAL)
+        self.log.delete("1.0", f"{delete_rows + 1}.0")
+        self.log.config(state=tk.DISABLED)
+
     def make_scrollback_widgets(self):
         ttk.Label(master=self.bottom_frame, text="Scrollback:").grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.check_num_wrapper = (self.frame.register(self.validate_for_number), "%P")
-        self.scrollback_spinbox = ttk.Spinbox(master=self.bottom_frame, from_=self.rows, to=10000, width=5,
-                                              validate="key", validatecommand=self.check_num_wrapper)
+        self.scrollback_spinbox = spinbox.SpinboxWithRightClick(master=self.bottom_frame, from_=self.rows, to=10000,
+                                                                width=5, validate="key",
+                                                                validatecommand=self.check_num_wrapper)
+        self.scrollback_spinbox.initiate_right_click_menu()
         self.scrollback_spinbox.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         self.scrollback_spinbox.set(self.scrollback)
+        self.clear_scrollback_button = ttk.Button(master=self.bottom_frame, text="Clear Scrollback",
+                                                  command=self.clear_scrollback)
+        self.clear_scrollback_button.grid(row=0, column=2, padx=1, pady=0, sticky=tk.NW)
 
     def emit(self, record):
         self.log.config(state=tk.NORMAL)
