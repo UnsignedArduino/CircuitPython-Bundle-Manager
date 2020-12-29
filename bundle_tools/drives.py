@@ -36,7 +36,7 @@ def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Pa
     :return: A list of pathlib.Path objects that contain the drives.
     """
     connected_drives: list = []
-    logger.debug(f"Testing for CircuitPython drives" if circuitpython_only else f"Not testing for CircuitPython drives!")
+    logger.debug("Testing for CircuitPython drives" if circuitpython_only else "Not testing for CircuitPython drives!")
     logger.debug(f"Drive mount point is {repr(drive_mount_point)}")
     if os_detect.on_windows():
         logger.debug(f"Platform is Windows!")
@@ -47,8 +47,9 @@ def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Pa
             if drive_path.exists():
                 connected_drives.append(drive_path.parent)
     elif os_detect.on_mac():
-        logger.debug(f"Platform is Mac OSX!")
-        logger.info(f"Hey, if this works, please tell me at https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/issues!")
+        logger.debug("Platform is Mac OSX!")
+        logger.info("Hey, if this works, please tell me at "
+                    "https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/issues!")
         logger.info(f"If it doesn't, still tell me please!")
         # TODO: Someone test this!
         for path in drive_mount_point.glob("*"):
@@ -57,7 +58,7 @@ def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Pa
             else:
                 connected_drives.append(path)
     elif os_detect.on_linux():
-        logger.debug(f"Platform is Linux!")
+        logger.debug("Platform is Linux!")
         for path in drive_mount_point.glob("*"):
             try:
                 if circuitpython_only and (path / "boot_out.txt").exists():
@@ -68,7 +69,7 @@ def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Pa
                 if not circuitpython_only:
                     connected_drives.append(path)
     else:
-        logger.error(f"Unknown platform!")
+        logger.error("Unknown platform!")
         raise os_detect.UnknownPlatform("Unknown platform - does not know how to search for drives")
     logger.info(f"Connected drives are {repr(connected_drives)}" + (" (CircuitPython only!)" if circuitpython_only else ""))
     return connected_drives

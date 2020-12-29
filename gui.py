@@ -579,8 +579,6 @@ class GUI(tk.Tk):
             self.save_key("show_traceback_in_error_messages", "false")
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
-        if not self.load_key("internet_check_website"):
-            self.save_key("internet_check_website", "https://github.com/")
 
     def create_log_tab(self):
         self.log_frame = ttk.Frame(master=self.notebook)

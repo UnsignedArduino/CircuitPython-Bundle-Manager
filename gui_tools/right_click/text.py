@@ -71,6 +71,18 @@ class TextWithRightClick(tk.Text):
 
     def copy(self):
         if self.tag_ranges(tk.SEL):
+            if len(self.selection_get()) > 20000 and mbox.askokcancel("CircuitPython Bundle Manager: Warning!",
+                                                                     f"You are about to copy "
+                                                                     f"{len(self.get('1.0', tk.END))}"
+                                                                     f" characters into the clipboard which might "
+                                                                     f"crash the application - are you sure you "
+                                                                     f"want to continue?", icon="warning",
+                                                                     default="cancel"):
+                logger.debug(f"Copying {repr(self.selection_get())} to clipboard!")
+                self.copy_to_clipboard(self.selection_get())
+                self.tag_remove(tk.SEL, self.tag_ranges(tk.SEL)[0], self.tag_ranges(tk.SEL)[1])
+                self.update_idletasks()
+        else:
             if len(self.get("1.0", tk.END)) > 20000 and mbox.askokcancel("CircuitPython Bundle Manager: Warning!",
                                                                          f"You are about to copy "
                                                                          f"{len(self.get('1.0', tk.END))}"
@@ -78,13 +90,8 @@ class TextWithRightClick(tk.Text):
                                                                          f"crash the application - are you sure you "
                                                                          f"want to continue?", icon="warning",
                                                                          default="cancel"):
-                logger.debug(f"Copying {repr(self.selection_get())} to clipboard!")
-                self.copy_to_clipboard(self.selection_get())
-                self.tag_remove(tk.SEL, self.tag_ranges(tk.SEL)[0], self.tag_ranges(tk.SEL)[1])
-                self.update_idletasks()
-        else:
-            logger.debug(f"Copying everything to clipboard!")
-            self.copy_to_clipboard(self.get("1.0", tk.END))
+                logger.debug(f"Copying everything to clipboard!")
+                self.copy_to_clipboard(self.get("1.0", tk.END))
 
     def copy_to_clipboard(self, string: str = ""):
         logger.debug(f"Copying {repr(string)} to clipboard!")
