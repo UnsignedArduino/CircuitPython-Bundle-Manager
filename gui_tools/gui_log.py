@@ -49,12 +49,9 @@ class Logger(logging.Handler):
         self.make_autoscroll_widgets()
 
     def make_autoscroll_widgets(self):
-        self.small_checkbox_style = ttk.Style()
-        self.small_checkbox_style.configure("my.TCheckbutton", font=("Helvetica", 7))
         self.autoscroll_checkbutton_var = tk.BooleanVar(value=True)
         self.autoscroll_checkbutton = ttk.Checkbutton(master=self.bottom_frame, text="Autoscroll?",
-                                                      variable=self.autoscroll_checkbutton_var,
-                                                      style="my.TCheckbutton")
+                                                      variable=self.autoscroll_checkbutton_var)
         self.autoscroll_checkbutton.grid(row=0, column=3, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.autoscroll_checkbutton, text="Whether to autoscroll the log when new logs are added.")
 
@@ -88,10 +85,8 @@ class Logger(logging.Handler):
         self.scrollback_spinbox.last_scrollback = self.scrollback_spinbox.get()
         self.save_scrollback()
         tooltip.Hovertip(self.scrollback_spinbox, text="How many lines to keep in the logs.")
-        self.small_button_style = ttk.Style()
-        self.small_button_style.configure("my.TButton", font=("Helvetica", 7))
-        self.clear_scrollback_button = ttk.Button(master=self.bottom_frame, text="Clear scrollback",
-                                                  command=self.clear_scrollback, style="my.TButton")
+        self.clear_scrollback_button = ttk.Button(master=self.bottom_frame, text="Clear", width=9,
+                                                  command=self.clear_scrollback)
         self.clear_scrollback_button.grid(row=0, column=2, padx=1, pady=0, sticky=tk.NW)
         tooltip.Hovertip(self.clear_scrollback_button, text="Clear the scrollback.")
 
