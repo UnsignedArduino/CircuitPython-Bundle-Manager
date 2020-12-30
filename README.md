@@ -8,12 +8,14 @@ Note: This will create a bunch of files and directories, so I recommend placing 
 You can find these options in `config.json`, which is in the same directory as [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/main.py), and should be auto-generated upon first run. In case it does not happen, this is the default JSON file:
 ```json
 {
+    "gui_log_scrollback": "2000",
     "last_auth_method_used": "username and password",
     "last_circuitpython_bundle_version": "6",
     "show_traceback_in_error_messages": "false",
     "unix_drive_mount_point": "/media"
 }
 ```
+- `gui_log_scrollback` should be a string of a number. This is how many lines to retain in the GUI log.
 - `last_auth_method_used` should be a string of `username and password`, `access token`, or `enterprise`. This is the last method of authentication you used.
 - `last_circuitpython_bundle_version` should be a string of a number. This is the last CircuitPython version you used.
 - `show_traceback_in_error_messages` should be a string of a bool. (Like `1`, `true`, `yes` for `True` and anything else for `False`) This will control whether stack traces will appear in error messages.

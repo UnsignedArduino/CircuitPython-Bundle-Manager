@@ -579,12 +579,19 @@ class GUI(tk.Tk):
             self.save_key("show_traceback_in_error_messages", "false")
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
+        if not self.load_key("gui_log_scrollback"):
+            self.save_key("gui_log_scrollback", "2000")
+
+    def save_scrollback(self, scrollback):
+        self.save_key("gui_log_scrollback", scrollback)
 
     def create_log_tab(self):
         self.log_frame = ttk.Frame(master=self.notebook)
         self.log_frame.grid(row=0, column=0)
         self.notebook.add(self.log_frame, text="Log")
-        self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=32)
+        self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=32,
+                                         scrollback=self.load_key("gui_log_scrollback"),
+                                         save_scrollback_callback=self.save_scrollback)
 
     def create_gui(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
         logger.debug(f"Creating GUI...")
