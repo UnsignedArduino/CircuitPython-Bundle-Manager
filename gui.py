@@ -602,7 +602,7 @@ class GUI(tk.Tk):
                                              scrollback=self.load_key("gui_log_scrollback"),
                                              save_scrollback_callback=self.save_scrollback)
         elif os_detect.on_linux():
-            self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=64,
+            self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=9, cols=45,
                                              scrollback=self.load_key("gui_log_scrollback"),
                                              save_scrollback_callback=self.save_scrollback)
 
