@@ -332,6 +332,14 @@ class GUI(tk.Tk):
 
     def update_buttons(self):
         self.after(100, self.update_buttons)
+        try:
+            if self.updating:
+                self.install_module_button.config(state="disabled", text="Updating bundle...\nCannot install!")
+                return
+            else:
+                self.install_module_button.config(text="Install")
+        except AttributeError:
+            logger.exception(f"Uh oh! Something happened!")
         if self.installing:
             self.install_module_button.config(state="disabled", text="Installing...")
             self.uninstall_module_button.config(state="disabled")
