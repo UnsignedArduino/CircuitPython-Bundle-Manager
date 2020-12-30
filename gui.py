@@ -15,7 +15,7 @@ import requests
 import webbrowser
 from time import sleep
 import json
-from bundle_tools import drives, modules, bundle_manager
+from bundle_tools import drives, modules, bundle_manager, os_detect
 from bundle_tools.create_logger import create_logger
 import logging
 
@@ -597,9 +597,14 @@ class GUI(tk.Tk):
         self.log_frame = ttk.Frame(master=self.notebook)
         self.log_frame.grid(row=0, column=0)
         self.notebook.add(self.log_frame, text="Log")
-        self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=32,
-                                         scrollback=self.load_key("gui_log_scrollback"),
-                                         save_scrollback_callback=self.save_scrollback)
+        if os_detect.on_windows():
+            self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=32,
+                                             scrollback=self.load_key("gui_log_scrollback"),
+                                             save_scrollback_callback=self.save_scrollback)
+        elif os_detect.on_linux():
+            self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=64,
+                                             scrollback=self.load_key("gui_log_scrollback"),
+                                             save_scrollback_callback=self.save_scrollback)
 
     def create_gui(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
         logger.debug(f"Creating GUI...")
