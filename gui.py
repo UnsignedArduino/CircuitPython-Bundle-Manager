@@ -584,7 +584,7 @@ class GUI(tk.Tk):
         self.log_frame = ttk.Frame(master=self.notebook)
         self.log_frame.grid(row=0, column=0)
         self.notebook.add(self.log_frame, text="Log")
-        self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=9, cols=32)
+        self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=32)
 
     def create_gui(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
         logger.debug(f"Creating GUI...")

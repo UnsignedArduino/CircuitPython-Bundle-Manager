@@ -18,6 +18,7 @@ No functions!
 import tkinter as tk
 from tkinter import ttk
 from gui_tools.right_click import text, spinbox
+from gui_tools.idlelib_clone import tooltip
 import logging
 
 
@@ -31,6 +32,7 @@ class Logger(logging.Handler):
         self.log = text.TextWithRightClick(master=self.frame, width=cols, height=rows, wrap=tk.NONE, state=tk.DISABLED)
         self.log.initiate_right_click_menu(disable=["Cut", "Paste", "Delete"])
         self.log.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.log, text="The log for the application. Please see the console for the complete log.")
         self.yscrollbar = ttk.Scrollbar(master=self.frame, orient=tk.VERTICAL, command=self.log.yview)
         self.yscrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.xscrollbar = ttk.Scrollbar(master=self.frame, orient=tk.HORIZONTAL, command=self.log.xview)
@@ -41,6 +43,16 @@ class Logger(logging.Handler):
         self.scrollback = scrollback
         self.rows = rows
         self.make_scrollback_widgets()
+        self.make_autoscroll_widgets()
+
+    def make_autoscroll_widgets(self):
+        self.small_checkbox_style = ttk.Style()
+        self.small_checkbox_style.configure("my.TCheckbutton", font=("Helvetica", 7))
+        self.autoscroll_checkbutton_var = tk.BooleanVar(value=True)
+        self.autoscroll_checkbutton = ttk.Checkbutton(master=self.bottom_frame, text="Autoscroll?",
+                                                      variable=self.autoscroll_checkbutton_var, style="my.TCheckbutton")
+        self.autoscroll_checkbutton.grid(row=0, column=3, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.autoscroll_checkbutton, text="Whether to autoscroll the log when new logs are added.")
 
     def validate_for_number(self, new):
         return new.isdigit()
@@ -55,19 +67,24 @@ class Logger(logging.Handler):
         ttk.Label(master=self.bottom_frame, text="Scrollback:").grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.check_num_wrapper = (self.frame.register(self.validate_for_number), "%P")
         self.scrollback_spinbox = spinbox.SpinboxWithRightClick(master=self.bottom_frame, from_=self.rows, to=10000,
-                                                                width=5, validate="key",
+                                                                width=7, validate="key",
                                                                 validatecommand=self.check_num_wrapper)
         self.scrollback_spinbox.initiate_right_click_menu()
         self.scrollback_spinbox.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         self.scrollback_spinbox.set(self.scrollback)
-        self.clear_scrollback_button = ttk.Button(master=self.bottom_frame, text="Clear Scrollback",
-                                                  command=self.clear_scrollback)
+        tooltip.Hovertip(self.scrollback_spinbox, text="How many lines to keep in the logs.")
+        self.small_button_style = ttk.Style()
+        self.small_button_style.configure("my.TButton", font=("Helvetica", 7))
+        self.clear_scrollback_button = ttk.Button(master=self.bottom_frame, text="Clear scrollback",
+                                                  command=self.clear_scrollback, style="my.TButton")
         self.clear_scrollback_button.grid(row=0, column=2, padx=1, pady=0, sticky=tk.NW)
+        tooltip.Hovertip(self.clear_scrollback_button, text="Clear the scrollback.")
 
     def emit(self, record):
         self.log.config(state=tk.NORMAL)
         self.log.insert(tk.END, self.format(record) + "\n")
-        self.log.see(tk.END)
+        if self.autoscroll_checkbutton_var.get():
+            self.log.see(tk.END)
         while self.log.get("1.0", tk.END).count("\n") > int(self.scrollback_spinbox.get()):
             self.log.delete("1.0", "2.0")
         self.log.config(state=tk.DISABLED)
