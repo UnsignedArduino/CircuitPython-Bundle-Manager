@@ -35,19 +35,19 @@ class GUI(tk.Tk):
         return self
 
     def try_to_close(self):
-        logger.debug(f"User requested closing window...")
+        logger.debug("User requested closing window...")
         if self.disable_closing:
-            logger.warning(f"Currently in the middle of doing something!")
+            logger.warning("Currently in the middle of doing something!")
             if mbox.askokcancel("CircuitPython Bundle Manager: Confirmation",
                                 "Something is happening right now!\n"
                                 "If you close out now, this will immediately stop what we are doing and may cause a "
                                 "corrupt directory hierarchy, broken files and/or broken directories. "
                                 "Are you sure you want to exit?",
                                 icon="warning", default="cancel"):
-                logger.debug(f"User continued to close window!")
+                logger.debug("User continued to close window!")
                 self.destroy()
         else:
-            logger.debug(f"Destroying main window!")
+            logger.debug("Destroying main window!")
             self.destroy()
 
     def save_key(self, key=None, value=None):
@@ -99,7 +99,7 @@ class GUI(tk.Tk):
         self.check_update_button()
 
     def start_update_bundle_thread(self):
-        logger.debug(f"Starting update bundle thread!")
+        logger.debug("Starting update bundle thread!")
         update_thread = Thread(target=self.update_bundle, daemon=True)
         update_thread.start()
 
@@ -119,39 +119,39 @@ class GUI(tk.Tk):
             } if self.github_auth_method_var.get() == "enterprise" else None
         )
         try:
-            logger.debug(f"Attempting to update bundle...")
+            logger.debug("Attempting to update bundle...")
             bundle_manager.update_bundle(int(self.version_listbox.get()), github_instance)
             mbox.showinfo("CircuitPython Bundle Manager: Info", "CircuitPython bundle updated successfully!")
         except (TypeError, ValueError):
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
                            "Did you enter in the correct CircuitPython version below?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except GithubException:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
                            "Something happened while trying to access GitHub! "
                            "Did you enter in the correct credentials?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except requests.exceptions.ConnectionError:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
                            "Something happened while trying to access the internet! "
                            "Do you have a working internet connection?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except requests.exceptions.ChunkedEncodingError:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!\n"
                            "Something happened while trying to access the internet! "
                            "Did you internet connection break?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except Exception as _:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while updating the bundle!"
                            "\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         else:
-            logger.info(f"Successfully updated bundle!")
+            logger.info("Successfully updated bundle!")
         self.updating = False
         self.disable_closing = False
         self.enable_github_auth_inputs(True)
@@ -312,13 +312,13 @@ class GUI(tk.Tk):
             try:
                 installed_modules = modules.list_modules(Path(self.drive_combobox.get()))
             except RuntimeError:
-                logger.exception(f"Uh oh! Something happened!")
+                logger.exception("Uh oh! Something happened!")
                 installed_modules = []
             installed_modules.sort()
             logger.debug(f"Installed modules: {repr(installed_modules)}")
             self.installed_modules_listbox_var.set(installed_modules)
         except (AttributeError, RuntimeError):
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
 
     def update_modules_in_bundle(self):
         try:
@@ -329,7 +329,7 @@ class GUI(tk.Tk):
             logger.debug(f"Modules in bundle: {repr(bundles)}")
             self.bundle_listbox_var.set(bundles)
         except (ValueError, AttributeError):
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
 
     def update_buttons(self):
         self.after(100, self.update_buttons)
@@ -340,7 +340,7 @@ class GUI(tk.Tk):
             else:
                 self.install_module_button.config(text="Install")
         except AttributeError:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
         if self.installing:
             self.install_module_button.config(state="disabled", text="Installing...")
             self.uninstall_module_button.config(state="disabled")
@@ -422,7 +422,7 @@ class GUI(tk.Tk):
         tooltip.Hovertip(self.uninstall_module_button, text="Uninstall the selected module from the selected device.")
 
     def start_uninstall_module_thread(self):
-        logger.debug(f"Starting uninstall module thread!")
+        logger.debug("Starting uninstall module thread!")
         uninstall_thread = Thread(target=self.uninstall_module, daemon=True)
         uninstall_thread.start()
 
@@ -436,22 +436,22 @@ class GUI(tk.Tk):
             logger.debug(f"Attempting to uninstall module at {repr(module_path)}")
             modules.uninstall_module(module_path)
         except FileNotFoundError:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to uninstall module - did you input a drive that exists?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except RuntimeError:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to uninstall module!\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         else:
-            logger.debug(f"Successfully uninstalled module!")
+            logger.debug("Successfully uninstalled module!")
             mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully uninstalled module!")
         self.uninstalling = False
         self.disable_closing = False
         self.after(100, self.update_modules_in_device)
 
     def start_install_module_thread(self):
-        logger.debug(f"Starting install module thread!")
+        logger.debug("Starting install module thread!")
         install_thread = Thread(target=self.install_module, daemon=True)
         install_thread.start()
 
@@ -469,15 +469,15 @@ class GUI(tk.Tk):
                 Path(self.drive_combobox.get()) / "lib"
             )
         except FileNotFoundError:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to install module - did you input a drive that exists?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except RuntimeError:
-            logger.exception(f"Uh oh! Something happened!")
+            logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Failed to install module!\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         else:
-            logger.debug(f"Successfully installed module!")
+            logger.debug("Successfully installed module!")
             mbox.showinfo("CircuitPython Bundle Manager: Info", "Successfully installed module!")
         self.installing = False
         self.disable_closing = False
@@ -602,7 +602,7 @@ class GUI(tk.Tk):
         self.save_key("gui_log_scrollback", scrollback)
 
     def create_gui(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
-        logger.debug(f"Creating GUI...")
+        logger.debug("Creating GUI...")
         if os_detect.on_linux():
             self.global_style = ttk.Style()
             self.global_style.theme_use("clam")
@@ -625,4 +625,4 @@ class GUI(tk.Tk):
                            f"Error type: {err_type}\n"
                            f"Error value: {err_value}\n"
                            f"Error traceback: {err_traceback}\n\n" + traceback.format_exc())
-            logger.fatel("Uh oh, a fatel error has occurred!", exc_info=True)
+            logger.fatel("Uh oh, a fatal error has occurred!", exc_info=True)
