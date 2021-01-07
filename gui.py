@@ -77,7 +77,7 @@ class GUI(tk.Tk):
     def create_bundle_update_tab(self):
         self.github_auth_frame = ttk.Frame(master=self.notebook)
         self.github_auth_frame.grid(row=0, column=0, padx=1, pady=1)
-        self.notebook.insert(0, self.github_auth_frame, text="Update Bundle")
+        self.notebook.add(self.github_auth_frame, text="Update Bundle")
         self.create_username_password_input()
         self.create_access_token_input()
         self.create_github_enterprise_input()
@@ -298,7 +298,7 @@ class GUI(tk.Tk):
     def create_bundle_manager_tab(self):
         self.bundle_manager_frame = ttk.Frame(master=self.notebook)
         self.bundle_manager_frame.grid(row=0, column=0, padx=1, pady=1)
-        self.notebook.insert(0, self.bundle_manager_frame, text="Bundle Manager")
+        self.notebook.add(self.bundle_manager_frame, text="Bundle Manager")
         self.installing = False
         self.uninstalling = False
         self.create_bundle_list()
@@ -527,7 +527,7 @@ class GUI(tk.Tk):
     def create_other_tab(self):
         self.other_frame = ttk.Frame(master=self.notebook)
         self.other_frame.grid(row=0, column=0)
-        self.notebook.insert(0, self.other_frame, text="Other")
+        self.notebook.add(self.other_frame, text="Other")
         self.readme_frame = ttk.Frame(master=self.other_frame)
         self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
@@ -594,36 +594,15 @@ class GUI(tk.Tk):
     def save_scrollback(self, scrollback):
         self.save_key("gui_log_scrollback", scrollback)
 
-    def create_log_tab(self):
-        self.log_frame = ttk.Frame(master=self.notebook)
-        self.log_frame.grid(row=0, column=0)
-        self.notebook.add(self.log_frame, text="Log")
-        if os_detect.on_windows():
-            self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=8, cols=32,
-                                             scrollback=self.load_key("gui_log_scrollback"),
-                                             save_scrollback_callback=self.save_scrollback)
-        elif os_detect.on_linux():
-            self.gui_logger = gui_log.Logger(master=self.log_frame, row=0, col=0, rows=9, cols=45,
-                                             scrollback=self.load_key("gui_log_scrollback"),
-                                             save_scrollback_callback=self.save_scrollback)
-
     def create_gui(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
         logger.debug(f"Creating GUI...")
         self.notebook = ttk.Notebook(master=self)
         self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
         self.create_config()
         self.create_drive_selector()
-        self.create_log_tab()
-        for log_thing in [logging.getLogger(name) for name in logging.root.manager.loggerDict]:
-            log_thing.setLevel(level=log_level)
-            for handler in handlers_to_add:
-                log_thing.addHandler(hdlr=handler)
-            log_thing.addHandler(hdlr=self.gui_logger)
-            for handler in log_thing.handlers:
-                handler.setLevel(level=log_level)
-        self.create_other_tab()
-        self.create_bundle_manager_tab()
         self.create_bundle_update_tab()
+        self.create_bundle_manager_tab()
+        self.create_other_tab()
         self.notebook.select(0)
 
     def run(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
