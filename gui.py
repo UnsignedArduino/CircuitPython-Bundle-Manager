@@ -212,6 +212,7 @@ class GUI(tk.Tk):
         self.username_entry.config(state="normal" if enable else "disabled")
         self.password_label.config(state="normal" if enable else "disabled")
         self.password_entry.config(state="normal" if enable else "disabled")
+        self.show_password_button.config(state="normal" if enable else "disabled")
 
     def create_auth_method_selector(self):
         self.github_auth_method_var = tk.StringVar()
