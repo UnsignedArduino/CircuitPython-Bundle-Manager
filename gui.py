@@ -374,7 +374,7 @@ class GUI(tk.Tk):
         if os_detect.on_windows():
             self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
         else:
-            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=17, height=10, listvariable=self.bundle_listbox_var)
+            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=18, height=10, listvariable=self.bundle_listbox_var)
         self.bundle_listbox.grid(row=0, column=0, padx=1, pady=1)
         self.bundle_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
         self.bundle_listbox.right_click_menu.add_separator()
