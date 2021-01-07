@@ -605,7 +605,7 @@ class GUI(tk.Tk):
         logger.debug(f"Creating GUI...")
         if os_detect.on_linux():
             self.global_style = ttk.Style()
-            self.global_style.theme_use("alt")
+            self.global_style.theme_use("clam")
         self.notebook = ttk.Notebook(master=self)
         self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
         self.create_config()
