@@ -371,7 +371,10 @@ class GUI(tk.Tk):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
         self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
         self.bundle_listbox_var = tk.StringVar()
-        self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
+        if os_detect.on_windows():
+            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
+        else:
+            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=17, height=10, listvariable=self.bundle_listbox_var)
         self.bundle_listbox.grid(row=0, column=0, padx=1, pady=1)
         self.bundle_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
         self.bundle_listbox.right_click_menu.add_separator()
@@ -386,7 +389,10 @@ class GUI(tk.Tk):
         self.installed_modules_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Installed modules")
         self.installed_modules_listbox_frame.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NE)
         self.installed_modules_listbox_var = tk.StringVar()
-        self.installed_modules_listbox = ListboxWithRightClick(self.installed_modules_listbox_frame, width=18, height=5, listvariable=self.installed_modules_listbox_var)
+        if os_detect.on_windows():
+            self.installed_modules_listbox = ListboxWithRightClick(self.installed_modules_listbox_frame, width=18, height=5, listvariable=self.installed_modules_listbox_var)
+        else:
+            self.installed_modules_listbox = ListboxWithRightClick(self.installed_modules_listbox_frame, width=17, height=5, listvariable=self.installed_modules_listbox_var)
         self.installed_modules_listbox.grid(row=0, column=0, padx=1, pady=1)
         self.installed_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"], callback=self.check_for_lib_path)
         self.installed_modules_listbox.right_click_menu.add_separator()
@@ -480,7 +486,10 @@ class GUI(tk.Tk):
     def create_drive_selector(self):
         self.drive_combobox_label = ttk.Label(master=self, text="Drive:")
         self.drive_combobox_label.grid(row=1, column=0, padx=1, pady=1)
-        self.drive_combobox = ComboboxWithRightClick(master=self, width=16)
+        if os_detect.on_windows():
+            self.drive_combobox = ComboboxWithRightClick(master=self, width=16)
+        else:
+            self.drive_combobox = ComboboxWithRightClick(master=self, width=15)
         self.drive_combobox.grid(row=1, column=1, padx=1, pady=1)
         self.drive_combobox.initiate_right_click_menu()
         self.drive_combobox.right_click_menu.add_separator()
