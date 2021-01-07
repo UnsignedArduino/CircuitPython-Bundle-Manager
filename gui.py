@@ -603,6 +603,9 @@ class GUI(tk.Tk):
 
     def create_gui(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
         logger.debug(f"Creating GUI...")
+        if os_detect.on_linux():
+            self.global_style = ttk.Style()
+            self.global_style.theme_use("alt")
         self.notebook = ttk.Notebook(master=self)
         self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
         self.create_config()
