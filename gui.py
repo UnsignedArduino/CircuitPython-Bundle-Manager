@@ -588,8 +588,6 @@ class GUI(tk.Tk):
             self.save_key("show_traceback_in_error_messages", "false")
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
-        if not self.load_key("gui_log_scrollback"):
-            self.save_key("gui_log_scrollback", "2000")
 
     def save_scrollback(self, scrollback):
         self.save_key("gui_log_scrollback", scrollback)
@@ -603,7 +601,6 @@ class GUI(tk.Tk):
         self.create_bundle_update_tab()
         self.create_bundle_manager_tab()
         self.create_other_tab()
-        self.notebook.select(0)
 
     def run(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
         self.create_gui(log_level=log_level, handlers_to_add=handlers_to_add)
