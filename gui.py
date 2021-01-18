@@ -383,11 +383,13 @@ class GUI(tk.Tk):
     def create_bundle_list(self):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
         self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
-        # TODO: Make search bar
         self.search_bar_var = tk.StringVar()
         self.search_bar_var.set("")
         self.search_bar_var.trace_add("write", self.update_search_bar)
-        self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
+        if os_detect.on_windows():
+            self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
+        else:
+            self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=21)
         self.search_bar.initiate_right_click_menu()
         self.search_bar.grid(row=0, column=0, columnspan=2, padx=1, pady=1)
         tooltip.Hovertip(self.search_bar, text="Enter your search query here.")
