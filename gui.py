@@ -355,21 +355,25 @@ class GUI(tk.Tk):
             self.uninstall_module_button.config(state="disabled")
             self.bundle_listbox.config(state="disabled")
             self.installed_modules_listbox.config(state="disabled")
+            self.search_bar.config(state="disabled")
             return
         else:
             self.install_module_button.config(text="Install")
             self.bundle_listbox.config(state="normal")
             self.installed_modules_listbox.config(state="normal")
+            self.search_bar.config(state="normal")
         if self.uninstalling:
             self.install_module_button.config(state="disabled")
             self.uninstall_module_button.config(state="disabled", text="Uninstalling...")
             self.bundle_listbox.config(state="disabled")
             self.installed_modules_listbox.config(state="disabled")
+            self.search_bar.config(state="disabled")
             return
         else:
             self.uninstall_module_button.config(text="Uninstall")
             self.bundle_listbox.config(state="normal")
             self.installed_modules_listbox.config(state="normal")
+            self.search_bar.config(state="normal")
         self.install_module_button.config(state="normal" if len(self.bundle_listbox.curselection()) > 0 else "disabled")
         self.uninstall_module_button.config(state="normal" if len(self.installed_modules_listbox.curselection()) > 0 else "disabled")
         if self.drive_combobox.get() == "":
