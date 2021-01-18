@@ -370,19 +370,25 @@ class GUI(tk.Tk):
     def create_bundle_list(self):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
         self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
+        # TODO: Make search bar
+        self.search_bar_var = tk.StringVar()
+        self.search_bar_var.set("")
+        self.search_bar = ttk.Entry(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
+        self.search_bar.grid(row=0, column=0, columnspan=2, padx=1, pady=1)
+        tooltip.Hovertip(self.search_bar, text="Enter your search query here.")
         self.bundle_listbox_var = tk.StringVar()
         if os_detect.on_windows():
-            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=19, height=10, listvariable=self.bundle_listbox_var)
+            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=19, height=9, listvariable=self.bundle_listbox_var)
         else:
-            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=18, height=10, listvariable=self.bundle_listbox_var)
-        self.bundle_listbox.grid(row=0, column=0, padx=1, pady=1)
+            self.bundle_listbox = ListboxWithRightClick(self.bundle_listbox_frame, width=18, height=9, listvariable=self.bundle_listbox_var)
+        self.bundle_listbox.grid(row=1, column=0, padx=1, pady=1)
         self.bundle_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
         self.bundle_listbox.right_click_menu.add_separator()
         self.bundle_listbox.right_click_menu.add_command(label="Refresh bundle", command=self.update_modules_in_bundle)
         tooltip.Hovertip(self.bundle_listbox, text="A list of modules from the CircuitPython bundle.\n"
                                                    "Select a module and press install to install the module to the selected device.")
         self.bundle_listbox_scrollbar = ttk.Scrollbar(self.bundle_listbox_frame, orient=tk.VERTICAL, command=self.bundle_listbox.yview)
-        self.bundle_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
+        self.bundle_listbox_scrollbar.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.bundle_listbox.config(yscrollcommand=self.bundle_listbox_scrollbar.set)
 
     def create_installed_module_list(self):
