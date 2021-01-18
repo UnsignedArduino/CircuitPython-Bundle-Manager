@@ -327,7 +327,16 @@ class GUI(tk.Tk):
                 bundles = []
             bundles.sort()
             logger.debug(f"Modules in bundle: {repr(bundles)}")
-            self.bundle_listbox_var.set(bundles)
+            search_query = self.search_bar_var.get()
+            if not search_query == "":
+                sorted_bundles = []
+                for bundle in bundles:
+                    if search_query in bundle:
+                        sorted_bundles.append(bundle)
+                logger.debug(f"Sorted bundles: {repr(sorted_bundles)}")
+                self.bundle_listbox_var.set(sorted_bundles)
+            else:
+                self.bundle_listbox_var.set(bundles)
         except (ValueError, AttributeError):
             logger.exception("Uh oh! Something happened!")
 
@@ -367,13 +376,19 @@ class GUI(tk.Tk):
             self.install_module_button.config(state="disabled")
             self.uninstall_module_button.config(state="disabled")
 
+    def update_search_bar(self, *args):
+        logger.debug(f"Search query is {repr(self.search_bar_var.get())}")
+        self.update_modules_in_bundle()
+
     def create_bundle_list(self):
         self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
         self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
         # TODO: Make search bar
         self.search_bar_var = tk.StringVar()
         self.search_bar_var.set("")
-        self.search_bar = ttk.Entry(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
+        self.search_bar_var.trace_add("write", self.update_search_bar)
+        self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
+        self.search_bar.initiate_right_click_menu()
         self.search_bar.grid(row=0, column=0, columnspan=2, padx=1, pady=1)
         tooltip.Hovertip(self.search_bar, text="Enter your search query here.")
         self.bundle_listbox_var = tk.StringVar()
