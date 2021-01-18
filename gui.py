@@ -160,21 +160,21 @@ class GUI(tk.Tk):
         self.enable_username_password(self.github_auth_method_var.get() == "username and password" if enable else False)
         self.enable_access_token(self.github_auth_method_var.get() == "access token" if enable else False)
         self.enable_enterprise(self.github_auth_method_var.get() == "enterprise" if enable else False)
-        self.user_pass_radio_button.config(state="normal" if enable else "disabled")
-        self.access_token_radio_button.config(state="normal" if enable else "disabled")
-        self.enterprise_radio_button.config(state="normal" if enable else "disabled")
-        self.version_label.config(state="normal" if enable else "disabled")
-        self.version_listbox.config(state="normal" if enable else "disabled")
+        self.user_pass_radio_button.config(state=tk.NORMAL if enable else "disabled")
+        self.access_token_radio_button.config(state=tk.NORMAL if enable else "disabled")
+        self.enterprise_radio_button.config(state=tk.NORMAL if enable else "disabled")
+        self.version_label.config(state=tk.NORMAL if enable else "disabled")
+        self.version_listbox.config(state=tk.NORMAL if enable else "disabled")
 
     def check_update_button(self):
         self.after(500, self.check_update_button)
         if self.updating:
-            self.update_bundle_button.config(state="disabled", text="Updating bundle...")
+            self.update_bundle_button.config(state=tk.DISABLED, text="Updating bundle...")
             return
         else:
             self.update_bundle_button.config(state="enabled", text="Update bundle")
         if self.version_listbox.get() == "":
-            self.update_bundle_button.config(state="disabled")
+            self.update_bundle_button.config(state=tk.DISABLED)
             return
         if self.github_auth_method_var.get() == "username and password":
             self.update_bundle_button.config(
@@ -189,7 +189,7 @@ class GUI(tk.Tk):
                 state="normal" if self.enterprise_url_entry.get() != "" and self.enterprise_token_entry.get() != "" else "disabled"
             )
         else:
-            self.update_bundle_button.config(state="disabled")
+            self.update_bundle_button.config(state=tk.DISABLED)
 
     def update_selected_auth_method(self):
         self.enable_username_password(self.github_auth_method_var.get() == "username and password")
@@ -198,21 +198,21 @@ class GUI(tk.Tk):
         self.save_key("last_auth_method_used", self.github_auth_method_var.get())
 
     def enable_enterprise(self, enable: bool = True):
-        self.enterprise_url_label.config(state="normal" if enable else "disabled")
-        self.enterprise_url_entry.config(state="normal" if enable else "disabled")
-        self.enterprise_token_label.config(state="normal" if enable else "disabled")
-        self.enterprise_token_entry.config(state="normal" if enable else "disabled")
+        self.enterprise_url_label.config(state=tk.NORMAL if enable else "disabled")
+        self.enterprise_url_entry.config(state=tk.NORMAL if enable else "disabled")
+        self.enterprise_token_label.config(state=tk.NORMAL if enable else "disabled")
+        self.enterprise_token_entry.config(state=tk.NORMAL if enable else "disabled")
 
     def enable_access_token(self, enable: bool = True):
-        self.access_token_label.config(state="normal" if enable else "disabled")
-        self.access_token_entry.config(state="normal" if enable else "disabled")
+        self.access_token_label.config(state=tk.NORMAL if enable else "disabled")
+        self.access_token_entry.config(state=tk.NORMAL if enable else "disabled")
 
     def enable_username_password(self, enable: bool = True):
-        self.username_label.config(state="normal" if enable else "disabled")
-        self.username_entry.config(state="normal" if enable else "disabled")
-        self.password_label.config(state="normal" if enable else "disabled")
-        self.password_entry.config(state="normal" if enable else "disabled")
-        self.show_password_button.config(state="normal" if enable else "disabled")
+        self.username_label.config(state=tk.NORMAL if enable else "disabled")
+        self.username_entry.config(state=tk.NORMAL if enable else "disabled")
+        self.password_label.config(state=tk.NORMAL if enable else "disabled")
+        self.password_entry.config(state=tk.NORMAL if enable else "disabled")
+        self.show_password_button.config(state=tk.NORMAL if enable else "disabled")
 
     def create_auth_method_selector(self):
         self.github_auth_method_var = tk.StringVar()
@@ -344,41 +344,41 @@ class GUI(tk.Tk):
         self.after(100, self.update_buttons)
         try:
             if self.updating:
-                self.install_module_button.config(state="disabled", text="Updating bundle...\nCannot install!")
+                self.install_module_button.config(state=tk.DISABLED, text="Updating bundle...\nCannot install!")
                 return
             else:
                 self.install_module_button.config(text="Install")
         except AttributeError:
             logger.exception("Uh oh! Something happened!")
         if self.installing:
-            self.install_module_button.config(state="disabled", text="Installing...")
-            self.uninstall_module_button.config(state="disabled")
-            self.bundle_listbox.config(state="disabled")
-            self.installed_modules_listbox.config(state="disabled")
-            self.search_bar.config(state="disabled")
+            self.install_module_button.config(state=tk.DISABLED, text="Installing...")
+            self.uninstall_module_button.config(state=tk.DISABLED)
+            self.bundle_listbox.config(state=tk.DISABLED)
+            self.installed_modules_listbox.config(state=tk.DISABLED)
+            self.search_bar.config(state=tk.DISABLED)
             return
         else:
             self.install_module_button.config(text="Install")
-            self.bundle_listbox.config(state="normal")
-            self.installed_modules_listbox.config(state="normal")
-            self.search_bar.config(state="normal")
+            self.bundle_listbox.config(state=tk.NORMAL)
+            self.installed_modules_listbox.config(state=tk.NORMAL)
+            self.search_bar.config(state=tk.NORMAL)
         if self.uninstalling:
-            self.install_module_button.config(state="disabled")
-            self.uninstall_module_button.config(state="disabled", text="Uninstalling...")
-            self.bundle_listbox.config(state="disabled")
-            self.installed_modules_listbox.config(state="disabled")
-            self.search_bar.config(state="disabled")
+            self.install_module_button.config(state=tk.DISABLED)
+            self.uninstall_module_button.config(state=tk.DISABLED, text="Uninstalling...")
+            self.bundle_listbox.config(state=tk.DISABLED)
+            self.installed_modules_listbox.config(state=tk.DISABLED)
+            self.search_bar.config(state=tk.DISABLED)
             return
         else:
             self.uninstall_module_button.config(text="Uninstall")
-            self.bundle_listbox.config(state="normal")
-            self.installed_modules_listbox.config(state="normal")
-            self.search_bar.config(state="normal")
-        self.install_module_button.config(state="normal" if len(self.bundle_listbox.curselection()) > 0 else "disabled")
-        self.uninstall_module_button.config(state="normal" if len(self.installed_modules_listbox.curselection()) > 0 else "disabled")
+            self.bundle_listbox.config(state=tk.NORMAL)
+            self.installed_modules_listbox.config(state=tk.NORMAL)
+            self.search_bar.config(state=tk.NORMAL)
+        self.install_module_button.config(state=tk.NORMAL if len(self.bundle_listbox.curselection()) > 0 else "disabled")
+        self.uninstall_module_button.config(state=tk.NORMAL if len(self.installed_modules_listbox.curselection()) > 0 else "disabled")
         if self.drive_combobox.get() == "":
-            self.install_module_button.config(state="disabled")
-            self.uninstall_module_button.config(state="disabled")
+            self.install_module_button.config(state=tk.DISABLED)
+            self.uninstall_module_button.config(state=tk.DISABLED)
 
     def update_search_bar(self, *args):
         logger.debug(f"Search query is {repr(self.search_bar_var.get())}")
