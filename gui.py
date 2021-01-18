@@ -389,7 +389,7 @@ class GUI(tk.Tk):
         if os_detect.on_windows():
             self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
         else:
-            self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=21)
+            self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=20)
         self.search_bar.initiate_right_click_menu()
         self.search_bar.grid(row=0, column=0, columnspan=2, padx=1, pady=1)
         tooltip.Hovertip(self.search_bar, text="Enter your search query here.")
