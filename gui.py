@@ -89,10 +89,10 @@ class GUI(tk.Tk):
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
         validate_for_number_wrapper = (self.register(self.validate_for_number), '%P')
         self.version_listbox = SpinboxWithRightClick(master=self.github_auth_frame, width=3, from_=1, to=100,
-                                                     command=lambda: self.save_key("last_circuitpython_bundle_version", self.version_listbox.get()),
+                                                     command=lambda: self.save_key("last_circuit_python_bundle_version", self.version_listbox.get()),
                                                      validate="key", validatecommand=validate_for_number_wrapper)
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
-        self.version_listbox.set(self.load_key("last_circuitpython_bundle_version"))
+        self.version_listbox.set(self.load_key("last_circuit_python_bundle_version"))
         self.version_listbox.initiate_right_click_menu(disable=["Cut", "Delete"])
         tooltip.Hovertip(self.version_listbox, text="The major CircuitPython version used when updating the bundle.")
         self.updating = False
@@ -589,8 +589,8 @@ class GUI(tk.Tk):
             return False
 
     def create_config(self):
-        if not self.load_key("last_circuitpython_bundle_version"):
-            self.save_key("last_circuitpython_bundle_version", "6")
+        if not self.load_key("last_circuit_python_bundle_version"):
+            self.save_key("last_circuit_python_bundle_version", "6")
         if not self.load_key("last_auth_method_used"):
             self.save_key("last_auth_method_used", "username and password")
         if not self.load_key("show_traceback_in_error_messages"):
@@ -598,10 +598,7 @@ class GUI(tk.Tk):
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
 
-    def save_scrollback(self, scrollback):
-        self.save_key("gui_log_scrollback", scrollback)
-
-    def create_gui(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
+    def create_gui(self):
         logger.debug("Creating GUI...")
         if os_detect.on_linux():
             self.global_style = ttk.Style()
@@ -614,8 +611,8 @@ class GUI(tk.Tk):
         self.create_bundle_manager_tab()
         self.create_other_tab()
 
-    def run(self, log_level: int = logging.DEBUG, handlers_to_add: list = []):
-        self.create_gui(log_level=log_level, handlers_to_add=handlers_to_add)
+    def run(self):
+        self.create_gui()
         self.mainloop()
 
     def __exit__(self, err_type=None, err_value=None, err_traceback=None):
