@@ -6,6 +6,7 @@ from gui_tools.right_click.spinbox import SpinboxWithRightClick
 from gui_tools.right_click.combobox import ComboboxWithRightClick
 from gui_tools.right_click.listbox import ListboxWithRightClick
 from gui_tools.idlelib_clone import tooltip
+from gui_tools import download_dialog
 from gui_tools import gui_log
 from threading import Thread
 from pathlib import Path
@@ -561,7 +562,7 @@ class GUI(tk.Tk):
         self.clipboard_append(string)
         self.update()
 
-    def open_file(self, path: Union[Path, str]):
+    def open_file(self, path: Union[Path, str], download_url: str = None):
         logger.debug(f"Opening {repr(path)}...")
         if isinstance(path, Path):
             if path.exists():
@@ -570,13 +571,20 @@ class GUI(tk.Tk):
                 mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                                "Oh no! An error occurred while opening this file!\n"
                                f"The file {repr(path)} does not exist!")
+                if download_url and mbox.askokcancel("CircuitPython Bundle Manager: Confirm",
+                                                     "It looks like this file is available on GitHub!\n"
+                                                     "Would you like to download it?"):
+                    download_dialog.download(master=self, url=download_url, path=path)
         else:
             webbrowser.open(path)
 
     def make_open_readme_buttons(self):
         self.open_readme_button = ttk.Button(
             master=self.readme_frame, text="Open README file",
-            command=lambda: self.open_file(Path.cwd() / "README.md")
+            command=lambda: self.open_file(
+                Path.cwd() / "README.md",
+                download_url="https://raw.githubusercontent.com/UnsignedArduino/CircuitPython-Bundle-Manager/main/README.md"
+            )
         )
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
