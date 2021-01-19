@@ -594,8 +594,23 @@ class GUI(tk.Tk):
         self.open_config_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
         ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        self.log_frame = ttk.Frame(master=self.other_frame)
+        self.log_frame.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_log_button = ttk.Button(
+            master=self.log_frame, text="Open log file",
+            command=lambda: webbrowser.open(str(Path.cwd() / "log.log"))
+        )
+        self.open_log_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.open_config_button, text="Open the log file in the default log editor.")
+        self.open_log_button_location = ttk.Button(
+            master=self.log_frame, text="Open log file location",
+            command=lambda: webbrowser.open(str(Path.cwd()))
+        )
+        self.open_log_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.open_log_button_location, text="Open the log file location in the default file manager.")
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.github_repo_frame = ttk.Frame(master=self.other_frame)
-        self.github_repo_frame.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.github_repo_frame.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_github_repo_button = ttk.Button(
             master=self.github_repo_frame, text="Open GitHub repo link",
             command=lambda: webbrowser.open("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
