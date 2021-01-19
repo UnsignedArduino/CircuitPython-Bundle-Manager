@@ -15,7 +15,10 @@ Functions list:
 
 """
 
+from pathlib import Path
 import logging
+
+LOG_LOCATION = Path.cwd() / "log.log"
 
 
 def create_logger(name: str = __name__, level: int = logging.DEBUG) -> logging.getLogger:
@@ -47,9 +50,15 @@ def create_logger(name: str = __name__, level: int = logging.DEBUG) -> logging.g
     console_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     console_handler.setFormatter(fmt=console_formatter)
     console_handler.setLevel(level=level)
+    file_handler = logging.FileHandler(filename=LOG_LOCATION)
+    file_handler.setLevel(level=level)
+    file_handler.setFormatter(fmt=console_formatter)
+    file_handler.setLevel(level=level)
     logger.propagate = False
     if console_handler not in logger.handlers:
         logger.addHandler(hdlr=console_handler)
+    if file_handler not in logger.handlers:
+        logger.addHandler(hdlr=file_handler)
     logger.setLevel(level=level)
     logger.debug(f"Created logger named {repr(name)} with level {repr(level)}")
     logger.debug(f"Handlers for {repr(name)}: {repr(logger.handlers)}")
