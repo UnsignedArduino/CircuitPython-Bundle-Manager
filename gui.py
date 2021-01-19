@@ -16,6 +16,7 @@ import webbrowser
 from time import sleep
 import json
 from bundle_tools import drives, modules, bundle_manager, os_detect
+from typing import Union
 from bundle_tools.create_logger import create_logger
 import logging
 
@@ -560,60 +561,70 @@ class GUI(tk.Tk):
         self.clipboard_append(string)
         self.update()
 
-    def create_other_tab(self):
-        self.other_frame = ttk.Frame(master=self.notebook)
-        self.other_frame.grid(row=0, column=0)
-        self.notebook.add(self.other_frame, text="Other")
-        self.readme_frame = ttk.Frame(master=self.other_frame)
-        self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+    def open_file(self, path: Union[Path, str]):
+        logger.debug(f"Opening {repr(path)}...")
+        if isinstance(path, Path):
+            if path.exists():
+                webbrowser.open(str(path))
+            else:
+                mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                               "Oh no! An error occurred while opening this file!\n"
+                               f"The file {repr(path)} does not exist!")
+        else:
+            webbrowser.open(path)
+
+    def make_open_readme_buttons(self):
         self.open_readme_button = ttk.Button(
             master=self.readme_frame, text="Open README file",
-            command=lambda: webbrowser.open(str(Path.cwd() / "README.md"))
+            command=lambda: self.open_file(Path.cwd() / "README.md")
         )
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
         self.open_readme_button_location = ttk.Button(
             master=self.readme_frame, text="Open README file location",
-            command=lambda: webbrowser.open(str(Path.cwd()))
+            command=lambda: self.open_file(Path.cwd())
         )
         self.open_readme_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button_location, text="Open the README file location in the default file manager.")
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
+
+    def make_open_config_buttons(self):
         self.config_frame = ttk.Frame(master=self.other_frame)
         self.config_frame.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_config_button = ttk.Button(
             master=self.config_frame, text="Open config file",
-            command=lambda: webbrowser.open(str(Path.cwd() / "config.json"))
+            command=lambda: self.open_file(Path.cwd() / "config.json")
         )
         self.open_config_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button, text="Open the config file in the default json editor.")
         self.open_config_button_location = ttk.Button(
             master=self.config_frame, text="Open config file location",
-            command=lambda: webbrowser.open(str(Path.cwd()))
+            command=lambda: self.open_file(Path.cwd())
         )
         self.open_config_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
+
+    def make_open_log_buttons(self):
         self.log_frame = ttk.Frame(master=self.other_frame)
         self.log_frame.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_log_button = ttk.Button(
             master=self.log_frame, text="Open log file",
-            command=lambda: webbrowser.open(str(Path.cwd() / "log.log"))
+            command=lambda: self.open_file(Path.cwd() / "log.log")
         )
         self.open_log_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button, text="Open the log file in the default log editor.")
         self.open_log_button_location = ttk.Button(
             master=self.log_frame, text="Open log file location",
-            command=lambda: webbrowser.open(str(Path.cwd()))
+            command=lambda: self.open_file(Path.cwd())
         )
         self.open_log_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_log_button_location, text="Open the log file location in the default file manager.")
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
+
+    def make_open_github_repo_buttons(self):
         self.github_repo_frame = ttk.Frame(master=self.other_frame)
         self.github_repo_frame.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_github_repo_button = ttk.Button(
             master=self.github_repo_frame, text="Open GitHub repo link",
-            command=lambda: webbrowser.open("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
+            command=lambda: self.open_file("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
         self.open_github_repo_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_github_repo_button, text="Open the GitHub repo for this project in the default browser.")
@@ -623,6 +634,20 @@ class GUI(tk.Tk):
         )
         self.copy_github_repo_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.copy_github_repo_button, text="Copy the link to the GitHub repo for this project to the clipboard.")
+
+    def create_other_tab(self):
+        self.other_frame = ttk.Frame(master=self.notebook)
+        self.other_frame.grid(row=0, column=0)
+        self.notebook.add(self.other_frame, text="Other")
+        self.readme_frame = ttk.Frame(master=self.other_frame)
+        self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.make_open_readme_buttons()
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        self.make_open_config_buttons()
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        self.make_open_log_buttons()
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        self.make_open_github_repo_buttons()
 
     def show_traceback(self):
         try:
