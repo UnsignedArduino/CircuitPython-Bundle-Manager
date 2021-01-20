@@ -11,13 +11,13 @@ import logging
 logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
-def close_window(window: tk.Toplevel):
+def close_window(window: tk.Toplevel) -> None:
     logger.debug(f"Closing download dialog!")
     window.grab_release()
     window.destroy()
 
 
-def download_file(status_widget: ttk.Label, url: str, path: Path):
+def download_file(status_widget: ttk.Label, url: str, path: Path) -> None:
     logger.debug(f"Downloading {repr(url)} to {repr(path)}")
     req = requests.get(url=url, stream=True)
     total_length = req.headers.get("content-length")
@@ -42,7 +42,7 @@ def download_file(status_widget: ttk.Label, url: str, path: Path):
             status_widget.update_idletasks()
 
 
-def download(master: tk.Tk, url: str, path: Path, show_traceback: bool = False):
+def download(master: tk.Tk, url: str, path: Path, show_traceback: bool = False) -> bool:
     dialog = tk.Toplevel(master=master)
     dialog.protocol("WM_DELETE_WINDOW", lambda: close_window(window=dialog))
     dialog.transient(master=master)
@@ -53,6 +53,7 @@ def download(master: tk.Tk, url: str, path: Path, show_traceback: bool = False):
     status = ttk.Label(master=dialog, text="0/infinity kB")
     status.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
     dialog.update_idletasks()
+    success = True
     try:
         download_file(status_widget=status, url=url, path=path)
     except requests.exceptions.ConnectionError:
@@ -62,6 +63,7 @@ def download(master: tk.Tk, url: str, path: Path, show_traceback: bool = False):
                        "Something happened while trying to access the internet! "
                        "Do you have a working internet connection?\n\n" + (
                        traceback.format_exc() if show_traceback else ""))
+        success = False
     except requests.exceptions.ChunkedEncodingError:
         logger.exception("Uh oh! Something happened!")
         mbox.showerror("CircuitPython Bundle Manager: ERROR!",
@@ -69,9 +71,12 @@ def download(master: tk.Tk, url: str, path: Path, show_traceback: bool = False):
                        "Something happened while trying to access the internet! "
                        "Did you internet connection break?\n\n" + (
                        traceback.format_exc() if show_traceback else ""))
+        success = False
     except Exception as _:
         logger.exception("Uh oh! Something happened!")
         mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                        "Oh no! An error occurred while downloading this file!"
                        "\n\n" + (traceback.format_exc() if show_traceback else ""))
+        success = False
     master.after(1000, func=lambda: close_window(window=dialog))
+    return success

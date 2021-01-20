@@ -574,8 +574,9 @@ class GUI(tk.Tk):
                 if download_url and mbox.askokcancel("CircuitPython Bundle Manager: Confirm",
                                                      "It looks like this file is available on GitHub!\n"
                                                      "Would you like to download it?"):
-                    download_dialog.download(master=self, url=download_url, path=path,
-                                             show_traceback=self.show_traceback())
+                    if download_dialog.download(master=self, url=download_url, path=path,
+                                                show_traceback=self.show_traceback()):
+                        webbrowser.open(str(path))
         else:
             webbrowser.open(path)
 
