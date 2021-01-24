@@ -4,6 +4,13 @@ A Python program that makes it easy to manage modules on a CircuitPython device!
 Run [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/main.py) to start the program. Make sure that [`bundle_tools`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/tree/main/bundle_tools) and [`gui_tools`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/tree/main/gui_tools) is in the same directory and that all [requirements](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/requirements.txt) are met!
 Note: This will create a bunch of files and directories, so I recommend placing this in its own directory and adding a shortcut or a symlink to the desktop or something like that.
 
+## Table of Contents
+1. [Installing](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing)
+   1. [Installing from a binary](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-a-binary)
+   2. [Installing from source](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-source)
+2. [Running](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#running)
+3. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
+
 ## Installing
 ~~Sooner or later, I will get binaries for Windows and Linux. (Sorry macOS users - I don't have a macOS computer!) For now, you are going to have to install everything manually.~~ Binaries are now available! Check it out [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
 
@@ -106,6 +113,7 @@ You can find a detailed description of the one-directory method [here](https://p
     ```
 
 ## Running
+**This only applies if you are installing from source!**
 If you are not using a virtual environment, then you can just create a `.bat` file containing `python \path\to\the\main.py` (`python3`, forward slashes, and use `.sh` for the extension on macOS and Linux) on the desktop for convenience. Otherwise, you will need to re-activate the virtual environment everytime you want to run it. I highly recommend using these shell scripts:
 1. Windows:
 ```batch
