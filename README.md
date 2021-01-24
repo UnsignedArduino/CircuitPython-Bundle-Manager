@@ -5,7 +5,45 @@ Run [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/
 Note: This will create a bunch of files and directories, so I recommend placing this in its own directory and adding a shortcut or a symlink to the desktop or something like that.
 
 ## Installing
-Sooner or later, I will get binaries for Windows and Linux. (Sorry macOS users - I don't have a macOS computer!) For now, you are going to have to install everything manually. 
+~~Sooner or later, I will get binaries for Windows and Linux. (Sorry macOS users - I don't have a macOS computer!) For now, you are going to have to install everything manually.~~ Binaries are now available! Check it out [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
+
+### Installing from a binary
+
+No installation is required! (Well, there is no installer. You are still going to have to create a shortcut/symlink to it somewhere and extract it if you are using the directory-based executable)
+
+These binaries were built with [PyInstaller](https://www.pyinstaller.org/).
+
+#### Using the one executable:
+
+1. Download the latest binary from [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
+2. Put it somewhere. On Windows, I would put it in `C:\Program Files\CircuitPython Bundle Manager`. On Linux, I would put it in `/usr/bin`.
+3. Create a shortcut/symlink to it on the desktop!
+
+Note: If you are having trouble with the one-executable, try the one directory method!
+#### Pros of the one-executable
+* Convenient - you only need to deal with one executable.
+* Easy to install - just place the executable somewhere and create a shortcut.
+#### Cons of the one-executable
+* Takes quite a while to start compared to the one-directory method.
+* Needs to execute code out of the temporary directory, which sometimes isn't allowed on Linux.
+* If the application crashes, the support code won't be deleted, so it will take up disk space until the OS clears it.
+* Needs more space than the one-directory method.
+
+#### Using the one directory:
+1. Download the zip/tar.gz file from [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
+2. Extract it. 
+3. Place the directory somewhere convenient. On Windows, I would put the extracted files and directories in `C:\Program Files\CircuitPython Bundle Manager`.
+4. Create a shortcut/symlink to `CircuitPython Bundle Manager.exe`. (`CircuitPython Bundle Manager` on Linux) It is in the top directory.
+
+#### Pros of the one directory:
+* Fast - all the support files are ready, no need to extract them like in the one-executable method.
+* Less space - needs less disk space then the one-executable method.
+#### Cons of the one directory:
+* Slightly annoying to install. 
+
+You can find a detailed description of the one-directory method [here](https://pyinstaller.readthedocs.io/en/stable/operating-mode.html#bundling-to-one-folder) and a description of how the one-file method works [here](https://pyinstaller.readthedocs.io/en/stable/operating-mode.html#bundling-to-one-file).
+
+### Installing from source
 
 1. [Download](https://git-scm.com/downloads) and install Git. It does not matter what editor you use for Git's default.
     1. Or...download this repo via the `Download ZIP` option under the green `Code` button. 
