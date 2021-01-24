@@ -13,7 +13,7 @@ Note: This will create a bunch of files and directories, so I recommend placing 
    1. [First use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run)
    2. [Selecting a device](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#selecting-a-device)
    3. [Managing modules](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#managing-modules)
-   4. [Keeping the bundle updated]
+   4. [Keeping the bundle updated](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#keeping-the-bundle-updated)
    5. [Other](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#other)
 4. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
 
