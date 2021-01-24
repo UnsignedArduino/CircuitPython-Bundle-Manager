@@ -9,7 +9,8 @@ Note: This will create a bunch of files and directories, so I recommend placing 
    1. [Installing from a binary](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-a-binary)
    2. [Installing from source](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-source)
 2. [Running](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#running)
-3. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
+3. [How to use]()
+4. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
 
 ## Installing
 ~~Sooner or later, I will get binaries for Windows and Linux. (Sorry macOS users - I don't have a macOS computer!) For now, you are going to have to install everything manually.~~ Binaries are now available! Check it out [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
@@ -130,6 +131,8 @@ cd path/to/the/CircuitPython-Bundle-Manager
 ```
 Don't forget to give the `.sh` file execute permission! (`chmod +x shell_file.sh`)
 
+## How to use
+
 ## Options
 You can find these options in `config.json`, which is in the same directory as [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/main.py), and should be auto-generated upon first run. In case it does not happen, this is the default JSON file:
 ```json
@@ -144,3 +147,5 @@ You can find these options in `config.json`, which is in the same directory as [
 - `last_circuitpython_bundle_version` should be a string of a number. This is the last CircuitPython version you used.
 - `show_traceback_in_error_messages` should be a string of a bool. (Like `1`, `true`, `yes` for `True` and anything else for `False`) This will control whether stack traces will appear in error messages.
 - `unix_drive_mount_point` should be a string of a path that points to the place where your distro automatically mounts drives. Only applies to Unix-based systems.
+
+[Back to top](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#circuitpython-bundle-manager)
