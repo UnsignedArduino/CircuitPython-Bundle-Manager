@@ -13,6 +13,7 @@ Note: This will create a bunch of files and directories, so I recommend placing 
 4. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
 
 ## Installing
+
 ~~Sooner or later, I will get binaries for Windows and Linux. (Sorry macOS users - I don't have a macOS computer!) For now, you are going to have to install everything manually.~~ Binaries are now available! Check it out [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
 
 ### Installing from a binary
@@ -50,6 +51,8 @@ Note: If you are having trouble with the one-executable, try the one directory m
 * Slightly annoying to install. 
 
 You can find a detailed description of the one-directory method [here](https://pyinstaller.readthedocs.io/en/stable/operating-mode.html#bundling-to-one-folder) and a description of how the one-file method works [here](https://pyinstaller.readthedocs.io/en/stable/operating-mode.html#bundling-to-one-file).
+
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
 ### Installing from source
 
@@ -113,6 +116,8 @@ You can find a detailed description of the one-directory method [here](https://p
     python3 main.py
     ```
 
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+
 ## Running
 **This only applies if you are installing from source!**
 If you are not using a virtual environment, then you can just create a `.bat` file containing `python \path\to\the\main.py` (`python3`, forward slashes, and use `.sh` for the extension on macOS and Linux) on the desktop for convenience. Otherwise, you will need to re-activate the virtual environment everytime you want to run it. I highly recommend using these shell scripts:
@@ -131,8 +136,12 @@ cd path/to/the/CircuitPython-Bundle-Manager
 ```
 Don't forget to give the `.sh` file execute permission! (`chmod +x shell_file.sh`)
 
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 ## How to use
 
+Nothing here yet...
+
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 ## Options
 You can find these options in `config.json`, which is in the same directory as [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/main.py), and should be auto-generated upon first run. In case it does not happen, this is the default JSON file:
 ```json
@@ -148,4 +157,4 @@ You can find these options in `config.json`, which is in the same directory as [
 - `show_traceback_in_error_messages` should be a string of a bool. (Like `1`, `true`, `yes` for `True` and anything else for `False`) This will control whether stack traces will appear in error messages.
 - `unix_drive_mount_point` should be a string of a path that points to the place where your distro automatically mounts drives. Only applies to Unix-based systems.
 
-[Back to top](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#circuitpython-bundle-manager)
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
