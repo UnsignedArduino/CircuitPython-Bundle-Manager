@@ -11,6 +11,10 @@ Note: This will create a bunch of files and directories, so I recommend placing 
 2. [Running](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#running)
 3. [How to use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#how-to-use)
    1. [First use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run)
+   2. [Selecting a device](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#selecting-a-device)
+   3. [Managing modules](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#managing-modules)
+   4. [Keeping the bundle updated]
+   5. [Other](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#other)
 4. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
 
 ## Installing
@@ -201,6 +205,10 @@ Figure 1.8: It updated!
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
 ### Managing modules
+
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+
+### Keeping the bundle updated
 
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
