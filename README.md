@@ -9,7 +9,7 @@ Note: This will create a bunch of files and directories, so I recommend placing 
    1. [Installing from a binary](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-a-binary)
    2. [Installing from source](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-source)
 2. [Running](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#running)
-3. [How to use]()
+3. [How to use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#circuitpython-bundle-manager)
 4. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
 
 ## Installing
