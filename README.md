@@ -10,6 +10,7 @@ Note: This will create a bunch of files and directories, so I recommend placing 
    2. [Installing from source](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-source)
 2. [Running](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#running)
 3. [How to use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#how-to-use)
+   1. [First use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run)
 4. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
 
 ## Installing
@@ -194,6 +195,19 @@ Figure 1.8: It updated!
 ![The information box shown when the bundle successfully updates](assets/figure_1_8.png)
 
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+
+### Selecting a device
+
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+
+### Managing modules
+
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+
+### Other
+
+[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+
 ## Options
 You can find these options in `config.json`, which is in the same directory as [`main.py`](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/main.py), and should be auto-generated upon first run. In case it does not happen, this is the default JSON file:
 ```json
