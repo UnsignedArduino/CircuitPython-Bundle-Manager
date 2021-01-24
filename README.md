@@ -57,9 +57,11 @@ You can find a detailed description of the one-directory method [here](https://p
 ### Installing from source
 
 1. [Download](https://git-scm.com/downloads) and install Git. It does not matter what editor you use for Git's default.
-    1. Or...download this repo via the `Download ZIP` option under the green `Code` button. 
+    1. Or...download this repo via the `Download ZIP` option under the green `Code` button, shown in Figure 0.1:
+   ![A picture on the Download Zip button on the GitHub page](assets/figure_0_1.png)
 2. [Download](https://www.python.org/downloads/) and install Python 3. (Here is [Python 3.9](https://www.microsoft.com/en-us/p/python-39/9p7qfqmjrfp7) on the Microsoft Store) Theoretically, you can use a version as early as 3.6, but I only tested this on 3.7 and 3.9.
-    1. Make sure to check `Add Python 3.x to PATH`!
+    1. Make sure to check `Add Python 3.x to PATH`, as shown in Figure 0.2:
+       ![A picture of the Python 3.9 installer with the Add Python 3.9 to PATH checkbutton checked](assets/figure_0_2.png)
     2. Make sure to also install Tk/Tcl support! If you can access the IDLE, then Tk/Tcl is installed!
 3. If you are on Windows, I would also install the [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701) while you are at it.
 4. If you installed Git, `cd` into a convenient directory (like the home directory or the desktop) and run:
@@ -119,7 +121,7 @@ You can find a detailed description of the one-directory method [here](https://p
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
 ## Running
-**This only applies if you are installing from source!**
+**This only applies if you installed from source!**
 If you are not using a virtual environment, then you can just create a `.bat` file containing `python \path\to\the\main.py` (`python3`, forward slashes, and use `.sh` for the extension on macOS and Linux) on the desktop for convenience. Otherwise, you will need to re-activate the virtual environment everytime you want to run it. I highly recommend using these shell scripts:
 1. Windows:
 ```batch
@@ -139,7 +141,57 @@ Don't forget to give the `.sh` file execute permission! (`chmod +x shell_file.sh
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 ## How to use
 
-Nothing here yet...
+### First run
+On run, you should get something like this:
+
+Figure 1.1: Start up on Windows.
+
+![An image of the CircuitPython Bundle Manager on Windows](assets/figure_1_1.png)
+
+Figure 1.2: Start up on Debian. (To be honest, Tk doesn't look that _great_ on Linux...) Also from now on, I will be exclusively showing pictures of the CircuitPython Bundle Manager on Windows unless there are Linux-specific instructions. The interface is _exactly_ the same.
+
+![An image of the CircuitPython Bundle Manager on Debian](assets/figure_1_2.png)
+
+What you want to do is to authenticate yourself and update the bundle so you can install modules. You can do it several ways:
+1. Use your username and password
+2. Use a GitHub token
+3. Use a GitHub Enterprise URL and a login/token
+
+Use the radio buttons (boxed in Figure 1.3) to select your method of authentication.
+
+Figure 1.3: The radio buttons used to select the method of authentication. 
+
+![An image of the CircuitPython Bundle Manager's authentication method selector boxed](assets/figure_1_3.png)
+
+If you used your username and password, type in your username and password. (Labeled `1` in Figure 1.4)
+
+If you used a GitHub access token, paste it in. (Labeled `2` in Figure 1.4)
+
+If you used a GitHub Enterprise URL and a login/token, paste those in. (Labled `3` in Figure 1.4)
+
+Figure 1.4: The methods of authentication labeled. Since I selected `Username and password` in the authentication method selector, I can only type in the `Username` and `Password` boxes.
+
+![An image of the CircuitPython Bundle Manager highlighting the different methods of authentication](assets/figure_1_4.png)
+
+Once you fill those in, make sure the version listbox (boxed in figure 1.5) has the correct version of CircuitPython you plan to use. If it does not exist or is too old, you will get an error shown in figure 1.6. If you input some bad credentials, you will get an error shown in figure 1.7. 
+
+Figure 1.5: The version listbox boxed. 
+
+![An image of the CircuitPython Bundle Manager boxing the version selector](assets/figure_1_5.png)
+
+Figure 1.6: The error you get when inputting a bad version. Sadly, CircuitPython 7 doesn't exist. (yet)
+
+![The error box shown when you input a bad CircuitPython version](assets/figure_1_6.png)
+
+Figure 1.7: The error you get when inputting bad credentials.
+
+![The error box shown when you input bad credentials](assets/figure_1_7.png)
+
+If all goes well, you should get a happy info message shown in Figure 1.8:
+
+Figure 1.8: It updated!
+
+![The information box shown when the bundle successfully updates](assets/figure_1_8.png)
 
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 ## Options
