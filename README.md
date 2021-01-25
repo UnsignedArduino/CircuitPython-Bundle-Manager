@@ -68,7 +68,7 @@ You can find a detailed description of the one-directory method [here](https://p
     1. Make sure to check `Add Python 3.x to PATH`, as shown in Figure 1.2:
        
        ![A picture of the Python 3.9 installer with the Add Python 3.9 to PATH checkbox checked](assets/1/2.png)
-    2. Make sure to also install Tk/Tcl support! If you can access the IDLE, then Tk/Tcl is installed, as shown in Figure 1.3:
+    2. Make sure to also install Tk/Tcl support! If you can access the IDLE, then Tk/Tcl is installed, as shown in Figure 1.3: (Only applies if you are using the `Customize installation` option in the installer)
        
        ![A picture of the Python 3.9 installer with the tcl/tk and IDLE checkbox checked](assets/1/3.png)
 3. If you are on Windows, I would also install the [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701) while you are at it.
@@ -156,9 +156,11 @@ Figure 2.1: Start up on Windows.
 
 ![An image of the CircuitPython Bundle Manager on Windows](assets/2/1.png)
 
-Figure 2.2: Start up on Debian. (To be honest, Tk doesn't look that _great_ on Linux...) Also from now on, I will be exclusively showing pictures of the CircuitPython Bundle Manager on Windows unless there are Linux-specific instructions. The interface is _exactly_ the same.
+Figure 2.2: Start up on Debian. (To be honest, Tk doesn't look that _great_ on Linux...)
 
 ![An image of the CircuitPython Bundle Manager on Debian](assets/2/2.png)
+
+> Note: From now on, I will be exclusively showing pictures of the CircuitPython Bundle Manager on Windows unless there are Linux-specific instructions. The interface is _exactly_ the same.
 
 What you want to do is to authenticate yourself and update the bundle so you can install modules. You can do it several ways:
 1. Use your username and password
@@ -195,7 +197,9 @@ Figure 2.7: The error you get when inputting bad credentials.
 
 ![The error box shown when you input bad credentials](assets/2/7.png)
 
-If all goes well, you should get a happy info message shown in Figure 1.8:
+Press `Update bundle`, and if all goes well, you should get a happy info message shown in Figure 1.8:
+
+> Note: You will need a working internet connection for this!
 
 Figure 2.8: The info box when the bundle updates successfully.
 
@@ -217,7 +221,7 @@ If you click on the downwards facing arrow in the entry box (labeled `1` in Figu
 
 Figure 2.10: Various parts of the drive selector labeled.
 
-![An image of the CircuitPython Bundle Manager's various parts of the drive selector labeled](assets/2/10.png)`
+![An image of the CircuitPython Bundle Manager's various parts of the drive selector labeled](assets/2/10.png)
 
 Figure 2.11: More drives are shown with the `Show all drives?` checkbox checked. You will most likely not need this checked.
 
@@ -293,6 +297,16 @@ That is it! Continue to [keeping the bundle updated](https://github.com/Unsigned
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
 ### Keeping the bundle updated
+
+Follow the instructions provided in [first run](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run). You only need to do this once a day, since the bundle is updated once a day at ~12PM PST.
+
+TL;DR:
+
+1. Make sure you have a working internet connection.
+2. Select method of authentication.
+3. Input credentials.
+4. Select CircuitPython version.
+5. Press `Update`!
 
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
