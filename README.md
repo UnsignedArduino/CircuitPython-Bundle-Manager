@@ -248,6 +248,24 @@ That is it! Continue to [managing modules](https://github.com/UnsignedArduino/Ci
 
 ### Managing modules
 
+This is the fun part! (Well, not really) Here you can view the modules you can install and the modules already installed on the selected CircutiPython device! Figure 2.14 shows an anatomy of the `Bundle Manager` tab:
+
+Figure 2.14: An anatomy of the`Bundle Manager` tab.
+
+![An image of the CircuitPython Bundle Manager's Bundle Manager tab's elements boxed](assets/2/14.png)
+
+1. (Blue) This is the search bar - typing in it will filter out modules that don't have that string inside it. (Uses Python's `in` keyword)
+2. (Green) This is where you where can scroll through the list of modules you can install - will reflect the contents of the most recent bundle **on your machine**. If it's blank, try pressing the reload button and updating the bundle!
+3. (Red) This is the list of installed modules on the selected CircutiPython device - after selecting a new one, press refresh!
+4. (Orange) If a module is selected in the bundle and there is a selected device, then you can install to it!
+5. (Pink)  If a module is selected in the list of installed modules and there is a selected device, you can uninstall it!
+
+Let's say I wanted to install the `simpleio.mpy` and `neopixel.mpy` files. First, I could either scroll through the list to find `simpleio` or use the search bar to search up `simpleio`, like in Figure 2.15:
+
+Figure 2.15: Using the search bar to find the `simpleio.mpy` files. 
+
+![An image of the CircuitPython Bundle Manager's Bundle Manager tab open with simpleio in the search bar](assets/2/15.png)
+
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
 ### Keeping the bundle updated
