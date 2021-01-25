@@ -298,7 +298,7 @@ That is it! Continue to [keeping the bundle updated](https://github.com/Unsigned
 
 ### Keeping the bundle updated
 
-Follow the instructions provided in [first run](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run). You only need to do this once a day, since the bundle is updated once a day at ~12PM PST.
+Follow the instructions provided in [first run](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run). You only need to do this once a day, since the bundle is updated once a day at ~12PM EST.
 
 TL;DR:
 
@@ -311,6 +311,19 @@ TL;DR:
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
 ### Other
+
+Figure 2.20: The `Other` tab in the CircuitPython Bundle Manager. The interface may change and I will probably forget to change this too.
+
+![An image of the CircuitPython Bundle Manager's other tab open](assets/2/20.png)
+
+- `Open README file` opens this file locally with the default `.md` program. If it cannot find it, it will attempt to download it from GitHub.
+- `Open README file location` opens the location of the README file in the default file manager.
+- `Open config file` opens the configuration file in the default `.json` program.
+- `Open config file location` opens the location of the config file in the default file manager.
+- `Open log file` opens the log file in the default `.log` program.
+- `Open log file location` opens the location of the log file in the default file manager.
+- `Open GitHub repo link` opens the repository in the default browser.
+- `Copy GitHub repo link` copies the link to this repository on GitHub to the clipboard.
 
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
