@@ -490,11 +490,11 @@ class GUI(tk.Tk):
         try:
             bundle_path = bundle_manager.get_bundle_path(int(self.version_listbox.get()))
             logger.debug(f"Attempting to install module at {repr(bundle_path)}")
-            bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))
-            bundles.sort()
-            bundles = bundles[self.bundle_listbox.curselection()[0]]
+            selected = self.bundle_listbox.get(self.bundle_listbox.curselection())
+            logger.debug(f"Selected in listbox is {repr(selected)}")
+            logger.debug(f"Installing module {repr(selected)}")
             modules.install_module(
-                bundle_path / bundles,
+                bundle_path / selected,
                 Path(self.drive_combobox.get()) / "lib"
             )
         except FileNotFoundError:
