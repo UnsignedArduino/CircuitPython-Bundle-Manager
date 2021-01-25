@@ -342,4 +342,6 @@ You can find these options in `config.json`, which is in the same directory as [
 - `show_traceback_in_error_messages` should be a string of a bool. (Like `1`, `true`, `yes` for `True` and anything else for `False`) This will control whether stack traces will appear in error messages.
 - `unix_drive_mount_point` should be a string of a path that points to the place where your distro automatically mounts drives. Only applies to Unix-based systems.
 
+AIf you want to reset the config file, either delete it or clear the contents of the config. If you want to reset just one option, remove it from the configuration file.
+
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
