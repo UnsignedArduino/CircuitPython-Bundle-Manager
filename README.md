@@ -181,7 +181,7 @@ Figure 2.4: The methods of authentication labeled. Since I selected `Username an
 
 ![An image of the CircuitPython Bundle Manager highlighting the different methods of authentication](assets/2/4.png)
 
-Once you fill those in, make sure the version listbox (boxed in figure 1.5) has the correct version of CircuitPython you plan to use. If it does not exist or is too old, you will get an error shown in figure 1.6. If you input some bad credentials, you will get an error shown in figure 1.7. 
+Once you fill those in, make sure the version listbox (boxed in figure 2.5) has the correct version of CircuitPython you plan to use. If it does not exist or is too old, you will get an error shown in figure 2.6. If you input some bad credentials, you will get an error shown in figure 2.7. 
 
 Figure 2.5: The version listbox boxed. 
 
@@ -200,6 +200,8 @@ If all goes well, you should get a happy info message shown in Figure 1.8:
 Figure 2.8: The info box when the bundle updates successfully
 
 ![The information box shown when the bundle successfully updates](assets/2/8.png)
+
+That is it! Continue to [selecting a device](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#selecting-a-device).
 
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
