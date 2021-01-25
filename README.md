@@ -197,7 +197,7 @@ Figure 2.7: The error you get when inputting bad credentials.
 
 If all goes well, you should get a happy info message shown in Figure 1.8:
 
-Figure 2.8: The info box when the bundle updates successfully
+Figure 2.8: The info box when the bundle updates successfully.
 
 ![The information box shown when the bundle successfully updates](assets/2/8.png)
 
@@ -206,6 +206,43 @@ That is it! Continue to [selecting a device](https://github.com/UnsignedArduino/
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
 ### Selecting a device
+
+At the bottom of the UI, there is a section which will be shown regardless of the tab selected. This is where you can select your CircuitPython device, as shown in Figure 2.9:
+
+Figure 2.9: The drive selector highlighted.
+
+![An image of the CircuitPython Bundle Manager's drive selector boxed](assets/2/9.png)
+
+If you click on the downwards facing arrow in the entry box (labeled `1` in Figure 2.10) a small menu will pop up. It will most likely be empty unless you have a CircuitPython device connected, or you have `Show all drives?` checked. (Labeled `3` in Figure 2.10, and shown in Figure 2.11) The reload button (labeled `2` in Figure 2.10 reloads a handful of things, including what drives are connected, so if you don't see your drive, click it!)
+
+Figure 2.10: Various parts of the drive selector labeled.
+
+![An image of the CircuitPython Bundle Manager's various parts of the drive selector labeled](assets/2/10.png)`
+
+Figure 2.11: More drives are shown with the `Show all drives?` checkbox checked. You will most likely not need this checked.
+
+![An image of the CircuitPython Bundle Manager's drive menu populated with non-CircuitPython device drives](assets/2/11.png)
+
+On Linux (and macOS too - I think) it will look slightly different. Instead of drive letters, a path will be shown, like in Figure 2.12:
+
+Figure 2.12: The drive selector on Linux.
+
+![An image of the CircuitPython Bundle Manager's drive menu populated with non-CircuitPython device drives on Debian](assets/2/12.png)
+
+The CircuitPython Bundle Manager searches for drives in `/media`. If your OS does not mount drives there, follow these instructions:
+1. Connect a CircuitPython device.
+2. Mount the device if necessary.
+3. Get the path of where the device was mounted. For example, `/media/pi/CIRCUITPY`.
+4. Switch to the `Other` tab and click on `Open config file`.
+5. Change the value of `unix_drive_mount_point` to the parent directory of the path of the device.
+   
+   Figure 2.13: My configuration file after modifying it:
+   
+   ![An image of the CircuitPython Bundle Manager configuration file on Debian](assets/2/13.png)
+6. Click the refresh button
+7. Select the device!
+
+That is it! Continue to [managing modules](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#managing-modules).
 
 [Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
 
