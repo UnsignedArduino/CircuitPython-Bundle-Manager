@@ -21,6 +21,8 @@ from typing import Union
 from bundle_tools.create_logger import create_logger
 import logging
 
+# TODO: Replace usage of master= to parent= everywhere
+
 logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
@@ -339,6 +341,7 @@ class GUI(tk.Tk):
                 self.bundle_listbox_var.set(sorted_bundles)
             else:
                 self.bundle_listbox_var.set(bundles)
+            self.bundles = bundles
         except (ValueError, AttributeError):
             logger.exception("Uh oh! Something happened!")
 
@@ -710,13 +713,45 @@ class GUI(tk.Tk):
         logger.debug(f"Modules imported: {repr(self.modules_imported)}")
         self.detected_modules_listbox_var.set(self.modules_imported)
 
+    def update_find_in_bundle_button(self):
+        self.after(ms=100, func=self.update_find_in_bundle_button)
+        if not hasattr(self, "detected_modules_listbox"):
+            return
+        if not hasattr(self, "bundles"):
+            return
+        if not self.detected_modules_listbox.curselection():
+            return
+        selected = self.detected_modules_listbox.get(self.detected_modules_listbox.curselection())
+        if selected in self.bundles:
+            self.detect_find_in_bundle_button.config(state=tk.NORMAL)
+        elif f"{selected}.mpy" in self.bundles:
+            self.detect_find_in_bundle_button.config(state=tk.NORMAL)
+        else:
+            self.detect_find_in_bundle_button.config(state=tk.DISABLED)
+
+    def find_in_bundle(self):
+        selected = self.detected_modules_listbox.get(self.detected_modules_listbox.curselection())
+        self.search_bar_var.set("")
+        self.bundle_listbox.selection_clear(0, tk.END)
+        if selected in self.bundles:
+            self.bundle_listbox.selection_set(self.bundles.index(selected))
+            self.bundle_listbox.see(self.bundles.index(selected))
+        selected = f"{selected}.mpy"
+        if selected in self.bundles:
+            self.bundle_listbox.selection_set(self.bundles.index(selected))
+            self.bundle_listbox.see(self.bundles.index(selected))
+        self.notebook.select(self.bundle_manager_frame)
+
     def create_detect_top_ui(self):
         self.detect_top_frame = ttk.Frame(master=self.detect_frame)
         self.detect_top_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.EW + tk.N)
-        self.detect_refresh_button = ttk.Button(master=self.detect_top_frame, text="Detect",
-                                                command=self.update_detect)
+        self.detect_refresh_button = ttk.Button(master=self.detect_top_frame, text="Detect", command=self.update_detect)
         self.detect_refresh_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.detect_find_in_bundle_button = ttk.Button(master=self.detect_top_frame, text="Find in bundle",
+                                                       command=self.find_in_bundle, state=tk.DISABLED)
+        self.detect_find_in_bundle_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         self.update_detect_button()
+        self.update_find_in_bundle_button()
 
     def create_detected_listbox_frame(self):
         self.detected_listbox_frame = ttk.LabelFrame(master=self.detected_frame, text="Imported modules")
@@ -734,23 +769,17 @@ class GUI(tk.Tk):
         self.detected_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.detected_modules_listbox.config(yscrollcommand=self.detected_modules_listbox_scrollbar.set)
 
-    def create_detected_control_frame(self):
-        self.detected_control_frame = ttk.Frame(master=self.detected_frame)
-        self.detected_control_frame.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
-
     def create_detected_frame(self):
         self.detected_frame = ttk.Frame(master=self.detect_frame)
         self.detected_frame.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NSEW)
         self.create_detected_listbox_frame()
-        self.create_detected_control_frame()
 
     def create_detect_tab(self):
         self.detect_frame = ttk.Frame(master=self.notebook)
         self.detect_frame.grid(row=0, column=0)
         self.notebook.add(child=self.detect_frame, text="Detect")
-        # TODO: Create find in bundle list button
-        # TODO: Move find in bundle list button next to success button
         # TODO: Test on Linux
+        # TODO: Test on macOS
         # TODO: Add tooltips
         self.create_detect_top_ui()
         self.create_detected_frame()
