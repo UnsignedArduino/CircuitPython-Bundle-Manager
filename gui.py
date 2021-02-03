@@ -705,6 +705,9 @@ class GUI(tk.Tk):
         self.detect_status_label.config(text=status)
         return success
 
+    def update_detect(self):
+        success = self.update_detect_status()
+
     def create_detect_tab(self):
         self.detect_frame = ttk.Frame(master=self.notebook)
         self.detect_frame.grid(row=0, column=0)
@@ -712,7 +715,7 @@ class GUI(tk.Tk):
         self.detect_status_label = ttk.Label(master=self.detect_frame)
         self.detect_status_label.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.detect_refresh_button = ttk.Button(master=self.detect_frame, text="Detect again",
-                                                command=self.update_detect_status)
+                                                command=self.update_detect)
         self.detect_refresh_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
         self.update_detect_status()
 
