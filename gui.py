@@ -581,6 +581,8 @@ class GUI(tk.Tk):
             webbrowser.open(path)
 
     def make_open_readme_buttons(self):
+        self.readme_frame = ttk.Frame(master=self.other_frame)
+        self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
             master=self.readme_frame, text="Open README file",
             command=lambda: self.open_file(
@@ -649,8 +651,6 @@ class GUI(tk.Tk):
         self.other_frame = ttk.Frame(master=self.notebook)
         self.other_frame.grid(row=0, column=0)
         self.notebook.add(self.other_frame, text="Other")
-        self.readme_frame = ttk.Frame(master=self.other_frame)
-        self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.make_open_readme_buttons()
         ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_config_buttons()
@@ -675,6 +675,47 @@ class GUI(tk.Tk):
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
 
+    def get_code(self):
+        codes = ["code.txt", "code.py", "main.txt", "main.py"]
+        if not self.drive_combobox.get() or not Path(self.drive_combobox.get()).exists():
+            logger.debug("No selected drive or drive does not exist!")
+            return None
+        for code_path in codes:
+            path = Path(self.drive_combobox.get()) / code_path
+            logger.debug(f"Checking for code file at {repr(path)}")
+            if path.exists():
+                logger.debug(f"Found code file: {repr(path)}")
+                return path
+        logger.debug("Could not find code file!")
+        return None
+
+    def update_detect_status(self):
+        logger.debug("Updating detect status...")
+        success = False
+        if not self.drive_combobox.get():
+            status = "No device selected!"
+        elif not Path(self.drive_combobox.get()).exists():
+            status = "Device doesn't exist!"
+        elif not self.get_code():
+            status = "No code file found!"
+        else:
+            status = "Success!"
+            success = True
+        logger.debug(f"Detect status: {status}")
+        self.detect_status_label.config(text=status)
+        return success
+
+    def create_detect_tab(self):
+        self.detect_frame = ttk.Frame(master=self.notebook)
+        self.detect_frame.grid(row=0, column=0)
+        self.notebook.add(child=self.detect_frame, text="Detect")
+        self.detect_status_label = ttk.Label(master=self.detect_frame)
+        self.detect_status_label.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.detect_refresh_button = ttk.Button(master=self.detect_frame, text="Detect again",
+                                                command=self.update_detect_status)
+        self.detect_refresh_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.update_detect_status()
+
     def create_gui(self):
         logger.debug("Creating GUI...")
         if os_detect.on_linux():
@@ -686,6 +727,7 @@ class GUI(tk.Tk):
         self.create_drive_selector()
         self.create_bundle_update_tab()
         self.create_bundle_manager_tab()
+        self.create_detect_tab()
         self.create_other_tab()
 
     def run(self):
