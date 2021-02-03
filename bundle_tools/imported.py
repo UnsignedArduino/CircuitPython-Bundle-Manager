@@ -21,20 +21,23 @@ import logging
 logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
-def get_imported(code: str) -> list[str]:
+def get_imported(code: str) -> tuple[list[str], list[str]]:
     """
     Gets the imported modules from Python code.
 
     :param code: The code as a string.
-    :return: A list of strings with the modules imported.
+    :return: A tuple of a list of strings with the modules imported. The first list is the module name, the second list
+      is the line that the imported module was imported.
     """
     modules = []
+    module_lines = []
     lines = code.splitlines()
     logger.debug(f"Found {len(lines)} lines in the code!")
     for line in lines:
         line = line.strip()
         while "  " in line:
             line = line.replace("  ", " ")
+        line = line.replace(",", "")
         parts = [part.strip() for part in line.split(sep=" ")]
         if parts[0] in ("import", "from"):
             logger.debug(f"Parts in import line: {repr(parts)}")
@@ -45,5 +48,7 @@ def get_imported(code: str) -> list[str]:
                 module = f"{parts[1]}.{parts[3]}"
                 if module not in modules:
                     modules.append(module)
+            module_lines.append(line)
     logger.debug(f"Modules imported in the code: {repr(modules)}")
-    return modules
+    logger.debug(f"Lines: {repr(module_lines)}")
+    return modules, module_lines

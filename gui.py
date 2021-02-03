@@ -678,69 +678,80 @@ class GUI(tk.Tk):
     def get_code(self):
         codes = ["code.txt", "code.py", "main.txt", "main.py"]
         if not self.drive_combobox.get() or not Path(self.drive_combobox.get()).exists():
-            logger.debug("No selected drive or drive does not exist!")
             return None
         for code_path in codes:
             path = Path(self.drive_combobox.get()) / code_path
-            logger.debug(f"Checking for code file at {repr(path)}")
             if path.exists():
-                logger.debug(f"Found code file: {repr(path)}")
                 return path
-        logger.debug("Could not find code file!")
         return None
 
-    def update_detect_status(self):
-        logger.debug("Updating detect status...")
-        success = False
-        if not self.drive_combobox.get():
-            status = "No device selected!"
-        elif not Path(self.drive_combobox.get()).exists():
-            status = "Device doesn't exist!"
-        elif not self.get_code():
-            status = "No code file found!"
-        else:
-            status = "Success!"
-            success = True
-        logger.debug(f"Detect status: {status}")
-        self.detect_status_label.config(text=status)
-        return success
+    def update_detect_button(self):
+        self.after(ms=100, func=self.update_detect_button)
+        enable = not (not self.drive_combobox.get() or not Path(self.drive_combobox.get()).exists() or not self.get_code())
+        self.detect_refresh_button.config(state=tk.NORMAL if enable else tk.DISABLED)
+        if hasattr(self, "detected_modules_listbox_var") and not enable:
+            self.detected_modules_listbox_var.set([])
+        if hasattr(self, "detected_modules_listbox"):
+            if enable and not self.detected_modules_listbox.right_click_menu.detect_again_en:
+                self.detected_modules_listbox.right_click_menu.detect_again_en = True
+                self.detected_modules_listbox.right_click_menu.delete(8)
+                self.detected_modules_listbox.right_click_menu.add_command(label="Detect again",
+                                                                           command=self.update_detect, state=tk.NORMAL)
+            elif not enable and self.detected_modules_listbox.right_click_menu.detect_again_en:
+                self.detected_modules_listbox.right_click_menu.detect_again_en = False
+                self.detected_modules_listbox.right_click_menu.delete(8)
+                self.detected_modules_listbox.right_click_menu.add_command(label="Detect again",
+                                                                           command=self.update_detect, state=tk.DISABLED)
 
     def update_detect(self):
-        success = self.update_detect_status()
-        if success:
-            modules_imported = imported.get_imported(self.get_code().read_text())
-            modules_imported = [module.split(".")[0] for module in modules_imported]
-            logger.debug(f"Modules imported: {repr(modules_imported)}")
-            self.detected_modules_listbox_var.set(modules_imported)
+        self.detected_modules_listbox_var.set([])
+        self.modules_imported, self.module_lines = imported.get_imported(self.get_code().read_text())
+        self.modules_imported = [module.split(".")[0] for module in self.modules_imported]
+        logger.debug(f"Modules imported: {repr(self.modules_imported)}")
+        self.detected_modules_listbox_var.set(self.modules_imported)
 
     def create_detect_top_ui(self):
         self.detect_top_frame = ttk.Frame(master=self.detect_frame)
         self.detect_top_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.EW + tk.N)
-        self.detect_refresh_button = ttk.Button(master=self.detect_top_frame, text="Detect again",
+        self.detect_refresh_button = ttk.Button(master=self.detect_top_frame, text="Detect",
                                                 command=self.update_detect)
         self.detect_refresh_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
-        self.detect_status_label = ttk.Label(master=self.detect_top_frame)
-        self.detect_status_label.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NE)
+        self.update_detect_button()
 
-    def create_detected_frame(self):
-        self.detected_frame = ttk.LabelFrame(master=self.detect_frame, text="Detected")
-        self.detected_frame.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NSEW)
+    def create_detected_listbox_frame(self):
         self.detected_listbox_frame = ttk.LabelFrame(master=self.detected_frame, text="Imported modules")
         self.detected_listbox_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NSEW)
         self.detected_modules_listbox_var = tk.StringVar(value=[])
-        self.detected_modules_listbox = ListboxWithRightClick(master=self.detected_listbox_frame, height=7, width=16,
+        self.detected_modules_listbox = ListboxWithRightClick(master=self.detected_listbox_frame, height=8, width=42,
                                                               listvariable=self.detected_modules_listbox_var)
         self.detected_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
+        self.detected_modules_listbox.right_click_menu.add_separator()
+        self.detected_modules_listbox.right_click_menu.add_command(label="Detect again", command=self.update_detect)
+        self.detected_modules_listbox.right_click_menu.detect_again_en = True
         self.detected_modules_listbox.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.detected_modules_listbox_scrollbar = ttk.Scrollbar(self.detected_listbox_frame, orient=tk.VERTICAL,
-                                                      command=self.detected_modules_listbox.yview)
+                                                                command=self.detected_modules_listbox.yview)
         self.detected_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.detected_modules_listbox.config(yscrollcommand=self.detected_modules_listbox_scrollbar.set)
+
+    def create_detected_control_frame(self):
+        self.detected_control_frame = ttk.Frame(master=self.detected_frame)
+        self.detected_control_frame.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
+
+    def create_detected_frame(self):
+        self.detected_frame = ttk.Frame(master=self.detect_frame)
+        self.detected_frame.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NSEW)
+        self.create_detected_listbox_frame()
+        self.create_detected_control_frame()
 
     def create_detect_tab(self):
         self.detect_frame = ttk.Frame(master=self.notebook)
         self.detect_frame.grid(row=0, column=0)
         self.notebook.add(child=self.detect_frame, text="Detect")
+        # TODO: Create find in bundle list button
+        # TODO: Move find in bundle list button next to success button
+        # TODO: Test on Linux
+        # TODO: Add tooltips
         self.create_detect_top_ui()
         self.create_detected_frame()
         self.update_detect()
@@ -770,4 +781,4 @@ class GUI(tk.Tk):
                            f"Error type: {err_type}\n"
                            f"Error value: {err_value}\n"
                            f"Error traceback: {err_traceback}\n\n" + traceback.format_exc())
-            logger.fatel("Uh oh, a fatal error has occurred!", exc_info=True)
+            logger.exception("Uh oh, a fatal error has occurred!", exc_info=True)
