@@ -747,9 +747,11 @@ class GUI(tk.Tk):
         self.detect_top_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.EW + tk.N)
         self.detect_refresh_button = ttk.Button(master=self.detect_top_frame, text="Detect", command=self.update_detect)
         self.detect_refresh_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.detect_refresh_button, text="Check again for imported modules.")
         self.detect_find_in_bundle_button = ttk.Button(master=self.detect_top_frame, text="Find in bundle",
                                                        command=self.find_in_bundle, state=tk.DISABLED)
         self.detect_find_in_bundle_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.detect_find_in_bundle_button, text="Find the selected module in the bundle list.")
         self.update_detect_button()
         self.update_find_in_bundle_button()
 
@@ -764,6 +766,7 @@ class GUI(tk.Tk):
         self.detected_modules_listbox.right_click_menu.add_command(label="Detect again", command=self.update_detect)
         self.detected_modules_listbox.right_click_menu.detect_again_en = True
         self.detected_modules_listbox.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.detected_modules_listbox, text="Modules that you imported in your code.")
         self.detected_modules_listbox_scrollbar = ttk.Scrollbar(self.detected_listbox_frame, orient=tk.VERTICAL,
                                                                 command=self.detected_modules_listbox.yview)
         self.detected_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
@@ -780,7 +783,6 @@ class GUI(tk.Tk):
         self.notebook.add(child=self.detect_frame, text="Detect")
         # TODO: Test on Linux
         # TODO: Test on macOS
-        # TODO: Add tooltips
         self.create_detect_top_ui()
         self.create_detected_frame()
         self.update_detect()
