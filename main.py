@@ -1,3 +1,20 @@
+"""
+The main program.
+
+-----------
+
+Classes list:
+
+No classes!
+
+-----------
+
+Functions list:
+
+No functions!
+
+"""
+
 import gui
 from bundle_tools.create_logger import create_logger
 from pathlib import Path

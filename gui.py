@@ -1,3 +1,20 @@
+"""
+The main GUI program.
+
+-----------
+
+Classes list:
+
+- GUI(tk.Tk).__init__()
+
+-----------
+
+Functions list:
+
+No functions!
+
+"""
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbox
@@ -7,14 +24,12 @@ from gui_tools.right_click.combobox import ComboboxWithRightClick
 from gui_tools.right_click.listbox import ListboxWithRightClick
 from gui_tools.idlelib_clone import tooltip
 from gui_tools import download_dialog
-from gui_tools import gui_log
 from threading import Thread
 from pathlib import Path
 import traceback
 from github import GithubException
 import requests
 import webbrowser
-from time import sleep
 import json
 from bundle_tools import drives, modules, bundle_manager, os_detect, imported
 from typing import Union
@@ -25,6 +40,9 @@ logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
 class GUI(tk.Tk):
+    """
+    The GUI for the CircuitPython Bundle Manager.
+    """
     def __init__(self):
         super().__init__()
         self.title("CircuitPython Bundle Manager")
@@ -36,7 +54,12 @@ class GUI(tk.Tk):
     def __enter__(self):
         return self
 
-    def try_to_close(self):
+    def try_to_close(self) -> None:
+        """
+        Try to close the application - checks if we are not busy and displays dialogs appropriately.
+
+        :return: None.
+        """
         logger.debug("User requested closing window...")
         if self.disable_closing:
             logger.warning("Currently in the middle of doing something!")
@@ -52,7 +75,14 @@ class GUI(tk.Tk):
             logger.debug("Destroying main window!")
             self.destroy()
 
-    def save_key(self, key=None, value=None):
+    def save_key(self, key: str = None, value: str = None) -> None:
+        """
+        Save a key to the config file.
+
+        :param key: A string.
+        :param value: A string.
+        :return: None.
+        """
         if not self.config_path.exists():
             self.config_path.write_text("{}")
         old_json = json.loads(self.config_path.read_text())
@@ -60,23 +90,38 @@ class GUI(tk.Tk):
         old_json[key] = value
         self.config_path.write_text(json.dumps(old_json, sort_keys=True, indent=4))
 
-    def load_key(self, key, log: bool = True):
+    def load_key(self, key: str) -> Union[str, None]:
+        """
+        Retrieves a key from the config file.
+
+        :param key: A string.
+        :return: A string of the value of the key, or None if it was not found.
+        """
         if not self.config_path.exists():
             self.config_path.write_text("{}")
         try:
             value = json.loads(self.config_path.read_text())[key]
-            if log:
-                logger.debug(f"{repr(key)} = {repr(value)}")
             return value
         except (json.decoder.JSONDecodeError, KeyError):
             logger.warning(f"Could not find {repr(key)} in config!")
             return None
 
-    def validate_for_number(self, new):
+    def validate_for_number(self, new: str = "") -> bool:
+        """
+        Checks a string to see whether it's a number and within 3 digits.
+
+        :param new: The string to validate.
+        :return: A bool telling whether it passed validation.
+        """
         logger.debug(f"{repr(new)} did " + ("" if new.isdigit() and len(new) <= 3 else "not ") + "pass validation!")
         return new.isdigit() and len(new) <= 3
 
-    def create_bundle_update_tab(self):
+    def create_bundle_update_tab(self) -> None:
+        """
+        Create the bundle update tab.
+
+        :return: None.
+        """
         self.github_auth_frame = ttk.Frame(parent=self.notebook)
         self.github_auth_frame.grid(row=0, column=0, padx=1, pady=1)
         self.notebook.add(self.github_auth_frame, text="Update Bundle")
@@ -100,12 +145,22 @@ class GUI(tk.Tk):
         self.updating = False
         self.check_update_button()
 
-    def start_update_bundle_thread(self):
+    def start_update_bundle_thread(self) -> None:
+        """
+        Start the bundle update thread.
+
+        :return: None.
+        """
         logger.debug("Starting update bundle thread!")
         update_thread = Thread(target=self.update_bundle, daemon=True)
         update_thread.start()
 
-    def update_bundle(self):
+    def update_bundle(self) -> None:
+        """
+        Update the bundle, this will block. Better to call GUI.start_update_bundle_thread instead.
+
+        :return: None.
+        """
         self.updating = True
         self.disable_closing = True
         self.enable_github_auth_inputs(False)
@@ -158,7 +213,13 @@ class GUI(tk.Tk):
         self.disable_closing = False
         self.enable_github_auth_inputs(True)
 
-    def enable_github_auth_inputs(self, enable: bool = True):
+    def enable_github_auth_inputs(self, enable: bool = True) -> None:
+        """
+        Enable of disable the GitHub authentication inputs.
+
+        :param enable: Whether to enable or disable the GitHub authentication inputs.
+        :return: None.
+        """
         self.enable_username_password(self.github_auth_method_var.get() == "username and password" if enable else False)
         self.enable_access_token(self.github_auth_method_var.get() == "access token" if enable else False)
         self.enable_enterprise(self.github_auth_method_var.get() == "enterprise" if enable else False)
@@ -168,8 +229,15 @@ class GUI(tk.Tk):
         self.version_label.config(state=tk.NORMAL if enable else "disabled")
         self.version_listbox.config(state=tk.NORMAL if enable else "disabled")
 
-    def check_update_button(self):
-        self.after(500, self.check_update_button)
+    def check_update_button(self) -> None:
+        """
+        Update the button to reflect the current operations. Also disable or enable it depending on the current
+        situation. Note you should only call this function once because it will automatically reschedule itself in the
+        Tk event loop.
+
+        :return: None.
+        """
+        self.after(100, self.check_update_button)
         if self.updating:
             self.update_bundle_button.config(state=tk.DISABLED, text="Updating bundle...")
             return
@@ -193,30 +261,59 @@ class GUI(tk.Tk):
         else:
             self.update_bundle_button.config(state=tk.DISABLED)
 
-    def update_selected_auth_method(self):
+    def update_selected_auth_method(self) -> None:
+        """
+        Update the GUI with the selected authentication method by disabling or enabling certain GitHub authentication
+        methods.
+
+        :return: None.
+        """
         self.enable_username_password(self.github_auth_method_var.get() == "username and password")
         self.enable_access_token(self.github_auth_method_var.get() == "access token")
         self.enable_enterprise(self.github_auth_method_var.get() == "enterprise")
         self.save_key("last_auth_method_used", self.github_auth_method_var.get())
 
-    def enable_enterprise(self, enable: bool = True):
+    def enable_enterprise(self, enable: bool = True) -> None:
+        """
+        Enable or disable the GitHub Enterprise authentication inputs.
+
+        :param enable: Whether to enable or disable the GitHub Enterprise authentication inputs.
+        :return: None.
+        """
         self.enterprise_url_label.config(state=tk.NORMAL if enable else "disabled")
         self.enterprise_url_entry.config(state=tk.NORMAL if enable else "disabled")
         self.enterprise_token_label.config(state=tk.NORMAL if enable else "disabled")
         self.enterprise_token_entry.config(state=tk.NORMAL if enable else "disabled")
 
-    def enable_access_token(self, enable: bool = True):
+    def enable_access_token(self, enable: bool = True) -> None:
+        """
+        Enable or disable the access token authentication input.
+
+        :param enable: Whether to enable or disable the GitHub access token authentication input.
+        :return: None.
+        """
         self.access_token_label.config(state=tk.NORMAL if enable else "disabled")
         self.access_token_entry.config(state=tk.NORMAL if enable else "disabled")
 
-    def enable_username_password(self, enable: bool = True):
+    def enable_username_password(self, enable: bool = True) -> None:
+        """
+        Enable or disable the username and password authentication input.
+
+        :param enable: Whether to enable or disable the username and password authentication input.
+        :return: None.
+        """
         self.username_label.config(state=tk.NORMAL if enable else "disabled")
         self.username_entry.config(state=tk.NORMAL if enable else "disabled")
         self.password_label.config(state=tk.NORMAL if enable else "disabled")
         self.password_entry.config(state=tk.NORMAL if enable else "disabled")
         self.show_password_button.config(state=tk.NORMAL if enable else "disabled")
 
-    def create_auth_method_selector(self):
+    def create_auth_method_selector(self) -> None:
+        """
+        Creates the GitHub authentcation method selector.
+
+        :return: None.
+        """
         self.github_auth_method_var = tk.StringVar()
         self.github_auth_method_var.set("username and password")
         self.user_pass_radio_button = ttk.Radiobutton(
@@ -248,7 +345,12 @@ class GUI(tk.Tk):
             pass
         self.update_selected_auth_method()
 
-    def create_github_enterprise_input(self):
+    def create_github_enterprise_input(self) -> None:
+        """
+        Create the GitHub Enterprise authentication input.
+
+        :return: None.
+        """
         self.enterprise_url_label = ttk.Label(parent=self.github_auth_frame, text="GitHub Enterprise URL: ")
         self.enterprise_url_label.grid(row=3, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_url_entry = EntryWithRightClick(parent=self.github_auth_frame)
@@ -262,7 +364,12 @@ class GUI(tk.Tk):
         self.enterprise_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.enterprise_token_entry, text="Input a GitHub Enterprise login or token that matches with the URL above.")
 
-    def create_access_token_input(self):
+    def create_access_token_input(self) -> None:
+        """
+        Create the GitHub access token authentication input.
+
+        :return: None.
+        """
         self.access_token_label = ttk.Label(parent=self.github_auth_frame, text="Access token: ")
         self.access_token_label.grid(row=2, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.access_token_entry = EntryWithRightClick(parent=self.github_auth_frame)
@@ -270,7 +377,12 @@ class GUI(tk.Tk):
         self.access_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.access_token_entry, text="Input an GitHub access token. Scopes need are:\n - public access")
 
-    def create_username_password_input(self):
+    def create_username_password_input(self) -> None:
+        """
+        Create the username and password authentication input.
+
+        :return: None.
+        """
         self.username_label = ttk.Label(parent=self.github_auth_frame, text="Username: ")
         self.username_label.grid(row=0, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.password_label = ttk.Label(parent=self.github_auth_frame, text="Password: ")
@@ -289,7 +401,12 @@ class GUI(tk.Tk):
         self.show_password_button.grid(row=0, column=1, padx=1, pady=0, sticky=tk.NW)
         tooltip.Hovertip(self.show_password_button, text="Show or hide the password")
 
-    def toggle_password_visibility(self):
+    def toggle_password_visibility(self) -> None:
+        """
+        Toggle whether to show or hide the password depending on the button's text.
+
+        :return: None.
+        """
         if self.show_password_button["text"] == "Show":
             self.show_password_button.config(text="Hide")
             self.password_entry.config(show="")
@@ -297,7 +414,12 @@ class GUI(tk.Tk):
             self.show_password_button.config(text="Show")
             self.password_entry.config(show="*")
 
-    def create_bundle_manager_tab(self):
+    def create_bundle_manager_tab(self) -> None:
+        """
+        Create the bundle manager tab.
+
+        :return: None.
+        """
         self.bundle_manager_frame = ttk.Frame(parent=self.notebook)
         self.bundle_manager_frame.grid(row=0, column=0, padx=1, pady=1)
         self.notebook.add(self.bundle_manager_frame, text="Bundle Manager")
@@ -309,7 +431,12 @@ class GUI(tk.Tk):
         self.update_buttons()
         self.after(100, self.update_modules)
 
-    def update_modules_in_device(self):
+    def update_modules_in_device(self) -> None:
+        """
+        Update the modules on the device.
+
+        :return: None.
+        """
         try:
             try:
                 installed_modules = modules.list_modules(Path(self.drive_combobox.get()))
@@ -322,7 +449,12 @@ class GUI(tk.Tk):
         except (AttributeError, RuntimeError):
             logger.exception("Uh oh! Something happened!")
 
-    def update_modules_in_bundle(self):
+    def update_modules_in_bundle(self) -> None:
+        """
+        Update the modules shown on the bundle.
+
+        :return: None.
+        """
         try:
             bundles = bundle_manager.list_modules_in_bundle(int(self.version_listbox.get()))
             if bundles == None:
@@ -343,7 +475,12 @@ class GUI(tk.Tk):
         except (ValueError, AttributeError):
             logger.exception("Uh oh! Something happened!")
 
-    def update_buttons(self):
+    def update_buttons(self) -> None:
+        """
+        Enable or disable the install/uninstall buttons.
+
+        :return: None
+        """
         self.after(100, self.update_buttons)
         try:
             if self.updating:
@@ -383,11 +520,22 @@ class GUI(tk.Tk):
             self.install_module_button.config(state=tk.DISABLED)
             self.uninstall_module_button.config(state=tk.DISABLED)
 
-    def update_search_bar(self, *args):
+    def update_search_bar(self, *args) -> None:
+        """
+        Update the results from the search bar.
+
+        :param args: Something to do with Tk's tracing method.
+        :return: None.
+        """
         logger.debug(f"Search query is {repr(self.search_bar_var.get())}")
         self.update_modules_in_bundle()
 
-    def create_bundle_list(self):
+    def create_bundle_list(self) -> None:
+        """
+        Create the list of modules in the bundle.
+
+        :return: None.
+        """
         self.bundle_listbox_frame = ttk.LabelFrame(parent=self.bundle_manager_frame, text="Bundle")
         self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
         self.search_bar_var = tk.StringVar()
@@ -415,7 +563,12 @@ class GUI(tk.Tk):
         self.bundle_listbox_scrollbar.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.bundle_listbox.config(yscrollcommand=self.bundle_listbox_scrollbar.set)
 
-    def create_installed_module_list(self):
+    def create_installed_module_list(self) -> None:
+        """
+        Create the list of installed modules.
+
+        :return: None.
+        """
         self.installed_modules_listbox_frame = ttk.LabelFrame(parent=self.bundle_manager_frame, text="Installed modules")
         self.installed_modules_listbox_frame.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NE)
         self.installed_modules_listbox_var = tk.StringVar()
@@ -435,7 +588,12 @@ class GUI(tk.Tk):
         self.installed_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.installed_modules_listbox.config(yscrollcommand=self.installed_modules_listbox_scrollbar.set)
 
-    def check_for_lib_path(self):
+    def check_for_lib_path(self) -> None:
+        """
+        Check whether we can open the device in the file manager via context menu.
+
+        :return: None.
+        """
         self.installed_modules_listbox.right_click_menu.delete(9)
         self.installed_modules_listbox.right_click_menu.add_command(
             label="Open in file manager",
@@ -443,7 +601,12 @@ class GUI(tk.Tk):
             command=lambda: webbrowser.open(str(modules.get_lib_path(Path(self.drive_combobox.get()))))
         )
 
-    def create_module_buttons(self):
+    def create_module_buttons(self) -> None:
+        """
+        Create the install and uninstall buttons.
+
+        :return: None.
+        """
         self.install_module_button = ttk.Button(self.bundle_manager_frame, text="Install", command=self.start_install_module_thread)
         self.install_module_button.grid(row=1, column=1, padx=1, pady=1, sticky=tk.NSEW)
         tooltip.Hovertip(self.install_module_button, text="Install the selected module to the selected device.")
@@ -451,12 +614,23 @@ class GUI(tk.Tk):
         self.uninstall_module_button.grid(row=2, column=1, padx=1, pady=1, sticky=tk.NSEW)
         tooltip.Hovertip(self.uninstall_module_button, text="Uninstall the selected module from the selected device.")
 
-    def start_uninstall_module_thread(self):
+    def start_uninstall_module_thread(self) -> None:
+        """
+        Start the module uninstall thread.
+
+        :return: None.
+        """
         logger.debug("Starting uninstall module thread!")
         uninstall_thread = Thread(target=self.uninstall_module, daemon=True)
         uninstall_thread.start()
 
-    def uninstall_module(self):
+    def uninstall_module(self) -> None:
+        """
+        Uninstall the selected module from the selected device, this will block. Better to call
+        GUI.start_uninstall_module_thread instead.
+
+        :return: None.
+        """
         self.uninstalling = True
         self.disable_closing = True
         drive = Path(self.drive_combobox.get())
@@ -480,12 +654,23 @@ class GUI(tk.Tk):
         self.disable_closing = False
         self.after(100, self.update_modules_in_device)
 
-    def start_install_module_thread(self):
+    def start_install_module_thread(self) -> None:
+        """
+        Start the module install thread.
+
+        :return: None.
+        """
         logger.debug("Starting install module thread!")
         install_thread = Thread(target=self.install_module, daemon=True)
         install_thread.start()
 
-    def install_module(self):
+    def install_module(self) -> None:
+        """
+        Install the selected module to the selected device, this will block. Better to call
+        GUI.start_install_module_thread instead.
+
+        :return: None.
+        """
         self.installing = True
         self.disable_closing = True
         try:
@@ -513,7 +698,12 @@ class GUI(tk.Tk):
         self.disable_closing = False
         self.after(100, self.update_modules_in_device)
 
-    def create_drive_selector(self):
+    def create_drive_selector(self) -> None:
+        """
+        Create the drive selector.
+
+        :return: None.
+        """
         self.drive_combobox_label = ttk.Label(parent=self, text="Drive:")
         self.drive_combobox_label.grid(row=1, column=0, padx=1, pady=1)
         if os_detect.on_windows():
@@ -539,15 +729,30 @@ class GUI(tk.Tk):
         tooltip.Hovertip(self.show_all_drives_checkbutton, text="Whether to list all drives or CircuitPython drives in the combobox.")
         self.update_drives()
 
-    def update_everything(self):
+    def update_everything(self) -> None:
+        """
+        Update the modules and the drives.
+
+        :return: None.
+        """
         self.update_drives()
         self.update_modules()
 
-    def update_modules(self):
+    def update_modules(self) -> None:
+        """
+        Update the displayed modules.
+
+        :return: None.
+        """
         self.update_modules_in_bundle()
         self.update_modules_in_device()
 
-    def update_drives(self):
+    def update_drives(self) -> None:
+        """
+        Update the displayed list of drives.
+
+        :return: None.
+        """
         connected_drives = drives.list_connected_drives(not self.show_all_drives_var.get(),
                                                         Path(self.load_key("unix_drive_mount_point")))
         logger.debug(f"Connected drives: {repr(connected_drives)}")
@@ -557,13 +762,26 @@ class GUI(tk.Tk):
             logger.debug(f"Setting selected drive to {repr(selected_drive)}!")
             self.drive_combobox.set(selected_drive)
 
-    def copy_to_clipboard(self, string: str = ""):
+    def copy_to_clipboard(self, string: str = "") -> None:
+        """
+        Copy the string to the clipboard.
+
+        :param string: A string to copy to the clipboard.
+        :return: None.
+        """
         logger.debug(f"Copying {repr(string)} to clipboard!")
         self.clipboard_clear()
         self.clipboard_append(string)
         self.update()
 
-    def open_file(self, path: Union[Path, str], download_url: str = None):
+    def open_file(self, path: Union[Path, str], download_url: str = None) -> None:
+        """
+        Open a file or a web page.
+
+        :param path: A string or a path representing the web page or the path of the file/directory.
+        :param download_url: If a file, the link to where we can download the file if it is missing.
+        :return: None.
+        """
         logger.debug(f"Opening {repr(path)}...")
         if isinstance(path, Path):
             if path.exists():
@@ -581,7 +799,12 @@ class GUI(tk.Tk):
         else:
             webbrowser.open(path)
 
-    def make_open_readme_buttons(self):
+    def make_open_readme_buttons(self) -> None:
+        """
+        Make the open README.md buttons.
+
+        :return: None.
+        """
         self.readme_frame = ttk.Frame(parent=self.other_frame)
         self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
@@ -600,7 +823,12 @@ class GUI(tk.Tk):
         self.open_readme_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button_location, text="Open the README file location in the default file manager.")
 
-    def make_open_config_buttons(self):
+    def make_open_config_buttons(self) -> None:
+        """
+        Make the open config buttons.
+
+        :return: None.
+        """
         self.config_frame = ttk.Frame(parent=self.other_frame)
         self.config_frame.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_config_button = ttk.Button(
@@ -616,7 +844,12 @@ class GUI(tk.Tk):
         self.open_config_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
 
-    def make_open_log_buttons(self):
+    def make_open_log_buttons(self) -> None:
+        """
+        Make the open log buttons.
+
+        :return: None.
+        """
         self.log_frame = ttk.Frame(parent=self.other_frame)
         self.log_frame.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_log_button = ttk.Button(
@@ -632,7 +865,12 @@ class GUI(tk.Tk):
         self.open_log_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_log_button_location, text="Open the log file location in the default file manager.")
 
-    def make_open_github_repo_buttons(self):
+    def make_open_github_repo_buttons(self) -> None:
+        """
+        Make the open GitHub repo buttons.
+
+        :return: None.
+        """
         self.github_repo_frame = ttk.Frame(parent=self.other_frame)
         self.github_repo_frame.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_github_repo_button = ttk.Button(
@@ -648,7 +886,12 @@ class GUI(tk.Tk):
         self.copy_github_repo_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.copy_github_repo_button, text="Copy the link to the GitHub repo for this project to the clipboard.")
 
-    def create_other_tab(self):
+    def create_other_tab(self) -> None:
+        """
+        Create the other tab.
+
+        :return: None.
+        """
         self.other_frame = ttk.Frame(parent=self.notebook)
         self.other_frame.grid(row=0, column=0)
         self.notebook.add(self.other_frame, text="Other")
@@ -660,13 +903,23 @@ class GUI(tk.Tk):
         ttk.Separator(parent=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_github_repo_buttons()
 
-    def show_traceback(self):
+    def show_traceback(self) -> bool:
+        """
+        Whether to show the traceback or not depending on the config file.
+
+        :return: None.
+        """
         try:
             return self.load_key("show_traceback_in_error_messages").lower() in ("yes", "true", "1")
         except AttributeError:
             return False
 
-    def create_config(self):
+    def create_config(self) -> None:
+        """
+        Re-create the config keys if they do not exist.
+
+        :return: None.
+        """
         if not self.load_key("last_circuit_python_bundle_version"):
             self.save_key("last_circuit_python_bundle_version", "6")
         if not self.load_key("last_auth_method_used"):
@@ -676,7 +929,12 @@ class GUI(tk.Tk):
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
 
-    def get_code(self):
+    def get_code(self) -> Union[Path, None]:
+        """
+        Return the path to the code file from the selected device.
+
+        :return: A pathlib.Path object pointing to the code file or None if we could not find it.
+        """
         codes = ["code.txt", "code.py", "main.txt", "main.py"]
         if not self.drive_combobox.get() or not Path(self.drive_combobox.get()).exists():
             return None
@@ -686,7 +944,12 @@ class GUI(tk.Tk):
                 return path
         return None
 
-    def update_detect_button(self):
+    def update_detect_button(self) -> None:
+        """
+        Update the detect button depending on the current situation.
+
+        :return: None.
+        """
         self.after(ms=100, func=self.update_detect_button)
         enable = not (not self.drive_combobox.get() or not Path(self.drive_combobox.get()).exists() or not self.get_code())
         self.detect_refresh_button.config(state=tk.NORMAL if enable else tk.DISABLED)
@@ -704,14 +967,24 @@ class GUI(tk.Tk):
                 self.detected_modules_listbox.right_click_menu.add_command(label="Detect again",
                                                                            command=self.update_detect, state=tk.DISABLED)
 
-    def update_detect(self):
+    def update_detect(self) -> None:
+        """
+        Update the detected modules.
+
+        :return: None.
+        """
         self.detected_modules_listbox_var.set([])
         self.modules_imported, self.module_lines = imported.get_imported(self.get_code().read_text())
         self.modules_imported = [module.split(".")[0] for module in self.modules_imported]
         logger.debug(f"Modules imported: {repr(self.modules_imported)}")
         self.detected_modules_listbox_var.set(self.modules_imported)
 
-    def update_find_in_bundle_button(self):
+    def update_find_in_bundle_button(self) -> None:
+        """
+        Update the find in bundle button depending on the current situation.
+
+        :return: None.
+        """
         self.after(ms=100, func=self.update_find_in_bundle_button)
         if not hasattr(self, "detected_modules_listbox"):
             return
@@ -727,7 +1000,12 @@ class GUI(tk.Tk):
         else:
             self.detect_find_in_bundle_button.config(state=tk.DISABLED)
 
-    def find_in_bundle(self):
+    def find_in_bundle(self) -> None:
+        """
+        Find the selected module in the list of detected modules in the bundle.
+
+        :return: None.
+        """
         selected = self.detected_modules_listbox.get(self.detected_modules_listbox.curselection())
         self.search_bar_var.set("")
         self.bundle_listbox.selection_clear(0, tk.END)
@@ -740,7 +1018,12 @@ class GUI(tk.Tk):
             self.bundle_listbox.see(self.bundles.index(selected))
         self.notebook.select(self.bundle_manager_frame)
 
-    def create_detect_top_ui(self):
+    def create_detect_top_ui(self) -> None:
+        """
+        Create the detect tab's top UI. (The two buttons)
+
+        :return: None.
+        """
         self.detect_top_frame = ttk.Frame(parent=self.detect_frame)
         self.detect_top_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.EW + tk.N)
         self.detect_refresh_button = ttk.Button(parent=self.detect_top_frame, text="Detect", command=self.update_detect)
@@ -753,7 +1036,12 @@ class GUI(tk.Tk):
         self.update_detect_button()
         self.update_find_in_bundle_button()
 
-    def create_detected_listbox_frame(self):
+    def create_detected_listbox_frame(self) -> None:
+        """
+        Created the detected listbox frame.
+
+        :return: None.
+        """
         self.detected_listbox_frame = ttk.LabelFrame(parent=self.detected_frame, text="Imported modules")
         self.detected_listbox_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NSEW)
         self.detected_modules_listbox_var = tk.StringVar(value=[])
@@ -770,12 +1058,22 @@ class GUI(tk.Tk):
         self.detected_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
         self.detected_modules_listbox.config(yscrollcommand=self.detected_modules_listbox_scrollbar.set)
 
-    def create_detected_frame(self):
+    def create_detected_frame(self) -> None:
+        """
+        Create the detected fram inside the detect tab.
+
+        :return: None.
+        """
         self.detected_frame = ttk.Frame(parent=self.detect_frame)
         self.detected_frame.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NSEW)
         self.create_detected_listbox_frame()
 
-    def create_detect_tab(self):
+    def create_detect_tab(self) -> None:
+        """
+        Create the detect tab.
+
+        :return: None.
+        """
         self.detect_frame = ttk.Frame(parent=self.notebook)
         self.detect_frame.grid(row=0, column=0)
         self.notebook.add(child=self.detect_frame, text="Detect")
@@ -785,7 +1083,12 @@ class GUI(tk.Tk):
         self.create_detected_frame()
         self.update_detect()
 
-    def create_gui(self):
+    def create_gui(self) -> None:
+        """
+        Create the GUI.
+
+        :return: None.
+        """
         logger.debug("Creating GUI...")
         if os_detect.on_linux():
             self.global_style = ttk.Style()
@@ -799,7 +1102,12 @@ class GUI(tk.Tk):
         self.create_detect_tab()
         self.create_other_tab()
 
-    def run(self):
+    def run(self) -> None:
+        """
+        Run the GUI, this will block.
+
+        :return: None.
+        """
         self.create_gui()
         self.mainloop()
 
