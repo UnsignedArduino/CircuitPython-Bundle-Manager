@@ -36,7 +36,7 @@ import logging
 logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
-def list_modules_in_bundle(version: int = None) -> Union[list, None]:
+def list_modules_in_bundle(version: int = None) -> Union[list[str], None]:
     """
     Lists the modules in the bundle stored internally.
 

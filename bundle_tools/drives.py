@@ -24,7 +24,7 @@ import logging
 logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
-def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Path = Path("/media")) -> list:
+def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Path = Path("/media")) -> list[Path]:
     """
     Returns a list of connected drives. On Windows, this will be something like `[WindowsPath('C:'), ...]`.
 

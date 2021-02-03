@@ -8,8 +8,8 @@ logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
 class ComboboxWithRightClick(ttk.Combobox):
-    def __init__(self, master, *args, **kwargs):
-        super().__init__(master, *args, **kwargs)
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
         self.bind("<Button-3>", self.popup)
 
     def popup(self, event):

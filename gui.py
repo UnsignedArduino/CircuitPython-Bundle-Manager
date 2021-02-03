@@ -21,8 +21,6 @@ from typing import Union
 from bundle_tools.create_logger import create_logger
 import logging
 
-# TODO: Replace usage of master= to parent= everywhere
-
 logger = create_logger(name=__name__, level=logging.DEBUG)
 
 
@@ -79,20 +77,20 @@ class GUI(tk.Tk):
         return new.isdigit() and len(new) <= 3
 
     def create_bundle_update_tab(self):
-        self.github_auth_frame = ttk.Frame(master=self.notebook)
+        self.github_auth_frame = ttk.Frame(parent=self.notebook)
         self.github_auth_frame.grid(row=0, column=0, padx=1, pady=1)
         self.notebook.add(self.github_auth_frame, text="Update Bundle")
         self.create_username_password_input()
         self.create_access_token_input()
         self.create_github_enterprise_input()
         self.create_auth_method_selector()
-        self.update_bundle_button = ttk.Button(master=self.github_auth_frame, text="Update bundle", command=self.start_update_bundle_thread)
+        self.update_bundle_button = ttk.Button(parent=self.github_auth_frame, text="Update bundle", command=self.start_update_bundle_thread)
         self.update_bundle_button.grid(row=5, column=1, rowspan=2, columnspan=2, padx=1, pady=1)
         tooltip.Hovertip(self.update_bundle_button, text="Update the bundle used for installing modules.")
-        self.version_label = ttk.Label(master=self.github_auth_frame, text="Version: ")
+        self.version_label = ttk.Label(parent=self.github_auth_frame, text="Version: ")
         self.version_label.grid(row=7, column=1, padx=1, pady=1, sticky=tk.NE)
         validate_for_number_wrapper = (self.register(self.validate_for_number), '%P')
-        self.version_listbox = SpinboxWithRightClick(master=self.github_auth_frame, width=3, from_=1, to=100,
+        self.version_listbox = SpinboxWithRightClick(parent=self.github_auth_frame, width=3, from_=1, to=100,
                                                      command=lambda: self.save_key("last_circuit_python_bundle_version", self.version_listbox.get()),
                                                      validate="key", validatecommand=validate_for_number_wrapper)
         self.version_listbox.grid(row=7, column=2, padx=1, pady=1, sticky=tk.NW)
@@ -222,21 +220,21 @@ class GUI(tk.Tk):
         self.github_auth_method_var = tk.StringVar()
         self.github_auth_method_var.set("username and password")
         self.user_pass_radio_button = ttk.Radiobutton(
-            master=self.github_auth_frame, text="Username and password",
+            parent=self.github_auth_frame, text="Username and password",
             variable=self.github_auth_method_var, value="username and password",
             command=self.update_selected_auth_method
         )
         self.user_pass_radio_button.grid(row=5, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.user_pass_radio_button, text="Use a username and password to authenticate with GitHub.")
         self.access_token_radio_button = ttk.Radiobutton(
-            master=self.github_auth_frame, text="Access token",
+            parent=self.github_auth_frame, text="Access token",
             variable=self.github_auth_method_var, value="access token",
             command=self.update_selected_auth_method
         )
         self.access_token_radio_button.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.access_token_radio_button, text="Use an access token and password to authenticate with GitHub.")
         self.enterprise_radio_button = ttk.Radiobutton(
-            master=self.github_auth_frame, text="GitHub Enterprise",
+            parent=self.github_auth_frame, text="GitHub Enterprise",
             variable=self.github_auth_method_var, value="enterprise",
             command=self.update_selected_auth_method
         )
@@ -251,43 +249,43 @@ class GUI(tk.Tk):
         self.update_selected_auth_method()
 
     def create_github_enterprise_input(self):
-        self.enterprise_url_label = ttk.Label(master=self.github_auth_frame, text="GitHub Enterprise URL: ")
+        self.enterprise_url_label = ttk.Label(parent=self.github_auth_frame, text="GitHub Enterprise URL: ")
         self.enterprise_url_label.grid(row=3, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.enterprise_url_entry = EntryWithRightClick(master=self.github_auth_frame)
+        self.enterprise_url_entry = EntryWithRightClick(parent=self.github_auth_frame)
         self.enterprise_url_entry.grid(row=3, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_url_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.enterprise_url_entry, text="Input a GitHub Enterprise URl that matches with the login or token below.")
-        self.enterprise_token_label = ttk.Label(master=self.github_auth_frame, text="Login or token: ")
+        self.enterprise_token_label = ttk.Label(parent=self.github_auth_frame, text="Login or token: ")
         self.enterprise_token_label.grid(row=4, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.enterprise_token_entry = EntryWithRightClick(master=self.github_auth_frame)
+        self.enterprise_token_entry = EntryWithRightClick(parent=self.github_auth_frame)
         self.enterprise_token_entry.grid(row=4, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.enterprise_token_entry, text="Input a GitHub Enterprise login or token that matches with the URL above.")
 
     def create_access_token_input(self):
-        self.access_token_label = ttk.Label(master=self.github_auth_frame, text="Access token: ")
+        self.access_token_label = ttk.Label(parent=self.github_auth_frame, text="Access token: ")
         self.access_token_label.grid(row=2, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.access_token_entry = EntryWithRightClick(master=self.github_auth_frame)
+        self.access_token_entry = EntryWithRightClick(parent=self.github_auth_frame)
         self.access_token_entry.grid(row=2, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.access_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.access_token_entry, text="Input an GitHub access token. Scopes need are:\n - public access")
 
     def create_username_password_input(self):
-        self.username_label = ttk.Label(master=self.github_auth_frame, text="Username: ")
+        self.username_label = ttk.Label(parent=self.github_auth_frame, text="Username: ")
         self.username_label.grid(row=0, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.password_label = ttk.Label(master=self.github_auth_frame, text="Password: ")
+        self.password_label = ttk.Label(parent=self.github_auth_frame, text="Password: ")
         self.password_label.grid(row=1, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.username_entry = EntryWithRightClick(master=self.github_auth_frame)
+        self.username_entry = EntryWithRightClick(parent=self.github_auth_frame)
         self.username_entry.grid(row=0, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.username_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.username_entry, text="Input a GitHub username that matches the password below.")
-        self.password_frame = ttk.Frame(master=self.github_auth_frame)
+        self.password_frame = ttk.Frame(parent=self.github_auth_frame)
         self.password_frame.grid(row=1, column=1, padx=0, pady=1, columnspan=2, sticky=tk.NW)
-        self.password_entry = EntryWithRightClick(master=self.password_frame, width=13, show="*")
+        self.password_entry = EntryWithRightClick(parent=self.password_frame, width=13, show="*")
         self.password_entry.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.password_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.password_entry, text="Input a GitHub password that matches the username above.")
-        self.show_password_button = ttk.Button(master=self.password_frame, width=5, text="Show", command=self.toggle_password_visibility)
+        self.show_password_button = ttk.Button(parent=self.password_frame, width=5, text="Show", command=self.toggle_password_visibility)
         self.show_password_button.grid(row=0, column=1, padx=1, pady=0, sticky=tk.NW)
         tooltip.Hovertip(self.show_password_button, text="Show or hide the password")
 
@@ -300,7 +298,7 @@ class GUI(tk.Tk):
             self.password_entry.config(show="*")
 
     def create_bundle_manager_tab(self):
-        self.bundle_manager_frame = ttk.Frame(master=self.notebook)
+        self.bundle_manager_frame = ttk.Frame(parent=self.notebook)
         self.bundle_manager_frame.grid(row=0, column=0, padx=1, pady=1)
         self.notebook.add(self.bundle_manager_frame, text="Bundle Manager")
         self.installing = False
@@ -390,15 +388,15 @@ class GUI(tk.Tk):
         self.update_modules_in_bundle()
 
     def create_bundle_list(self):
-        self.bundle_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Bundle")
+        self.bundle_listbox_frame = ttk.LabelFrame(parent=self.bundle_manager_frame, text="Bundle")
         self.bundle_listbox_frame.grid(row=0, column=0, padx=1, pady=1, rowspan=3)
         self.search_bar_var = tk.StringVar()
         self.search_bar_var.set("")
         self.search_bar_var.trace_add("write", self.update_search_bar)
         if os_detect.on_windows():
-            self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
+            self.search_bar = EntryWithRightClick(parent=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=22)
         else:
-            self.search_bar = EntryWithRightClick(master=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=20)
+            self.search_bar = EntryWithRightClick(parent=self.bundle_listbox_frame, textvariable=self.search_bar_var, width=20)
         self.search_bar.initiate_right_click_menu()
         self.search_bar.grid(row=0, column=0, columnspan=2, padx=1, pady=1)
         tooltip.Hovertip(self.search_bar, text="Enter your search query here.")
@@ -418,7 +416,7 @@ class GUI(tk.Tk):
         self.bundle_listbox.config(yscrollcommand=self.bundle_listbox_scrollbar.set)
 
     def create_installed_module_list(self):
-        self.installed_modules_listbox_frame = ttk.LabelFrame(master=self.bundle_manager_frame, text="Installed modules")
+        self.installed_modules_listbox_frame = ttk.LabelFrame(parent=self.bundle_manager_frame, text="Installed modules")
         self.installed_modules_listbox_frame.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NE)
         self.installed_modules_listbox_var = tk.StringVar()
         if os_detect.on_windows():
@@ -516,18 +514,18 @@ class GUI(tk.Tk):
         self.after(100, self.update_modules_in_device)
 
     def create_drive_selector(self):
-        self.drive_combobox_label = ttk.Label(master=self, text="Drive:")
+        self.drive_combobox_label = ttk.Label(parent=self, text="Drive:")
         self.drive_combobox_label.grid(row=1, column=0, padx=1, pady=1)
         if os_detect.on_windows():
-            self.drive_combobox = ComboboxWithRightClick(master=self, width=16)
+            self.drive_combobox = ComboboxWithRightClick(parent=self, width=16)
         else:
-            self.drive_combobox = ComboboxWithRightClick(master=self, width=15)
+            self.drive_combobox = ComboboxWithRightClick(parent=self, width=15)
         self.drive_combobox.grid(row=1, column=1, padx=1, pady=1)
         self.drive_combobox.initiate_right_click_menu()
         self.drive_combobox.right_click_menu.add_separator()
         self.drive_combobox.right_click_menu.add_command(label="Refresh drives", command=self.update_drives)
         tooltip.Hovertip(self.drive_combobox, text="Select the drive that represents the CircuitPython device.")
-        self.refresh_drives_button = ttk.Button(master=self, text="↻", width=2, command=self.update_everything)
+        self.refresh_drives_button = ttk.Button(parent=self, text="↻", width=2, command=self.update_everything)
         self.refresh_drives_button.grid(row=1, column=2, padx=1, pady=1)
         tooltip.Hovertip(self.refresh_drives_button, text="Refresh:\n"
                                                           " - Connected drives\n"
@@ -535,7 +533,7 @@ class GUI(tk.Tk):
                                                           " - Modules installed on the device\n")
         self.show_all_drives_var = tk.BooleanVar()
         self.show_all_drives_var.set(False)
-        self.show_all_drives_checkbutton = ttk.Checkbutton(master=self, text="Show all drives?",
+        self.show_all_drives_checkbutton = ttk.Checkbutton(parent=self, text="Show all drives?",
                                                            variable=self.show_all_drives_var, command=self.update_drives)
         self.show_all_drives_checkbutton.grid(row=1, column=3, padx=1, pady=1)
         tooltip.Hovertip(self.show_all_drives_checkbutton, text="Whether to list all drives or CircuitPython drives in the combobox.")
@@ -577,17 +575,17 @@ class GUI(tk.Tk):
                 if download_url and mbox.askokcancel("CircuitPython Bundle Manager: Confirm",
                                                      "It looks like this file is available on GitHub!\n"
                                                      "Would you like to download it?"):
-                    if download_dialog.download(master=self, url=download_url, path=path,
+                    if download_dialog.download(parent=self, url=download_url, path=path,
                                                 show_traceback=self.show_traceback()):
                         webbrowser.open(str(path))
         else:
             webbrowser.open(path)
 
     def make_open_readme_buttons(self):
-        self.readme_frame = ttk.Frame(master=self.other_frame)
+        self.readme_frame = ttk.Frame(parent=self.other_frame)
         self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
-            master=self.readme_frame, text="Open README file",
+            parent=self.readme_frame, text="Open README file",
             command=lambda: self.open_file(
                 Path.cwd() / "README.md",
                 download_url="https://raw.githubusercontent.com/UnsignedArduino/CircuitPython-Bundle-Manager/main/README.md"
@@ -596,70 +594,70 @@ class GUI(tk.Tk):
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
         self.open_readme_button_location = ttk.Button(
-            master=self.readme_frame, text="Open README file location",
+            parent=self.readme_frame, text="Open README file location",
             command=lambda: self.open_file(Path.cwd())
         )
         self.open_readme_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button_location, text="Open the README file location in the default file manager.")
 
     def make_open_config_buttons(self):
-        self.config_frame = ttk.Frame(master=self.other_frame)
+        self.config_frame = ttk.Frame(parent=self.other_frame)
         self.config_frame.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_config_button = ttk.Button(
-            master=self.config_frame, text="Open config file",
+            parent=self.config_frame, text="Open config file",
             command=lambda: self.open_file(Path.cwd() / "config.json")
         )
         self.open_config_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button, text="Open the config file in the default json editor.")
         self.open_config_button_location = ttk.Button(
-            master=self.config_frame, text="Open config file location",
+            parent=self.config_frame, text="Open config file location",
             command=lambda: self.open_file(Path.cwd())
         )
         self.open_config_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
 
     def make_open_log_buttons(self):
-        self.log_frame = ttk.Frame(master=self.other_frame)
+        self.log_frame = ttk.Frame(parent=self.other_frame)
         self.log_frame.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_log_button = ttk.Button(
-            master=self.log_frame, text="Open log file",
+            parent=self.log_frame, text="Open log file",
             command=lambda: self.open_file(Path.cwd() / "log.log")
         )
         self.open_log_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button, text="Open the log file in the default log editor.")
         self.open_log_button_location = ttk.Button(
-            master=self.log_frame, text="Open log file location",
+            parent=self.log_frame, text="Open log file location",
             command=lambda: self.open_file(Path.cwd())
         )
         self.open_log_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_log_button_location, text="Open the log file location in the default file manager.")
 
     def make_open_github_repo_buttons(self):
-        self.github_repo_frame = ttk.Frame(master=self.other_frame)
+        self.github_repo_frame = ttk.Frame(parent=self.other_frame)
         self.github_repo_frame.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_github_repo_button = ttk.Button(
-            master=self.github_repo_frame, text="Open GitHub repo link",
+            parent=self.github_repo_frame, text="Open GitHub repo link",
             command=lambda: self.open_file("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
         self.open_github_repo_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_github_repo_button, text="Open the GitHub repo for this project in the default browser.")
         self.copy_github_repo_button = ttk.Button(
-            master=self.github_repo_frame, text="Copy GitHub repo link",
+            parent=self.github_repo_frame, text="Copy GitHub repo link",
             command=lambda: self.copy_to_clipboard("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager")
         )
         self.copy_github_repo_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.copy_github_repo_button, text="Copy the link to the GitHub repo for this project to the clipboard.")
 
     def create_other_tab(self):
-        self.other_frame = ttk.Frame(master=self.notebook)
+        self.other_frame = ttk.Frame(parent=self.notebook)
         self.other_frame.grid(row=0, column=0)
         self.notebook.add(self.other_frame, text="Other")
         self.make_open_readme_buttons()
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(parent=self.other_frame, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_config_buttons()
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(parent=self.other_frame, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_log_buttons()
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(parent=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_github_repo_buttons()
 
     def show_traceback(self):
@@ -743,12 +741,12 @@ class GUI(tk.Tk):
         self.notebook.select(self.bundle_manager_frame)
 
     def create_detect_top_ui(self):
-        self.detect_top_frame = ttk.Frame(master=self.detect_frame)
+        self.detect_top_frame = ttk.Frame(parent=self.detect_frame)
         self.detect_top_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.EW + tk.N)
-        self.detect_refresh_button = ttk.Button(master=self.detect_top_frame, text="Detect", command=self.update_detect)
+        self.detect_refresh_button = ttk.Button(parent=self.detect_top_frame, text="Detect", command=self.update_detect)
         self.detect_refresh_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.detect_refresh_button, text="Check again for imported modules.")
-        self.detect_find_in_bundle_button = ttk.Button(master=self.detect_top_frame, text="Find in bundle",
+        self.detect_find_in_bundle_button = ttk.Button(parent=self.detect_top_frame, text="Find in bundle",
                                                        command=self.find_in_bundle, state=tk.DISABLED)
         self.detect_find_in_bundle_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.detect_find_in_bundle_button, text="Find the selected module in the bundle list.")
@@ -756,10 +754,10 @@ class GUI(tk.Tk):
         self.update_find_in_bundle_button()
 
     def create_detected_listbox_frame(self):
-        self.detected_listbox_frame = ttk.LabelFrame(master=self.detected_frame, text="Imported modules")
+        self.detected_listbox_frame = ttk.LabelFrame(parent=self.detected_frame, text="Imported modules")
         self.detected_listbox_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NSEW)
         self.detected_modules_listbox_var = tk.StringVar(value=[])
-        self.detected_modules_listbox = ListboxWithRightClick(master=self.detected_listbox_frame, height=8, width=42,
+        self.detected_modules_listbox = ListboxWithRightClick(parent=self.detected_listbox_frame, height=8, width=42,
                                                               listvariable=self.detected_modules_listbox_var)
         self.detected_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
         self.detected_modules_listbox.right_click_menu.add_separator()
@@ -773,12 +771,12 @@ class GUI(tk.Tk):
         self.detected_modules_listbox.config(yscrollcommand=self.detected_modules_listbox_scrollbar.set)
 
     def create_detected_frame(self):
-        self.detected_frame = ttk.Frame(master=self.detect_frame)
+        self.detected_frame = ttk.Frame(parent=self.detect_frame)
         self.detected_frame.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NSEW)
         self.create_detected_listbox_frame()
 
     def create_detect_tab(self):
-        self.detect_frame = ttk.Frame(master=self.notebook)
+        self.detect_frame = ttk.Frame(parent=self.notebook)
         self.detect_frame.grid(row=0, column=0)
         self.notebook.add(child=self.detect_frame, text="Detect")
         # TODO: Test on Linux
@@ -792,7 +790,7 @@ class GUI(tk.Tk):
         if os_detect.on_linux():
             self.global_style = ttk.Style()
             self.global_style.theme_use("clam")
-        self.notebook = ttk.Notebook(master=self)
+        self.notebook = ttk.Notebook(parent=self)
         self.notebook.grid(row=0, column=0, padx=1, pady=1, columnspan=4, sticky=tk.N)
         self.create_config()
         self.create_drive_selector()

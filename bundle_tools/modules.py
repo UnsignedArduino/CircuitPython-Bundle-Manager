@@ -42,7 +42,7 @@ def get_lib_path(device_drive: Path = None) -> Path:
     return device_drive / "lib"
 
 
-def list_modules(start_path: Path = None) -> list:
+def list_modules(start_path: Path = None) -> list[str]:
     """
     Passing in the device path (ex. "I:") will return a list of strings containing the names of the modules.
 
@@ -63,7 +63,7 @@ def list_modules(start_path: Path = None) -> list:
     return libs
 
 
-def list_modules_in_bundle(start_path: Path = None) -> list:
+def list_modules_in_bundle(start_path: Path = None) -> list[str]:
     """
     Passing in a path to the bundle (ex.
     E:/CircuitPython Bundle Manager/bundles/6/1608213643.5342305/adafruit-circuitpython-bundle-6.x-mpy-20201217/lib/)
