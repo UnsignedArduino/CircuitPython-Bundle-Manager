@@ -16,7 +16,7 @@ import requests
 import webbrowser
 from time import sleep
 import json
-from bundle_tools import drives, modules, bundle_manager, os_detect
+from bundle_tools import drives, modules, bundle_manager, os_detect, imported
 from typing import Union
 from bundle_tools.create_logger import create_logger
 import logging
@@ -707,17 +707,43 @@ class GUI(tk.Tk):
 
     def update_detect(self):
         success = self.update_detect_status()
+        if success:
+            modules_imported = imported.get_imported(self.get_code().read_text())
+            modules_imported = [module.split(".")[0] for module in modules_imported]
+            logger.debug(f"Modules imported: {repr(modules_imported)}")
+            self.detected_modules_listbox_var.set(modules_imported)
+
+    def create_detect_top_ui(self):
+        self.detect_top_frame = ttk.Frame(master=self.detect_frame)
+        self.detect_top_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.EW + tk.N)
+        self.detect_refresh_button = ttk.Button(master=self.detect_top_frame, text="Detect again",
+                                                command=self.update_detect)
+        self.detect_refresh_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.detect_status_label = ttk.Label(master=self.detect_top_frame)
+        self.detect_status_label.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NE)
+
+    def create_detected_frame(self):
+        self.detected_frame = ttk.LabelFrame(master=self.detect_frame, text="Detected")
+        self.detected_frame.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NSEW)
+        self.detected_listbox_frame = ttk.LabelFrame(master=self.detected_frame, text="Imported modules")
+        self.detected_listbox_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NSEW)
+        self.detected_modules_listbox_var = tk.StringVar(value=[])
+        self.detected_modules_listbox = ListboxWithRightClick(master=self.detected_listbox_frame, height=7, width=16,
+                                                              listvariable=self.detected_modules_listbox_var)
+        self.detected_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"])
+        self.detected_modules_listbox.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.detected_modules_listbox_scrollbar = ttk.Scrollbar(self.detected_listbox_frame, orient=tk.VERTICAL,
+                                                      command=self.detected_modules_listbox.yview)
+        self.detected_modules_listbox_scrollbar.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NSEW)
+        self.detected_modules_listbox.config(yscrollcommand=self.detected_modules_listbox_scrollbar.set)
 
     def create_detect_tab(self):
         self.detect_frame = ttk.Frame(master=self.notebook)
         self.detect_frame.grid(row=0, column=0)
         self.notebook.add(child=self.detect_frame, text="Detect")
-        self.detect_status_label = ttk.Label(master=self.detect_frame)
-        self.detect_status_label.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
-        self.detect_refresh_button = ttk.Button(master=self.detect_frame, text="Detect again",
-                                                command=self.update_detect)
-        self.detect_refresh_button.grid(row=1, column=0, padx=1, pady=1, sticky=tk.NW)
-        self.update_detect_status()
+        self.create_detect_top_ui()
+        self.create_detected_frame()
+        self.update_detect()
 
     def create_gui(self):
         logger.debug("Creating GUI...")
