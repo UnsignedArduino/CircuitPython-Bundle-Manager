@@ -1053,8 +1053,12 @@ class GUI(tk.Tk):
         self.detected_listbox_frame = ttk.LabelFrame(master=self.detected_frame, text="Imported modules")
         self.detected_listbox_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NSEW)
         self.detected_modules_listbox_var = tk.StringVar(value=[])
-        self.detected_modules_listbox = ListboxWithRightClick(master=self.detected_listbox_frame, height=8, width=42,
-                                                              listvariable=self.detected_modules_listbox_var)
+        if os_detect.on_windows():
+            self.detected_modules_listbox = ListboxWithRightClick(master=self.detected_listbox_frame, height=8, width=42,
+                                                                  listvariable=self.detected_modules_listbox_var)
+        else:
+            self.detected_modules_listbox = ListboxWithRightClick(master=self.detected_listbox_frame, height=8, width=38,
+                                                                  listvariable=self.detected_modules_listbox_var)
         self.detected_modules_listbox.initiate_right_click_menu(["Copy", "Cut", "Paste", "Select all", "Delete"],
                                                                 callback=self.update_detected_modules_listbox_right_click)
         self.detected_modules_listbox.right_click_menu.add_separator()
