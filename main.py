@@ -20,8 +20,7 @@ from bundle_tools.create_logger import create_logger
 from pathlib import Path
 import logging
 
-# TODO: Add docstrings for everything
-# TODO: Cleanup positional params everywhere
+# TODO: Note in README that you need Python 3.9!
 
 LEVEL = logging.DEBUG
 

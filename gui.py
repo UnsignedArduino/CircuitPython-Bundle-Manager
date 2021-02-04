@@ -979,7 +979,10 @@ class GUI(tk.Tk):
         :return: None.
         """
         self.detected_modules_listbox_var.set([])
-        self.modules_imported, self.module_lines = imported.get_imported(self.get_code().read_text())
+        code_path = self.get_code()
+        if not code_path:
+            return
+        self.modules_imported, self.module_lines = imported.get_imported(code_path.read_text())
         self.modules_imported = [module.split(".")[0] for module in self.modules_imported]
         logger.debug(f"Modules imported: {repr(self.modules_imported)}")
         self.detected_modules_listbox_var.set(self.modules_imported)
