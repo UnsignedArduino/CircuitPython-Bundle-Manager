@@ -4,17 +4,18 @@ A Python program that makes it easy to manage modules on a CircuitPython device!
 request if you can fix it! 
 
 ## Table of Contents
-1. [Installing](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing)
-   1. [Installing from a binary](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-a-binary)
-   2. [Installing from source](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#installing-from-source)
-2. [Running](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#running)
-3. [How to use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#how-to-use)
-   1. [First use](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run)
-   2. [Selecting a device](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#selecting-a-device)
-   3. [Managing modules](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#managing-modules)
-   4. [Keeping the bundle updated](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#keeping-the-bundle-updated)
-   5. [Other](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#other)
-4. [Options](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#options)
+1. [Installing](#installing)
+   1. [Installing from a binary](#installing-from-a-binary)
+   2. [Installing from source](#installing-from-source)
+2. [Running](#running)
+3. [How to use](#how-to-use)
+   1. [First use](#first-run)
+   2. [Selecting a device](#selecting-a-device)
+   3. [Managing modules](#managing-modules)
+   4. [Keeping the bundle updated](#keeping-the-bundle-updated)
+   5. [Automatically detecting imported modules](#automatically-detecting-imported-modules)
+   6. [Other](#other)
+4. [Options](#options)
 
 ## Installing
 
@@ -65,16 +66,14 @@ You can find a detailed description of the one-directory method
 how the one-file method works 
 [here](https://pyinstaller.readthedocs.io/en/stable/operating-mode.html#bundling-to-one-file).
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
 
 ### Installing from source
 
 1. [Download](https://git-scm.com/downloads) and install Git. It does not matter what editor you use for Git's default.
     1. Or...download this repo via the `Download ZIP` option under the green `Code` button, shown in Figure 1.1:
    ![A picture on the Download Zip button on the GitHub page](assets/1/1.png)
-2. [Download](https://www.python.org/downloads/) and install Python 3. 
-   (Here is [Python 3.9](https://www.microsoft.com/en-us/p/python-39/9p7qfqmjrfp7) on the Microsoft Store) 
-   Theoretically, you can use a version as early as 3.6, but I only tested this on 3.7 and 3.9.
+2. [Download](https://www.python.org/downloads/) and install Python **3.9**. (Because I use type definitions)
     1. Make sure to check `Add Python 3.x to PATH`, as shown in Figure 1.2:
        
        ![A picture of the Python 3.9 installer with the Add Python 3.9 to PATH checkbox checked](assets/1/2.png)
@@ -82,6 +81,11 @@ how the one-file method works
        Figure 1.3: (Only applies if you are using the `Customize installation` option in the installer)
        
        ![A picture of the Python 3.9 installer with the tcl/tk and IDLE checkbox checked](assets/1/3.png)
+   
+       If you are building Python, 
+       ([Here is a guide on building Python on Debian I found helpful](https://www.vultr.com/docs/upgrade-python-on-debian)) 
+       make sure to install `tk-dev`! (with `sudo apt install tk-dev`) and include SSL support! (Via the `--with-ssl` 
+       option while configuring.)
 3. If you are on Windows, I would also install the 
    [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701) while you are at it.
 4. If you installed Git, `cd` into a convenient directory (like the home directory or the desktop) and run:
@@ -140,7 +144,7 @@ how the one-file method works
     python3 main.py
     ```
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
 
 ## Running
 **This only applies if you installed from source!**
@@ -163,11 +167,16 @@ cd path/to/the/CircuitPython-Bundle-Manager
 ```
 Don't forget to give the `.sh` file execute permission! (`chmod +x shell_file.sh`)
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
 ## How to use
 
 ### First run
 On run, you should get something like this:
+
+> If the GUI looks different from these images, it's because I don't want to update all these images. I will only 
+> update the relevant images. (So if I add something in the example, Bundle Manager, then I will include new 
+> instructions on how to use it, I won't be updating all the images that show the Bundle Manager.) The functionality 
+> _should_ still be the same.
 
 Figure 2.1: Start up on Windows.
 
@@ -228,9 +237,9 @@ Figure 2.8: The info box when the bundle updates successfully.
 ![The information box shown when the bundle successfully updates](assets/2/8.png)
 
 That is it! Continue to 
-[selecting a device](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#selecting-a-device).
+[selecting a device](#selecting-a-device).
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
 
 ### Selecting a device
 
@@ -277,9 +286,9 @@ instructions:
 7. Select the device!
 
 That is it! Continue to 
-[managing modules](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#managing-modules).
+[managing modules](#managing-modules).
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
 
 ### Managing modules
 
@@ -331,14 +340,14 @@ Figure 2.19: We see that it has been successfully uninstalled!
 ![An information dialog saying "Successfully uninstalled module!"](assets/2/19.png)
 
 That is it! Continue to 
-[keeping the bundle updated](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#keeping-the-bundle-updated).
+[keeping the bundle updated](#keeping-the-bundle-updated).
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
 
 ### Keeping the bundle updated
 
 Follow the instructions provided in 
-[first run](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#first-run). You only need to do this once a 
+[first run](#first-run). You only need to do this once a 
 day, since the bundle is updated once a day at ~12PM EST.
 
 TL;DR:
@@ -349,14 +358,39 @@ TL;DR:
 4. Select CircuitPython version.
 5. Press `Update`!
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
+
+### Automatically detecting imported modules
+
+> Note: This feature is still very new! Problems? 
+> [Report an issue!](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/issues/new)
+
+Instead of scrolling through the bundle or using the search bar, why not save a couple more steps and have the 
+CircuitPython Bundle Manager automatically detect dependencies for you? Figure 2.20 shows the `Detect` tab:
+
+Figure 2.20: The `Detect` tab in the CircuitPython Bundle Manager.
+
+![A picture of the CircuitPython Bundle Manager's detect tab open](assets/2/20.png)
+
+If you have a CircuitPython device selected and there is a valid code file (One of `code.txt`, `code.py`, `main.txt`, 
+`main.py`) you can press the `Detect` button to have the CircuitPython Bundle Manager parse the code files and look at 
+your import statements. I'm using [this example](https://learn.adafruit.com/adafruit-airlift-featherwing-esp32-wifi-co-processor-featherwing/internet-connect#connect-to-wifi-3035277-4:~:text=%23%20SPDX%2DFileCopyrightText%3A%202019%20ladyada%20for%20Adafruit,print(%22Done!%22)) 
+from the Adafruit Airlift Featherwing Internet Connect guide from the Adafruit Learn site. If you click on one of the
+modules and it's in the bundle, the `Find in bundle` button will light up. Pressing it will teleport you to the Bundle
+Manager allowing you to click `Install`!
+
+Figure 2.21: After clicking on `adafruit_requests` in the listbox and pressing `Find in bundle`, I was teleported here! 
+
+![A picture of the CircuitPython Bundle Manager's bundle Manager's tab open with adafruit_requests selected](assets/2/21.png)
+
+[Back to table of contents](#table-of-contents)
 
 ### Other
 
-Figure 2.20: The `Other` tab in the CircuitPython Bundle Manager. The interface may change and I will probably forget 
+Figure 2.22: The `Other` tab in the CircuitPython Bundle Manager. The interface may change and I will probably forget 
 to change this too.
 
-![A picture of the CircuitPython Bundle Manager's other tab open](assets/2/20.png)
+![A picture of the CircuitPython Bundle Manager's other tab open](assets/2/22.png)
 
 - `Open README file` opens this file locally with the default `.md` program. If it cannot find it, it will attempt to 
   download it from GitHub.
@@ -368,7 +402,7 @@ to change this too.
 - `Open GitHub repo link` opens the repository in the default browser.
 - `Copy GitHub repo link` copies the link to this repository on GitHub to the clipboard.
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)
 
 ## Options
 You can find these options in `config.json`, which is in the same directory as 
@@ -393,4 +427,4 @@ auto-generated upon first run. In case it does not happen, (file a issue?) this 
 If you want to reset the config file, either delete it or clear the contents of the config. If you want to reset just 
 one option, remove it from the configuration file.
 
-[Back to table of contents](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager#table-of-contents)
+[Back to table of contents](#table-of-contents)

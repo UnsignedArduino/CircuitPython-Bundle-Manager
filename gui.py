@@ -1085,7 +1085,6 @@ class GUI(tk.Tk):
         self.detect_frame = ttk.Frame(master=self.notebook)
         self.detect_frame.grid(row=0, column=0)
         self.notebook.add(child=self.detect_frame, text="Detect")
-        # TODO: Test on Linux
         # TODO: Test on macOS
         self.create_detect_top_ui()
         self.create_detected_frame()
