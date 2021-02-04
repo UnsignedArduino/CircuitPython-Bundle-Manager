@@ -6,7 +6,6 @@ A module that detects and abstracts detecting what OS we are on.
 Classes list:
 
 - UnknownPlatform(OSError)
-
 - OS(Enum)
 
 -----------
@@ -14,9 +13,7 @@ Classes list:
 Functions list:
 
 - on_windows() -> bool
-
 - on_mac() -> bool
-
 - on_linux() -> bool
 
 """

@@ -39,9 +39,7 @@ def create_logger(name: str = __name__, level: int = logging.DEBUG) -> logging.g
     `logger.exception` everywhere in that module.
 
     :param name: A string with the logger name. Defaults to __name__.
-
     :param level: A integer with the logger level. Defaults to logging.DEBUG.
-
     :return: A logging.getLogger which you can use as a regular logger.
     """
     logger = logging.getLogger(name=name)
