@@ -3,6 +3,11 @@ A Python program that makes it easy to manage modules on a CircuitPython device!
 [file an issue](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/issues/new) or even better, a pull 
 request if you can fix it! 
 
+Note: If you are viewing this file offline, the HTML generated from this markdown isn't perfect. It is highly 
+recommended that you view this file on 
+[GitHub](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/README.md), as it has been tuned for 
+GitHub-style markdown.
+
 ## Table of Contents
 1. [Installing](#installing)
    1. [Installing from a binary](#installing-from-a-binary)
@@ -72,11 +77,14 @@ how the one-file method works
 
 1. [Download](https://git-scm.com/downloads) and install Git. It does not matter what editor you use for Git's default.
     1. Or...download this repo via the `Download ZIP` option under the green `Code` button, shown in Figure 1.1:
-   ![A picture on the Download Zip button on the GitHub page](assets/1/1.png)
+    
+    ![A picture on the Download Zip button on the GitHub page](assets/1/1.png)
+    
 2. [Download](https://www.python.org/downloads/) and install Python **3.9**. (Because I use type definitions)
     1. Make sure to check `Add Python 3.x to PATH`, as shown in Figure 1.2:
        
        ![A picture of the Python 3.9 installer with the Add Python 3.9 to PATH checkbox checked](assets/1/2.png)
+       
     2. Make sure to also install Tk/Tcl support! If you can access the IDLE, then Tk/Tcl is installed, as shown in 
        Figure 1.3: (Only applies if you are using the `Customize installation` option in the installer)
        
@@ -86,8 +94,10 @@ how the one-file method works
        ([Here is a guide on building Python on Debian I found helpful](https://www.vultr.com/docs/upgrade-python-on-debian)) 
        make sure to install `tk-dev`! (with `sudo apt install tk-dev`) and include SSL support! (Via the `--with-ssl` 
        option while configuring.)
+
 3. If you are on Windows, I would also install the 
    [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701) while you are at it.
+
 4. If you installed Git, `cd` into a convenient directory (like the home directory or the desktop) and run:
     ```commandline
     git clone https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager
@@ -95,8 +105,11 @@ how the one-file method works
     ```
     1. If you downloaded the ZIP, move the downloaded ZIP to somewhere convenient (ex. home directory or desktop), 
        extract it, open a terminal and `cd` into the extracted directory.
+
 5. If you run `dir` (or `ls` on Mac and Linux) you should get something like this:
+
     1. `dir` (Windows):
+    
     ```commandline
     01/18/2021  08:11 PM    <DIR>          .
     01/18/2021  08:11 PM    <DIR>          ..
@@ -109,10 +122,13 @@ how the one-file method works
                    4 File(s)         41,921 bytes
                    4 Dir(s)  x bytes free
     ```
+
    2. `ls` (macOS and Linux):
+    
     ```commandline
     bundle_tools  gui.py  gui_tools  main.py  README.md  requirements.txt
     ```
+
 6. If you are going to use a [virtual environment](https://docs.python.org/3/library/venv.html), run the following 
    commands:
     1. Windows:
@@ -125,6 +141,7 @@ how the one-file method works
     python3 -m venv
     source .venv/bin/activate
     ```
+
 7. Install the packages:
     1. Windows:
     ```commandline
@@ -134,6 +151,7 @@ how the one-file method works
     ```commandline
     pip3 install -r requirements.txt
     ```
+
 8. You should now be able to run it!
     1. Windows:
     ```commandline
@@ -152,14 +170,18 @@ If you are not using a virtual environment, then you can just create a `.bat` fi
 `python \path\to\the\main.py` (`python3`, forward slashes, and use `.sh` for the extension on macOS and Linux) on the 
 desktop for convenience. Otherwise, you will need to re-activate the virtual environment everytime you want to run it. 
 I highly recommend using these shell scripts:
+
 1. Windows:
+
 ```batch
 :: Replace this with the path to the directory of the CircuitPython Bundle Manager, should have main.py in it
 cd path\to\the\CircuitPython-Bundle-Manager
 :: You can use python.exe or pythonw.exe - the w one will just supress output of the program
 ".venv\Scripts\pythonw.exe" main.py
 ```
+
 2. macOS and Linux:
+
 ```shell
 # Replace with the path to the CircuitPython Bundle Manager
 cd path/to/the/CircuitPython-Bundle-Manager

@@ -29,6 +29,7 @@ from pathlib import Path
 import traceback
 from github import GithubException
 import requests
+from markdown import markdown as markdown_to_html
 import webbrowser
 import json
 from bundle_tools import drives, modules, bundle_manager, os_detect, imported
@@ -799,6 +800,34 @@ class GUI(tk.Tk):
         else:
             webbrowser.open(path)
 
+    def open_markdown(self, path: Union[str, Path], download_url: str = None) -> None:
+        """
+        Open a file or a web page.
+
+        :param path: A string or a path to the markdown file.
+        :param download_url: If a file, the link to where we can download the file if it is missing.
+        :return: None.
+        """
+        logger.debug(f"Opening markdown file {repr(path)}...")
+        if isinstance(path, Path):
+            path = Path(path)
+        if path.exists():
+            logger.debug(f"Converting markdown to HTML...")
+            html_path = Path.cwd() / (path.stem + ".html")
+            html_path.write_text(markdown_to_html(text=path.read_text(), extensions=["pymdownx.tilde"]))
+            logger.debug(f"Opening HTML in browser...")
+            webbrowser.open(url=html_path.as_uri())
+        else:
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Oh no! An error occurred while opening this file!\n"
+                           f"The file {repr(path)} does not exist!")
+            if download_url and mbox.askokcancel("CircuitPython Bundle Manager: Confirm",
+                                                 "It looks like this file is available on GitHub!\n"
+                                                 "Would you like to download it?"):
+                if download_dialog.download(master=self, url=download_url, path=path,
+                                            show_traceback=self.show_traceback()):
+                    self.open_markdown(path=path)
+
     def make_open_readme_buttons(self) -> None:
         """
         Make the open README.md buttons.
@@ -809,7 +838,7 @@ class GUI(tk.Tk):
         self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
             master=self.readme_frame, text="Open README file",
-            command=lambda: self.open_file(
+            command=lambda: self.open_markdown(
                 Path.cwd() / "README.md",
                 download_url="https://raw.githubusercontent.com/UnsignedArduino/CircuitPython-Bundle-Manager/main/README.md"
             )
