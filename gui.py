@@ -125,7 +125,7 @@ class GUI(tk.Tk):
         """
         self.github_auth_frame = ttk.Frame(master=self.notebook)
         self.github_auth_frame.grid(row=0, column=0, padx=1, pady=1)
-        self.notebook.add(self.github_auth_frame, text="Update Bundle")
+        self.notebook.add(self.github_auth_frame, text="Update" if os_detect.on_linux() else "Update Bundle")
         self.create_username_password_input()
         self.create_access_token_input()
         self.create_github_enterprise_input()
@@ -354,13 +354,19 @@ class GUI(tk.Tk):
         """
         self.enterprise_url_label = ttk.Label(master=self.github_auth_frame, text="GitHub Enterprise URL: ")
         self.enterprise_url_label.grid(row=3, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.enterprise_url_entry = EntryWithRightClick(master=self.github_auth_frame)
+        if os_detect.on_linux():
+            self.enterprise_url_entry = EntryWithRightClick(master=self.github_auth_frame, width=18)
+        else:
+            self.enterprise_url_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.enterprise_url_entry.grid(row=3, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_url_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.enterprise_url_entry, text="Input a GitHub Enterprise URl that matches with the login or token below.")
         self.enterprise_token_label = ttk.Label(master=self.github_auth_frame, text="Login or token: ")
         self.enterprise_token_label.grid(row=4, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.enterprise_token_entry = EntryWithRightClick(master=self.github_auth_frame)
+        if os_detect.on_linux():
+            self.enterprise_token_entry = EntryWithRightClick(master=self.github_auth_frame, width=18)
+        else:
+            self.enterprise_token_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.enterprise_token_entry.grid(row=4, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.enterprise_token_entry, text="Input a GitHub Enterprise login or token that matches with the URL above.")
@@ -373,7 +379,10 @@ class GUI(tk.Tk):
         """
         self.access_token_label = ttk.Label(master=self.github_auth_frame, text="Access token: ")
         self.access_token_label.grid(row=2, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.access_token_entry = EntryWithRightClick(master=self.github_auth_frame)
+        if os_detect.on_linux():
+            self.access_token_entry = EntryWithRightClick(master=self.github_auth_frame, width=18)
+        else:
+            self.access_token_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.access_token_entry.grid(row=2, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.access_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.access_token_entry, text="Input an GitHub access token. Scopes need are:\n - public access")
@@ -388,13 +397,19 @@ class GUI(tk.Tk):
         self.username_label.grid(row=0, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.password_label = ttk.Label(master=self.github_auth_frame, text="Password: ")
         self.password_label.grid(row=1, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
-        self.username_entry = EntryWithRightClick(master=self.github_auth_frame)
+        if os_detect.on_linux():
+            self.username_entry = EntryWithRightClick(master=self.github_auth_frame, width=18)
+        else:
+            self.username_entry = EntryWithRightClick(master=self.github_auth_frame)
         self.username_entry.grid(row=0, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.username_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.username_entry, text="Input a GitHub username that matches the password below.")
         self.password_frame = ttk.Frame(master=self.github_auth_frame)
         self.password_frame.grid(row=1, column=1, padx=0, pady=1, columnspan=2, sticky=tk.NW)
-        self.password_entry = EntryWithRightClick(master=self.password_frame, width=13, show="*")
+        if os_detect.on_linux():
+            self.password_entry = EntryWithRightClick(master=self.password_frame, width=11, show="*")
+        else:
+            self.password_entry = EntryWithRightClick(master=self.password_frame, width=13, show="*")
         self.password_entry.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.password_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.password_entry, text="Input a GitHub password that matches the username above.")
@@ -754,8 +769,14 @@ class GUI(tk.Tk):
 
         :return: None.
         """
-        connected_drives = drives.list_connected_drives(not self.show_all_drives_var.get(),
-                                                        Path(self.load_key("unix_drive_mount_point")))
+        try:
+            connected_drives = drives.list_connected_drives(not self.show_all_drives_var.get(),
+                                                            Path(self.load_key("unix_drive_mount_point")))
+        except OSError:
+            logger.error(f"Could not get connected drives!\n\n{traceback.format_exc()}")
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Oh no! An error occurred while getting a list of connected drives!\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
+            return
         logger.debug(f"Connected drives: {repr(connected_drives)}")
         self.drive_combobox["values"] = connected_drives
         if self.drive_combobox.get() == "" and len(drives.list_connected_drives(not self.show_all_drives_var.get(), Path(self.load_key("unix_drive_mount_point")))) > 0:
