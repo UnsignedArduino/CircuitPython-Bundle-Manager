@@ -1149,6 +1149,7 @@ class GUI(tk.Tk):
         :return: None.
         """
         self.create_gui()
+        self.lift()
         self.mainloop()
 
     def __exit__(self, err_type=None, err_value=None, err_traceback=None):
