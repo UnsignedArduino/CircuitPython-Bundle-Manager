@@ -92,8 +92,10 @@ how the one-file method works
    
        If you are building Python, 
        ([Here is a guide on building Python on Debian I found helpful](https://www.vultr.com/docs/upgrade-python-on-debian)) 
-       make sure to install `tk-dev`! (with `sudo apt install tk-dev`) and include SSL support! (Via the `--with-ssl` 
-       option while configuring.)
+       make sure to install `tk-dev`! (with `sudo apt install tk-dev`), `libffi-dev`, (with 
+       `sudo apt install libffi-dev`) include SSL support, (via the `--with-ssl` 
+       option while configuring.) and install `python-dev`, (`sudo apt install python-dev`) `python3-dev`, 
+       (`sudo apt install python3-dev`) and build with `--enabled-shared`!
 
 3. If you are on Windows, I would also install the 
    [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701) while you are at it.
