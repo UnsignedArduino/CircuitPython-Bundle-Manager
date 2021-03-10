@@ -20,8 +20,6 @@ from bundle_tools.create_logger import create_logger
 from pathlib import Path
 import logging
 
-# TODO: Note in README that you need Python 3.9!
-
 LEVEL = logging.DEBUG
 
 log_path = Path.cwd() / "log.log"
