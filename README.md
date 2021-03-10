@@ -91,8 +91,10 @@ how the one-file method works
        ![A picture of the Python 3.9 installer with the tcl/tk and IDLE checkbox checked](assets/1/3.png)
    
        If you are building Python,
-       [Here is a guide on building Python on Debian I found helpful.](https://linuxize.com/post/how-to-install-python-3-8-on-debian-10/)
-
+       [here is a guide on building Python on Debian I found helpful](https://linuxize.com/post/how-to-install-python-3-8-on-debian-10/).
+       Before building, you may need to install a bunch of packages using `apt`: 
+       `sudo apt install libbz2-dev libgdbm-dev libgdbm-compat-dev liblzma-dev libsqlite3-dev libssl-dev uuid-dev libreadline-dev zlib1g-dev tk-dev libffi-dev`
+       
 3. If you are on Windows, I would also install the 
    [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701) while you are at it.
 
