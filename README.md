@@ -165,8 +165,11 @@ how the one-file method works
 [Back to table of contents](#table-of-contents)
 
 ## Running
-**This only applies if you installed from source!**
-If you are not using a virtual environment, then you can just create a `.bat` file containing 
+If you installed from a binary, then just run the `CircuitPython Bundle Manager.exe` (`CircuitPython Bundle Manager` 
+macOS and Linux) file. You may want to create a shortcut/symlink to it on the desktop or create a menu entry. If you 
+would like to submit an icon, you can open an issue for it with the icon. 
+
+If you install from source and you are not using a virtual environment, then you can just create a `.bat` file containing 
 `python \path\to\the\main.py` (`python3`, forward slashes, and use `.sh` for the extension on macOS and Linux) on the 
 desktop for convenience. Otherwise, you will need to re-activate the virtual environment everytime you want to run it. 
 I highly recommend using these shell scripts:
