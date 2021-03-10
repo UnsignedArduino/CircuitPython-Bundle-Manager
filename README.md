@@ -80,7 +80,8 @@ how the one-file method works
     
     ![A picture on the Download Zip button on the GitHub page](assets/1/1.png)
     
-2. [Download](https://www.python.org/downloads/) and install Python **3.9**. (Because I use type definitions)
+2. [Download](https://www.python.org/downloads/) and install Python **3.9**. (Because I use type definitions, but 3.8 
+   seems to work too)
     1. Make sure to check `Add Python 3.x to PATH`, as shown in Figure 1.2:
        
        ![A picture of the Python 3.9 installer with the Add Python 3.9 to PATH checkbox checked](assets/1/2.png)
