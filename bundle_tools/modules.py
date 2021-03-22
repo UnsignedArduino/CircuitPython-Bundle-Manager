@@ -55,6 +55,8 @@ def list_modules(start_path: Path = None) -> list[str]:
         if lib.name[0] != "." # ignore hidden files
     ]
     logger.debug(f"Modules found: {repr(libs)}")
+    # sort the modules here, so we have a stable list
+    libs.sort()
     return libs
 
 
