@@ -48,17 +48,13 @@ def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Pa
         logger.debug("Platform is Mac OSX!")
         drive_mount_point = Path("/Volumes")
         for path in drive_mount_point.glob("*"):
-            if circuitpython_only and (path / "boot_out.txt").exists():
-                connected_drives.append(path)
-            else:
+            if not circuitpython_only or (path / "boot_out.txt").exists():
                 connected_drives.append(path)
     elif os_detect.on_linux():
         logger.debug("Platform is Linux!")
         for path in drive_mount_point.glob("*"):
             try:
-                if circuitpython_only and (path / "boot_out.txt").exists():
-                    connected_drives.append(path)
-                else:
+                if not circuitpython_only or (path / "boot_out.txt").exists():
                     connected_drives.append(path)
             except PermissionError:
                 if not circuitpython_only:
