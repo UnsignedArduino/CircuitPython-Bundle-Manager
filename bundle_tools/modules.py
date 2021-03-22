@@ -49,10 +49,14 @@ def list_modules(start_path: Path = None) -> list[str]:
     if not lib_directory.exists():
         logger.error(f"The lib directory '{lib_directory}' does not exist on the CircuitPython device!")
         raise RuntimeError(f"The lib directory '{lib_directory}' does not exist on the CircuitPython device!")
-    libs = list(lib_directory.glob("*"))
-    for index, lib in enumerate(libs):
-        libs[index] = lib.name
+    libs = [
+        lib.name
+        for lib in list(lib_directory.glob("*"))
+        if lib.name[0] != "." # ignore hidden files
+    ]
     logger.debug(f"Modules found: {repr(libs)}")
+    # sort the modules here, so we have a stable list
+    libs.sort()
     return libs
 
 
@@ -112,5 +116,5 @@ def uninstall_module(module_path: Path = None) -> None:
     if module_path.is_file():
         module_path.unlink()
     else:
-        rmtree(module_path)
+        rmtree(module_path, ignore_errors=True)
     logger.info(f"Successfully uninstalled {repr(module_path)}!")
