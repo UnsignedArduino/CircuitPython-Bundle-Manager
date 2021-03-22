@@ -936,6 +936,27 @@ class GUI(tk.Tk):
         self.copy_github_repo_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.copy_github_repo_button, text="Copy the link to the GitHub repo for this project to the clipboard.")
 
+    def make_open_issue_buttons(self) -> None:
+        """
+        Make the open new issue buttons.
+
+        :return: None.
+        """
+        self.github_repo_frame = ttk.Frame(master=self.other_frame)
+        self.github_repo_frame.grid(row=8, column=0, padx=1, pady=1, sticky=tk.NW)
+        self.open_github_repo_button = ttk.Button(
+            master=self.github_repo_frame, text="Open an issue",
+            command=lambda: self.open_file("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/issues/new")
+        )
+        self.open_github_repo_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.open_github_repo_button, text="Open a new issue panel for this project in the default browser.")
+        self.copy_github_repo_button = ttk.Button(
+            master=self.github_repo_frame, text="Copy link to open issue",
+            command=lambda: self.copy_to_clipboard("https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/issues/new")
+        )
+        self.copy_github_repo_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.copy_github_repo_button, text="Copy the link to open a new issue panel for this project to the clipboard.")
+
     def create_other_tab(self) -> None:
         """
         Create the other tab.
@@ -952,6 +973,8 @@ class GUI(tk.Tk):
         self.make_open_log_buttons()
         ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_github_repo_buttons()
+        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=7, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        self.make_open_issue_buttons()
 
     def show_traceback(self) -> bool:
         """
