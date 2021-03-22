@@ -116,5 +116,5 @@ def uninstall_module(module_path: Path = None) -> None:
     if module_path.is_file():
         module_path.unlink()
     else:
-        rmtree(module_path)
+        rmtree(module_path, ignore_errors=True)
     logger.info(f"Successfully uninstalled {repr(module_path)}!")
