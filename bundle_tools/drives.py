@@ -46,10 +46,7 @@ def list_connected_drives(circuitpython_only: bool = True, drive_mount_point: Pa
                 connected_drives.append(drive_path.parent)
     elif os_detect.on_mac():
         logger.debug("Platform is Mac OSX!")
-        logger.info("Hey, if this works, please tell me at "
-                    "https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/issues!")
-        logger.info(f"If it doesn't, still tell me please!")
-        # TODO: Someone test this!
+        drive_mount_point = Path("/Volumes")
         for path in drive_mount_point.glob("*"):
             if circuitpython_only and (path / "boot_out.txt").exists():
                 connected_drives.append(path)
