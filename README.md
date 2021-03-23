@@ -10,8 +10,9 @@ GitHub-style markdown.
 
 ## Table of Contents
 1. [Installing](#installing)
-   1. [Installing from a binary](#installing-from-a-binary)
-   2. [Installing from source](#installing-from-source)
+   1. [Release notes for v1.1.0](#release-notes-for-v110)
+   2. [Installing from a binary](#installing-from-a-binary)
+   3. [Installing from source](#installing-from-source)
 2. [Running](#running)
 3. [How to use](#how-to-use)
    1. [First use](#first-run)
