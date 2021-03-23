@@ -858,6 +858,28 @@ class GUI(tk.Tk):
                                             show_traceback=self.show_traceback()):
                     self.open_markdown(path=path)
 
+    def start_open_readme_thread(self) -> None:
+        """
+        Start the thread to open the README.md.
+
+        :return: None.
+        """
+        self.open_readme_button.config(state=tk.DISABLED)
+        open_readme_thread = Thread(target=self.open_readme, args=(), daemon=True)
+        open_readme_thread.start()
+
+    def open_readme(self) -> None:
+        """
+        Open the README.md. This will block - better to call start_open_readme_thread instead.
+
+        :return: None.
+        """
+        self.open_markdown(
+            Path.cwd() / "README.md",
+            download_url="https://raw.githubusercontent.com/UnsignedArduino/CircuitPython-Bundle-Manager/main/README.md"
+        )
+        self.open_readme_button.config(state=tk.NORMAL)
+
     def make_open_readme_buttons(self) -> None:
         """
         Make the open README.md buttons.
@@ -867,11 +889,7 @@ class GUI(tk.Tk):
         self.readme_frame = ttk.Frame(master=self.other_frame_interior)
         self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
-            master=self.readme_frame, text="Open README file",
-            command=lambda: self.open_markdown(
-                Path.cwd() / "README.md",
-                download_url="https://raw.githubusercontent.com/UnsignedArduino/CircuitPython-Bundle-Manager/main/README.md"
-            )
+            master=self.readme_frame, text="Open README file", command=self.start_open_readme_thread
         )
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
