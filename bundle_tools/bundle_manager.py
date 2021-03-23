@@ -162,7 +162,7 @@ def update_bundle(version: int = None, github_instance: Github = None) -> Path:
     logger.debug(f"Deleting {repr(download_path.parent)}...")
     rmtree(download_path.parent)
     logger.debug(f"Found {len(list(unzip_path.parent.glob('*')))} bundles!")
-    while len(list(unzip_path.parent.glob("*"))) > 5:
+    while len(list(unzip_path.parent.glob("*"))) > 2:
         bundles = list(unzip_path.parent.glob("*"))
         bundles.sort()
         logger.debug(f"Deleting {repr(bundles[0])}...")
