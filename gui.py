@@ -652,13 +652,15 @@ class GUI(tk.Tk):
         drive = Path(self.drive_combobox.get())
         logger.debug(f"Selected drive is {repr(drive)}")
         try:
-            module_path = modules.get_lib_path(drive) / modules.list_modules(drive)[self.installed_modules_listbox.curselection()[0]]
+            module_path = modules.get_lib_path(drive) / self.installed_modules_listbox.get(self.installed_modules_listbox.curselection())
             logger.debug(f"Attempting to uninstall module at {repr(module_path)}")
             modules.uninstall_module(module_path)
         except FileNotFoundError:
             logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
-                           "Failed to uninstall module - did you input a drive that exists?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
+                           "Failed to uninstall module - did you input a drive that exists?\n"
+                           "Try reloading the list of installed modules before uninstall again!\n"
+                           "\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except RuntimeError:
             logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
