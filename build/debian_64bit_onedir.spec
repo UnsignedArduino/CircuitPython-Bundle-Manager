@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['/home/pi/PycharmProjects/CircuitPython-Bundle-Manager/main.py'],
-             pathex=['/home/pi/PycharmProjects/CircuitPython-Bundle-Manager/main.py'],
+a = Analysis(['/home/pi/CircuitPython-Bundle-Manager/main.py'],
+             pathex=['/home/pi/CircuitPython-Bundle-Manager/main.py'],
              binaries=[],
              datas=[],
              hiddenimports=[],

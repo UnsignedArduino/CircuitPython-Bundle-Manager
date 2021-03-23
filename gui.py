@@ -993,7 +993,14 @@ class GUI(tk.Tk):
         self.other_frame = ttk.Frame(master=self.notebook)
         self.other_frame.grid(row=0, column=0)
         self.notebook.add(self.other_frame, text="Other")
-        self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, width=100, height=190)
+        if os_detect.on_linux():        
+            self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, 
+                width=90, height=220
+            )
+        else:
+            self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, 
+                width=100, height=190
+            )
         self.other_frame_interior.grid(row=0, column=0)
         self.other_frame_interior = self.other_frame_interior.interior
         self.make_open_readme_buttons()
