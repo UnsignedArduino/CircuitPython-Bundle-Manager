@@ -24,9 +24,8 @@ GitHub-style markdown.
 
 ## Installing
 
-~~Sooner or later, I will get binaries for Windows and Linux. (Sorry macOS users - I don't have a macOS computer!) For 
-now, you are going to have to install everything manually.~~ Binaries are now available for Windows and Linux! Check it 
-out [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
+Binaries are now available for Windows and Linux! (macOS users are going to have to wait a bit as I get a working VM) 
+Check it out [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
 
 ### Installing from a binary
 
@@ -427,6 +426,8 @@ to change this too.
 - `Open log file location` opens the location of the log file in the default file manager.
 - `Open GitHub repo link` opens the repository in the default browser.
 - `Copy GitHub repo link` copies the link to this repository on GitHub to the clipboard.
+- `Open an issue` opens the new issue panel in the default browser.
+- `Copy link to open issue` copies the link to the new issue panel. 
 
 [Back to table of contents](#table-of-contents)
 
