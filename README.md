@@ -36,6 +36,8 @@ Changes:
 - Added a new `Detect` tab to automatically detect dependencies, saving a couple clicks! (Still very new, so report an 
   issue if there are problems!)
 
+[Back to table of contents](#table-of-contents)
+
 ### Installing from a binary
 
 No installation is required! (Well, there is no installer. You are still going to have to create a shortcut/symlink to 
