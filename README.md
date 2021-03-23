@@ -424,12 +424,14 @@ Figure 2.21: After clicking on `adafruit_requests` in the listbox and pressing `
 Figure 2.22: The `Other` tab in the CircuitPython Bundle Manager. The interface may change and I will probably forget 
 to change this too.
 
-![A picture of the CircuitPython Bundle Manager's other tab open](assets/2/22.png)
+![A picture of the CircuitPython Bundle Manager's other tab open](assets/2/22.gif)
 
-- `Open README file` opens this file locally with the default `.md` program. If it cannot find it, it will attempt to 
+- `Open README file` opens this file locally with the default `.html`/`.md` program. If it cannot find it, it will attempt to 
   download it from GitHub.
+- `Convert to HTML` will decide whether to convert the markdown to HTML before showing it to you. 
 - `Open README file location` opens the location of the README file in the default file manager.
 - `Open config file` opens the configuration file in the default `.json` program.
+- `Reset config file` resets the config file but only after you confirm doing so. 
 - `Open config file location` opens the location of the config file in the default file manager.
 - `Open log file` opens the log file in the default `.log` program.
 - `Open log file location` opens the location of the log file in the default file manager.
@@ -460,7 +462,7 @@ auto-generated upon first run. In case it does not happen, (file a issue?) this 
 - `unix_drive_mount_point` should be a string of a path that points to the place where your distro automatically mounts 
   drives. Only applies to Unix-based systems.
 
-If you want to reset the config file, either delete it or clear the contents of the config. If you want to reset just 
-one option, remove it from the configuration file.
+If you want to reset the config file, there is a button to reset the configuration file in the `Other` tab. If you want 
+to reset just one option, remove it from the configuration file.
 
 [Back to table of contents](#table-of-contents)
