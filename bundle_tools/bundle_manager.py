@@ -167,6 +167,13 @@ def update_bundle(version: int = None, github_instance: Github = None) -> Path:
         bundles.sort()
         logger.debug(f"Deleting {repr(bundles[0])}...")
         rmtree(bundles[0])
-    logger.debug(f"Path to latest bundle is {repr(unzip_path / bundle_name[:-4] / 'lib')}")
+    lib_path = unzip_path / bundle_name[:-4] / "lib"
+    examples_path = unzip_path / bundle_name[:-4] / "examples"
+    logger.debug(f"Removing {repr(examples_path)}")
+    rmtree(examples_path, ignore_errors=True)
+    requirements_path = unzip_path / bundle_name[:-4] / "requirements"
+    logger.debug(f"Removing {repr(requirements_path)}")
+    rmtree(requirements_path, ignore_errors=True)
+    logger.debug(f"Path to latest bundle is {repr(lib_path)}")
     logger.info(f"Finished updating bundle!")
-    return unzip_path / bundle_name[:-4] / "lib"
+    return lib_path
