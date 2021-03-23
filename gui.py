@@ -901,15 +901,15 @@ class GUI(tk.Tk):
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
         self.toggle_html_var = tk.BooleanVar(value=True)
         self.toggle_html_checkbutton = ttk.Checkbutton(
-            master=self.readme_frame, text="Convert markdown to HTML", variable=self.toggle_html_var
+            master=self.readme_frame, text="Convert to HTML", variable=self.toggle_html_var
         )
-        self.toggle_html_checkbutton.grid(row=1, column=0, columnspan=2, padx=1, pady=1, sticky=tk.NW)
+        self.toggle_html_checkbutton.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.toggle_html_checkbutton, text="Whether to convert the markdown to HTML before opening.")
         self.open_readme_button_location = ttk.Button(
             master=self.readme_frame, text="Open README file location",
             command=lambda: self.open_file(Path.cwd())
         )
-        self.open_readme_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.open_readme_button_location.grid(row=1, column=0, columnspan=2, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button_location, text="Open the README file location in the default file manager.")
 
     def reset_config(self) -> None:
@@ -918,6 +918,7 @@ class GUI(tk.Tk):
 
         :return: None.
         """
+        logger.warning(f"Resetting configuration file at {repr(self.config_path)}")
         self.config_path.write_text("")
         self.create_config()
 
@@ -927,6 +928,7 @@ class GUI(tk.Tk):
 
         :return: None.
         """
+        logger.debug("User asked to clear configuration file!")
         if mbox.askyesno(title="CircuitPython Bundle Manager: Confirm",
                          message="Are you sure you want to clear the configuration file?",
                          icon="question", default="no"):
@@ -952,10 +954,10 @@ class GUI(tk.Tk):
             master=self.config_frame, text="Open config file location",
             command=lambda: self.open_file(Path.cwd())
         )
-        self.open_config_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
+        self.open_config_button_location.grid(row=1, column=0, columnspan=2, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
         self.reset_config_button = ttk.Button(master=self.config_frame, text="Reset config file", command=self.confirm_reset_config)
-        self.reset_config_button.grid(row=1, column=0, columnspan=2, padx=1, pady=1, sticky=tk.NW)
+        self.reset_config_button.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.reset_config_button, text="Reset the config file.")
 
     def make_open_log_buttons(self) -> None:
