@@ -703,6 +703,10 @@ class GUI(tk.Tk):
                 bundle_path / selected,
                 Path(self.drive_combobox.get()) / "lib"
             )
+        except FileExistsError:
+            logger.exception("Uh oh! Something happened!")
+            mbox.showerror("CircuitPython Bundle Manager: ERROR!",
+                           "Failed to install module - did you already install the module?\n\n" + (traceback.format_exc() if self.show_traceback() else ""))
         except FileNotFoundError:
             logger.exception("Uh oh! Something happened!")
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
