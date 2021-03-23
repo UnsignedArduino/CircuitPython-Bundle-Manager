@@ -33,7 +33,7 @@ from markdown import markdown as markdown_to_html
 import webbrowser
 import json
 from bundle_tools import drives, modules, bundle_manager, os_detect, imported
-from typing import Union
+from typing import Union, Any
 from bundle_tools.create_logger import create_logger
 import logging
 
@@ -76,27 +76,30 @@ class GUI(tk.Tk):
             logger.debug("Destroying main window!")
             self.destroy()
 
-    def save_key(self, key: str = None, value: str = None) -> None:
+    def save_key(self, key: str = None, value: Any = None) -> None:
         """
         Save a key to the config file.
 
         :param key: A string.
-        :param value: A string.
+        :param value: Something.
         :return: None.
         """
         if not self.config_path.exists():
             self.config_path.write_text("{}")
-        old_json = json.loads(self.config_path.read_text())
+        try:
+            old_json = json.loads(self.config_path.read_text())
+        except json.decoder.JSONDecodeError:
+            old_json = {}
         logger.debug(f"Setting {repr(key)} to {repr(value)}!")
         old_json[key] = value
         self.config_path.write_text(json.dumps(old_json, sort_keys=True, indent=4))
 
-    def load_key(self, key: str) -> Union[str, None]:
+    def load_key(self, key: str) -> Any:
         """
         Retrieves a key from the config file.
 
         :param key: A string.
-        :return: A string of the value of the key, or None if it was not found.
+        :return: Something, or None if it was not found.
         """
         if not self.config_path.exists():
             self.config_path.write_text("{}")
@@ -995,11 +998,11 @@ class GUI(tk.Tk):
         :return: None.
         """
         if not self.load_key("last_circuit_python_bundle_version"):
-            self.save_key("last_circuit_python_bundle_version", "6")
+            self.save_key("last_circuit_python_bundle_version", 6)
         if not self.load_key("last_auth_method_used"):
             self.save_key("last_auth_method_used", "username and password")
         if not self.load_key("show_traceback_in_error_messages"):
-            self.save_key("show_traceback_in_error_messages", "false")
+            self.save_key("show_traceback_in_error_messages", False)
         if not self.load_key("unix_drive_mount_point"):
             self.save_key("unix_drive_mount_point", "/media")
 
