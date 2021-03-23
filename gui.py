@@ -830,11 +830,12 @@ class GUI(tk.Tk):
         else:
             webbrowser.open(path)
 
-    def open_markdown(self, path: Union[str, Path], download_url: str = None) -> None:
+    def open_markdown(self, path: Union[str, Path], convert_to_html: bool = True, download_url: str = None) -> None:
         """
         Open a file or a web page.
 
         :param path: A string or a path to the markdown file.
+        :param convert_to_html: A bool on whether to convert the markdown to HTML or not.
         :param download_url: If a file, the link to where we can download the file if it is missing.
         :return: None.
         """
@@ -842,11 +843,15 @@ class GUI(tk.Tk):
         if isinstance(path, Path):
             path = Path(path)
         if path.exists():
-            logger.debug(f"Converting markdown to HTML...")
-            html_path = Path.cwd() / (path.stem + ".html")
-            html_path.write_text(markdown_to_html(text=path.read_text(), extensions=["pymdownx.tilde"]))
-            logger.debug(f"Opening HTML in browser...")
-            webbrowser.open(url=html_path.as_uri())
+            if convert_to_html:
+                logger.debug(f"Converting markdown to HTML...")
+                html_path = Path.cwd() / (path.stem + ".html")
+                html_path.write_text(markdown_to_html(text=path.read_text(), extensions=["pymdownx.tilde"]))
+                logger.debug(f"Opening HTML in browser...")
+                webbrowser.open(url=html_path.as_uri())
+            else:
+                logger.debug(f"Opening {repr(path)} as markdown!")
+                webbrowser.open(str(path))
         else:
             mbox.showerror("CircuitPython Bundle Manager: ERROR!",
                            "Oh no! An error occurred while opening this file!\n"
@@ -876,6 +881,7 @@ class GUI(tk.Tk):
         """
         self.open_markdown(
             Path.cwd() / "README.md",
+            convert_to_html=self.toggle_html_var.get(),
             download_url="https://raw.githubusercontent.com/UnsignedArduino/CircuitPython-Bundle-Manager/main/README.md"
         )
         self.open_readme_button.config(state=tk.NORMAL)
@@ -893,6 +899,12 @@ class GUI(tk.Tk):
         )
         self.open_readme_button.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button, text="Open the README file in the default markdown editor.")
+        self.toggle_html_var = tk.BooleanVar(value=True)
+        self.toggle_html_checkbutton = ttk.Checkbutton(
+            master=self.readme_frame, text="Convert markdown to HTML", variable=self.toggle_html_var
+        )
+        self.toggle_html_checkbutton.grid(row=1, column=0, columnspan=2, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.toggle_html_checkbutton, text="Whether to convert the markdown to HTML before opening.")
         self.open_readme_button_location = ttk.Button(
             master=self.readme_frame, text="Open README file location",
             command=lambda: self.open_file(Path.cwd())
