@@ -991,7 +991,7 @@ class GUI(tk.Tk):
         :return: None.
         """
         try:
-            return self.load_key("show_traceback_in_error_messages").lower() in ("yes", "true", "1")
+            return bool(self.load_key("show_traceback_in_error_messages"))
         except AttributeError:
             return False
 
