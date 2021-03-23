@@ -45,7 +45,7 @@ def get_imported(code: str) -> tuple[list[str], list[str]]:
                 if parts[1] not in modules:
                     modules.append(parts[1])
             else:
-                module = f"{parts[1]}.{parts[3]}"
+                module = parts[1]
                 if module not in modules:
                     modules.append(module)
             module_lines.append(line)
