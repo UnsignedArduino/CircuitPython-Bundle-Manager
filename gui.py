@@ -24,6 +24,7 @@ from gui_tools.right_click.combobox import ComboboxWithRightClick
 from gui_tools.right_click.listbox import ListboxWithRightClick
 from gui_tools.idlelib_clone import tooltip
 from gui_tools import download_dialog
+from gui_tools.scrollableFrame import VerticalScrolledFrame
 from threading import Thread
 from pathlib import Path
 import traceback
@@ -863,7 +864,7 @@ class GUI(tk.Tk):
 
         :return: None.
         """
-        self.readme_frame = ttk.Frame(master=self.other_frame)
+        self.readme_frame = ttk.Frame(master=self.other_frame_interior)
         self.readme_frame.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_readme_button = ttk.Button(
             master=self.readme_frame, text="Open README file",
@@ -887,7 +888,7 @@ class GUI(tk.Tk):
 
         :return: None.
         """
-        self.config_frame = ttk.Frame(master=self.other_frame)
+        self.config_frame = ttk.Frame(master=self.other_frame_interior)
         self.config_frame.grid(row=2, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_config_button = ttk.Button(
             master=self.config_frame, text="Open config file",
@@ -908,7 +909,7 @@ class GUI(tk.Tk):
 
         :return: None.
         """
-        self.log_frame = ttk.Frame(master=self.other_frame)
+        self.log_frame = ttk.Frame(master=self.other_frame_interior)
         self.log_frame.grid(row=4, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_log_button = ttk.Button(
             master=self.log_frame, text="Open log file",
@@ -929,7 +930,7 @@ class GUI(tk.Tk):
 
         :return: None.
         """
-        self.github_repo_frame = ttk.Frame(master=self.other_frame)
+        self.github_repo_frame = ttk.Frame(master=self.other_frame_interior)
         self.github_repo_frame.grid(row=6, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_github_repo_button = ttk.Button(
             master=self.github_repo_frame, text="Open GitHub repo link",
@@ -950,7 +951,7 @@ class GUI(tk.Tk):
 
         :return: None.
         """
-        self.github_repo_frame = ttk.Frame(master=self.other_frame)
+        self.github_repo_frame = ttk.Frame(master=self.other_frame_interior)
         self.github_repo_frame.grid(row=8, column=0, padx=1, pady=1, sticky=tk.NW)
         self.open_github_repo_button = ttk.Button(
             master=self.github_repo_frame, text="Open an issue",
@@ -974,14 +975,17 @@ class GUI(tk.Tk):
         self.other_frame = ttk.Frame(master=self.notebook)
         self.other_frame.grid(row=0, column=0)
         self.notebook.add(self.other_frame, text="Other")
+        self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, width=100, height=190)
+        self.other_frame_interior.grid(row=0, column=0)
+        self.other_frame_interior = self.other_frame_interior.interior
         self.make_open_readme_buttons()
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(master=self.other_frame_interior, orient=tk.HORIZONTAL).grid(row=1, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_config_buttons()
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(master=self.other_frame_interior, orient=tk.HORIZONTAL).grid(row=3, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_log_buttons()
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(master=self.other_frame_interior, orient=tk.HORIZONTAL).grid(row=5, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_github_repo_buttons()
-        ttk.Separator(master=self.other_frame, orient=tk.HORIZONTAL).grid(row=7, column=0, padx=1, pady=3, sticky=tk.NSEW)
+        ttk.Separator(master=self.other_frame_interior, orient=tk.HORIZONTAL).grid(row=7, column=0, padx=1, pady=3, sticky=tk.NSEW)
         self.make_open_issue_buttons()
 
     def show_traceback(self) -> bool:
