@@ -912,6 +912,28 @@ class GUI(tk.Tk):
         self.open_readme_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_readme_button_location, text="Open the README file location in the default file manager.")
 
+    def reset_config(self) -> None:
+        """
+        Reset the configuration file.
+
+        :return: None.
+        """
+        self.config_path.write_text("")
+        self.create_config()
+
+    def confirm_reset_config(self) -> None:
+        """
+        Show a pop up asking if you want to reset the configuration file and reset if yes.
+
+        :return: None.
+        """
+        if mbox.askyesno(title="CircuitPython Bundle Manager: Confirm",
+                         message="Are you sure you want to clear the configuration file?",
+                         icon="question", default="no"):
+            self.reset_config()
+            mbox.showinfo(title="CircuitPython Bundle Manager: Info",
+                          message="Configuration file successfully reset!")
+
     def make_open_config_buttons(self) -> None:
         """
         Make the open config buttons.
@@ -932,6 +954,9 @@ class GUI(tk.Tk):
         )
         self.open_config_button_location.grid(row=0, column=1, padx=1, pady=1, sticky=tk.NW)
         tooltip.Hovertip(self.open_config_button_location, text="Open the config file location in the default file manager.")
+        self.reset_config_button = ttk.Button(master=self.config_frame, text="Reset config file", command=self.confirm_reset_config)
+        self.reset_config_button.grid(row=1, column=0, columnspan=2, padx=1, pady=1, sticky=tk.NW)
+        tooltip.Hovertip(self.reset_config_button, text="Reset the config file.")
 
     def make_open_log_buttons(self) -> None:
         """
