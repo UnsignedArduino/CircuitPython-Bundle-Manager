@@ -24,7 +24,7 @@ from gui_tools.right_click.combobox import ComboboxWithRightClick
 from gui_tools.right_click.listbox import ListboxWithRightClick
 from gui_tools.idlelib_clone import tooltip
 from gui_tools import download_dialog
-from gui_tools.scrollableFrame import VerticalScrolledFrame
+from gui_tools.scrollable_frame import VerticalScrolledFrame
 from threading import Thread
 from pathlib import Path
 import traceback
@@ -994,13 +994,9 @@ class GUI(tk.Tk):
         self.other_frame.grid(row=0, column=0)
         self.notebook.add(self.other_frame, text="Other")
         if os_detect.on_linux():        
-            self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, 
-                width=90, height=220
-            )
+            self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, width=90, height=220)
         else:
-            self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, 
-                width=100, height=190
-            )
+            self.other_frame_interior = VerticalScrolledFrame(master=self.other_frame, width=100, height=190)
         self.other_frame_interior.grid(row=0, column=0)
         self.other_frame_interior = self.other_frame_interior.interior
         self.make_open_readme_buttons()
