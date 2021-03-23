@@ -27,6 +27,14 @@ GitHub-style markdown.
 Binaries are now available for Windows and Linux! (macOS users are going to have to wait a bit as I get a working VM) 
 Check it out [here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases).
 
+### Release notes for v1.1.0
+You can get the v1.1.0 release 
+[here](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/releases/tag/v1.1.0).
+
+Changes:
+- Added a new `Detect` tab to automatically detect dependencies, saving a couple clicks! (Still very new, so report an 
+  issue if there are problems!)
+
 ### Installing from a binary
 
 No installation is required! (Well, there is no installer. You are still going to have to create a shortcut/symlink to 
