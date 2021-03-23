@@ -459,7 +459,6 @@ class GUI(tk.Tk):
             except RuntimeError:
                 logger.exception("Uh oh! Something happened!")
                 installed_modules = []
-            installed_modules.sort()
             logger.debug(f"Installed modules: {repr(installed_modules)}")
             self.installed_modules_listbox_var.set(installed_modules)
         except (AttributeError, RuntimeError):
