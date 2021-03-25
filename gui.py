@@ -150,6 +150,19 @@ class GUI(tk.Tk):
         self.updating = False
         self.check_update_button()
 
+    def try_updating_bundle_thread(self, event=None) -> None:
+        """
+        Try to update the bundle. Does nothing if cannot.
+
+        :event: Something that Tkinter passes in but we don't care about
+        :return: None
+        """
+        logger.debug(f"State of update bundle button is {repr(self.update_bundle_button['state'])}")
+        if self.update_bundle_button["state"] == "normal":
+            self.start_update_bundle_thread()
+        else:
+            logger.debug("Cannot start bundle update thread as auth requirements aren't satisfied")
+
     def start_update_bundle_thread(self) -> None:
         """
         Start the bundle update thread.
@@ -365,6 +378,7 @@ class GUI(tk.Tk):
         self.enterprise_url_entry.grid(row=3, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_url_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.enterprise_url_entry, text="Input a GitHub Enterprise URl that matches with the login or token below.")
+        self.enterprise_url_entry.bind("<Return>", self.try_updating_bundle_thread)
         self.enterprise_token_label = ttk.Label(master=self.github_auth_frame, text="Login or token: ")
         self.enterprise_token_label.grid(row=4, column=0, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         if os_detect.on_linux():
@@ -374,6 +388,7 @@ class GUI(tk.Tk):
         self.enterprise_token_entry.grid(row=4, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.enterprise_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.enterprise_token_entry, text="Input a GitHub Enterprise login or token that matches with the URL above.")
+        self.enterprise_token_entry.bind("<Return>", self.try_updating_bundle_thread)
 
     def create_access_token_input(self) -> None:
         """
@@ -390,6 +405,7 @@ class GUI(tk.Tk):
         self.access_token_entry.grid(row=2, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.access_token_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.access_token_entry, text="Input an GitHub access token. Scopes need are:\n - public access")
+        self.access_token_entry.bind("<Return>", self.try_updating_bundle_thread)
 
     def create_username_password_input(self) -> None:
         """
@@ -408,6 +424,7 @@ class GUI(tk.Tk):
         self.username_entry.grid(row=0, column=1, padx=1, pady=1, columnspan=2, sticky=tk.NW)
         self.username_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.username_entry, text="Input a GitHub username that matches the password below.")
+        self.username_entry.bind("<Return>", self.try_updating_bundle_thread)
         self.password_frame = ttk.Frame(master=self.github_auth_frame)
         self.password_frame.grid(row=1, column=1, padx=0, pady=1, columnspan=2, sticky=tk.NW)
         if os_detect.on_linux():
@@ -417,6 +434,7 @@ class GUI(tk.Tk):
         self.password_entry.grid(row=0, column=0, padx=1, pady=1, sticky=tk.NW)
         self.password_entry.initiate_right_click_menu()
         tooltip.Hovertip(self.password_entry, text="Input a GitHub password that matches the username above.")
+        self.password_entry.bind("<Return>", self.try_updating_bundle_thread)
         self.show_password_button = ttk.Button(master=self.password_frame, width=5, text="Show", command=self.toggle_password_visibility)
         self.show_password_button.grid(row=0, column=1, padx=1, pady=0, sticky=tk.NW)
         tooltip.Hovertip(self.show_password_button, text="Show or hide the password")
