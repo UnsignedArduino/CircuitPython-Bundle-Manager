@@ -863,10 +863,11 @@ class GUI(tk.Tk):
                                             show_traceback=self.show_traceback()):
                     self.open_markdown(path=path)
 
-    def start_open_readme_thread(self) -> None:
+    def start_open_readme_thread(self, event=None) -> None:
         """
         Start the thread to open the README.md.
 
+        :event: Something that Tkinter passes in that we don't care about.
         :return: None.
         """
         self.open_readme_button.config(state=tk.DISABLED)
@@ -1257,6 +1258,7 @@ class GUI(tk.Tk):
         self.create_bundle_manager_tab()
         self.create_detect_tab()
         self.create_other_tab()
+        self.bind("<F1>", self.start_open_readme_thread)
 
     def run(self) -> None:
         """

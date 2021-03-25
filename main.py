@@ -16,8 +16,8 @@ No functions!
 """
 
 import gui
-from bundle_tools.create_logger import create_logger
 from pathlib import Path
+from bundle_tools.create_logger import create_logger
 import logging
 
 LEVEL = logging.DEBUG
