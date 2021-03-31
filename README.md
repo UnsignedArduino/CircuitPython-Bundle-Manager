@@ -11,6 +11,11 @@ request if you can fix it!
 recommended that you view this file on 
 [GitHub](https://github.com/UnsignedArduino/CircuitPython-Bundle-Manager/blob/main/README.md), as it has been tuned for 
 GitHub-style markdown.
+ 
+> Check out my other projects related to CircuitPython: (Oh look **shameless self-promotion** again)
+> - [CircuitPython-Project-Manager](https://github.com/UnsignedArduino/CircuitPython-Project-Manager): A Python program 
+    that will copy files to a CircuitPython device, basically eliminating the risk of losing code from the 
+    CircuitPython drive being corrupted and allows for version-control systems!
 
 ## Table of Contents
 1. [Installing](#installing)
